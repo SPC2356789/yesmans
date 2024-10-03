@@ -25,11 +25,24 @@ class IndexCarouselResource extends Resource
 
     protected static ?string $cluster = IndexSetting::class;
 
+    protected static ?string $title  = '輪播圖';
+    public static function getModelLabel(): string
+    {
+        return self::$title;
+    }
+    public function getTitle(): string//標題
+    {
+        return self::$title;
+    }
+
+    public static function getNavigationLabel(): string//集群標題
+    {
+        return self::$title;
+    }
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-
                 FileUpload::make('image_path')
                     ->label('首圖跑馬燈')
                     ->image()
@@ -69,6 +82,7 @@ class IndexCarouselResource extends Resource
 
     public static function getPages(): array
     {
+
         return [
             'index' => Pages\ManageIndexCarousels::route('/'),
         ];

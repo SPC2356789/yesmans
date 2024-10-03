@@ -11,17 +11,15 @@ class IndexSetting extends Cluster
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
     protected static ?string $navigationGroup = '網頁設定';//群組
-    public function title(): string
-    {
-        return '首頁設定';
-    }
+    protected static ?string $title = '基礎設定';
 
     public static function getClusterBreadcrumb(): string
     {
-        return (new static())->title();
+        return self::$title;
     }
+
     public static function getNavigationLabel(): string
     {
-        return (new static())->title();
+        return self::$title;
     }
 }

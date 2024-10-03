@@ -68,6 +68,9 @@ class AdminPanelProvider extends PanelProvider
             ->plugin(
                 FilamentEnvEditorPlugin::make()
             )
+            ->plugins([
+                \FilipFonal\FilamentLogManager\FilamentLogManager::make(),
+            ])
             ;
 
     }
