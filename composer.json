@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "amidesfahani/filament-tinyeditor": "^2.0",
         "filament/filament": "^3.2",
         "filipfonal/filament-log-manager": "^2.0",
         "geo-sot/filament-env-editor": "*",
@@ -15,7 +16,8 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "outerweb/filament-settings": "^1.2",
-        "ralphjsmit/laravel-filament-seo": "^1.4"
+        "ralphjsmit/laravel-filament-seo": "^1.4",
+        "tomatophp/filament-users": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

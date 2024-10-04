@@ -5,6 +5,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     {!! seo($SEOData) !!}
+
     <link rel="icon" type="image/x-icon" href="{{ asset('newLayout/assets/favicon.ico') }}"/>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -22,6 +23,15 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <!--    font-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script type="application/ld+json">
+       {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "產品名稱",
+          "image": "https://www.example.com/product.jpg",
+          "description": "產品描述"
+        }
+    </script>
 
 </head>
 <body id="page-top">

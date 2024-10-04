@@ -14,8 +14,9 @@ class IndexController extends Controller
     {
         $SEOData = new SEOData(
             title: env('APP_NAME'),
-            description: 'Lorem Ipsum',
+        description: 'Lorem Ipsum',
             locale: app()->getLocale()
+
         );
 //        $Carousels=$this->Carousels();
         $Carousels="0";

@@ -16,7 +16,7 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Forms\Components\Tabs;
 class IndexCarouselResource extends Resource
 {
     protected static ?string $model = IndexCarousel::class;
@@ -51,12 +51,16 @@ class IndexCarouselResource extends Resource
                 Toggle::make('status')
                     ->onColor('success')
                     ->offColor('danger'),
+
+
             ]);
+
     }
 
     public static function table(Table $table): Table
     {
         return $table
+
             ->reorderable('orderby')
             ->defaultSort('orderby', 'asc')
             ->columns([
@@ -65,6 +69,12 @@ class IndexCarouselResource extends Resource
                     ->label('圖片'),
                 Tables\Columns\ToggleColumn::make('status')
                     ->label('顯示'),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('更新時間')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
                 //

@@ -19,6 +19,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
+use TomatoPHP\FilamentUsers\FilamentUsersPlugin;
 
 //env
 use Outerweb\FilamentSettings\Filament\Plugins\FilamentSettingsPlugin;
@@ -66,12 +67,14 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->plugin(
-                FilamentEnvEditorPlugin::make()
+                FilamentEnvEditorPlugin::make(),
+            )
+            ->plugin(
+                FilamentUsersPlugin::make()
             )
             ->plugins([
                 \FilipFonal\FilamentLogManager\FilamentLogManager::make(),
-            ])
-            ;
+            ]);
 
     }
 }
