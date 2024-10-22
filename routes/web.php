@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,8 +17,19 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function () {
+Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers', 'middleware' => 'ngrok.header'], function () {
     Route::get('/', 'IndexController@index');
-    Route::get('/about', 'AboutController@index');
+    Route::get('/about', 'About\AboutController@index');
     Route::get('/contact', 'ContactController@index');
 });
+//Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers', 'middleware' => 'ngrok.header'], function () {
+//    Route::get('/', function () use ($request) {
+//        return app(IndexController::class)->index($request);
+//    });
+//    Route::get('/about', function () use ($request) {
+//        return app(About\AboutController::class)->index($request);
+//    });
+//    Route::get('/contact', function () use ($request) {
+//        return app(ContactController::class)->index($request);
+//    });
+//});

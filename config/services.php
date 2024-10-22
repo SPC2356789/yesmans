@@ -30,5 +30,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-
+    'GTM' => [
+        'enabled' => env('GTM_ENABLED', false),
+        'id' => env('GTM_ID', 'GTM-XXXXXX'),
+    ],
+    'dev' => [
+        'enabled' => env('APP_DEV', false),
+    ],
 ];

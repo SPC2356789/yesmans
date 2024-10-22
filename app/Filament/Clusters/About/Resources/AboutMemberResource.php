@@ -65,6 +65,7 @@ class AboutMemberResource extends Resource
                             ->ltr() // Set RTL or use ->direction('auto|rtl|ltr')
                             ->columnSpan('full')
                             ->label('內容')
+
                             ->required(),
                     ]),
                 ]),

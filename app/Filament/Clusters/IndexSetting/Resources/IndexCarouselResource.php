@@ -8,6 +8,7 @@ use App\Filament\Clusters\IndexSetting\Resources\IndexCarouselResource\RelationM
 use App\Models\IndexCarousel;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -48,11 +49,11 @@ class IndexCarouselResource extends Resource
                     ->image()
                     ->storeFileNamesIn('original_image_names')
                     ->imageEditor(),
+                TextInput::make('alt')
+                    ->label('圖片描述'),
                 Toggle::make('status')
                     ->onColor('success')
                     ->offColor('danger'),
-
-
             ]);
 
     }

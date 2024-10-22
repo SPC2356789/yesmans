@@ -4,30 +4,46 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
+use App\Models\Setting;
+use App\Models\IndexCarousel;
+use Illuminate\Support\Facades\Http;
 
 class IndexController extends Controller
 {
+    protected $Settings;
+    protected $Slug;
+
+    public function __construct()
+    {
+
+        $this->Slug = 'index';
+        $this->Settings = new Setting();
+        $this->Carousel = new IndexCarousel();
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+
+    public function index(Request $request)
     {
-        $SEOData = new SEOData(
-            title: env('APP_NAME'),
-        description: 'Lorem Ipsum',
-            locale: app()->getLocale()
 
-        );
-//        $Carousels=$this->Carousels();
-        $Carousels="0";
-//        $Facts=$this->Facts();
-        $Facts="0";
 
+
+        $SEOData = $this->Settings->SEOdata($this->Slug);
+
+        $Carousels = $this->Carousel->Carousels();
+
+        $Slug = $this->Slug;
+//        $request=$request;
+        $AllNames = array_keys(get_defined_vars());
+//dd($SEOData);
         return response()
-            ->view('index', compact('SEOData','Carousels','Facts'))//            ->header('X-Robots-Tag', 'index,follow')
-            ;
-    }
+            ->view($this->Slug, compact($AllNames))
 
+        ;
+    }
     /**
      * Show the form for creating a new resource.
      */

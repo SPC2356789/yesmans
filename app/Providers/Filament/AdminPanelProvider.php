@@ -19,8 +19,9 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
-use TomatoPHP\FilamentUsers\FilamentUsersPlugin;
-
+use SolutionForest\FilamentAccessManagement\FilamentAccessManagementPanel;
+use Rmsramos\Activitylog\ActivitylogPlugin;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 //env
 use Outerweb\FilamentSettings\Filament\Plugins\FilamentSettingsPlugin;
 
@@ -69,9 +70,10 @@ class AdminPanelProvider extends PanelProvider
             ->plugin(
                 FilamentEnvEditorPlugin::make(),
             )
-            ->plugin(
-                FilamentUsersPlugin::make()
-            )
+            ->plugin(FilamentAccessManagementPanel::make())
+            ->resources([
+                config('filament-logger.activity_resource')
+            ])
             ->plugins([
                 \FilipFonal\FilamentLogManager\FilamentLogManager::make(),
             ]);

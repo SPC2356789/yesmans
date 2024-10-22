@@ -56,6 +56,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+ 'vite' => 'https://easy-ibex-nearly.ngrok-free.app/',
+
     'asset_url' => env('ASSET_URL', '/'),
 
     /*
@@ -83,6 +85,7 @@ return [
     */
 
     'locale' => env('APP_LOCALE', 'en'),
+//    'locale' => 'en',
 
 
     /*
@@ -97,7 +100,7 @@ return [
     */
 
 //    'fallback_locale' =>  env('APP_LOCALE', 'en'),
-    'fallback_locale' =>  'en',
+    'fallback_locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -214,5 +217,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
+
+    'dev' => env('APP_DEV',false),
 
 ];
