@@ -45,6 +45,47 @@ class IndexBase extends BaseSettings
         return [
             Tabs::make('Settings')
                 ->schema([
+                    Tabs\Tab::make('一般設定(general)')
+                        ->schema([
+                            Split::make([
+
+                                Section::make([
+                                    TextInput::make('general.brand_name')
+                                        ->label('品牌名稱')
+                                        ->required(),
+
+                                    FileUpload::make('general.favicon')
+                                        ->label('網站標誌')
+                                        ->image(),
+                                    TextInput::make('general.favicon_alt')
+                                        ->label('標誌描述')
+                                    ,
+                                ]),
+                                Section::make([
+                                    Builder::make('general.brand')
+                                        ->label('品牌名稱圖標版')
+                                        ->blocks([
+                                            Builder\Block::make('general.brand_img')
+                                                ->label('新增品牌圖')
+                                                ->schema([
+                                                    Split::make([
+                                                        Section::make([
+                                                            FileUpload::make('image')
+                                                                ->label('圖標上傳')
+                                                                ->image()
+                                                                ->imageEditor(),
+                                                        ]),
+                                                    ])->from('md')
+
+
+                                                ])
+
+                                        ]),
+                                ]),
+                            ])->from('md'),
+
+                        ]),
+
                     Tabs\Tab::make('關鍵字(Seo)')
                         ->schema([
                             TextInput::make('index_seo.title')
@@ -69,6 +110,7 @@ class IndexBase extends BaseSettings
                                 ->required(),
                             FileUpload::make('index_OG.image')
                                 ->label('OG圖片上傳')
+                                ->imageEditor()
                                 ->image(),
                             Select::make('index_seo.robots')
                                 ->label('索引')
@@ -79,20 +121,24 @@ class IndexBase extends BaseSettings
                                     'noindex, nofollow' => 'Noindex, Nofollow',
                                 ]),
                         ]),
-                    Tabs\Tab::make('一般設定(general)')
-                        ->schema([
-                            TextInput::make('general.brand_name')
-                                ->label('品牌名稱')
-                                ->required(),
-                            FileUpload::make('general.favicon')
-                                ->label('網站標誌')
-                                ->image(),
-                        ]),
                     Tabs\Tab::make('頁腳設定(foot)')
                         ->schema([
-                            TextInput::make('foot.copyright')
-                                ->label('版權宣告')
-                                ->required(),
+                            Split::make([
+                                Section::make([
+                                    TextInput::make('foot.copyright')
+                                        ->label('版權宣告')
+                                        ->required(),
+                                    TextInput::make('foot.alt')
+                                        ->label('描述'),
+                                ]),
+                                Section::make([
+                                    FileUpload::make('foot.bg')
+                                        ->label('底部背景圖')
+                                        ->imageEditor()
+                                        ->image(),
+                                ]),
+                            ]),
+
                             Builder::make('foot.media')
                                 ->label('頁腳媒體圖標設定')
                                 ->blocks([
@@ -116,6 +162,7 @@ class IndexBase extends BaseSettings
                                                     FileUpload::make('image')
                                                         ->label('圖標上傳')
                                                         ->image()
+                                                        ->imageEditor()
                                                 ]),
                                             ])->from('md')
 

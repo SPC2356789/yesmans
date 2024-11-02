@@ -22,8 +22,11 @@ use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
 use SolutionForest\FilamentAccessManagement\FilamentAccessManagementPanel;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
+use Filament\Navigation\MenuItem;
+
 //env
 use Outerweb\FilamentSettings\Filament\Plugins\FilamentSettingsPlugin;
+use Outerweb\FilamentImageLibrary\Filament\Plugins\FilamentImageLibraryPlugin;
 
 //use App\Filament\Clusters\IndexSetting\Resources\IndexBase ;
 //單頁非條目
@@ -37,6 +40,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->userMenuItems([
+                'profile' => MenuItem::make()->label('個人資料編輯'),
+                // ...
+            ])
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -77,6 +84,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 \FilipFonal\FilamentLogManager\FilamentLogManager::make(),
             ]);
+//            ->plugin(\TomatoPHP\FilamentMediaManager\FilamentMediaManagerPlugin::make());
 
     }
 }

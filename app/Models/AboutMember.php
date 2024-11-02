@@ -6,13 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AboutMember extends Model
+class AboutMember extends BaseModel
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $dates = ['deleted_at']; // 必須加這行才有軟刪除
     protected $fillable = ['status', 'name','orderby','image_path','original_image_names','introduce'];
+    protected $casts = [
+        'image_path' => 'array',//轉URL
+    ];
+    protected function getMember()
+    {
+        $data = self::selectRaw('*')
+            ->orderBy('orderby', 'asc')
+            ->where('status', 1)
+            ->get()
+            ->toArray();//抓有開啟的
+        return $data;
+    }
     protected static function boot()
     {
         parent::boot();

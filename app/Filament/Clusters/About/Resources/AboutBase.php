@@ -5,6 +5,7 @@ namespace App\Filament\Clusters\About\Resources;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Clusters\About;
 use Closure;
+use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -13,6 +14,7 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 
+use Filament\Forms\Components\Toggle;
 use Outerweb\FilamentSettings\Filament\Pages\Settings as BaseSettings;
 
 class AboutBase extends BaseSettings
@@ -75,25 +77,67 @@ class AboutBase extends BaseSettings
                         ->schema([
 
                             Split::make([
-                                    TextInput::make('about.title')
-                                        ->label('故事標題')
-                                        ->required(),
-                                    TextInput::make('about.imgAlt')
-                                        ->label('圖片描述')
+                                TextInput::make('about.title')
+                                    ->label('關於我們標題')
+                                    ->required(),
+                                TextInput::make('about.imgAlt')
+                                    ->label('圖片描述')
                             ]),
                             FileUpload::make('about.image')
-                                ->label('故事圖片')
+                                ->label('關於我們圖片')
+                                ->directory('About') // 指定儲存的目錄
                                 ->image()
                                 ->imageEditor(),
                             TinyEditor::make('about.introduce')
-                                ->fileAttachmentsDisk('public')
-                                ->fileAttachmentsVisibility('public')
+                                ->fileAttachmentsDisk('public/About')
+                                ->fileAttachmentsVisibility('public/About')
                                 ->fileAttachmentsDirectory('uploads')
                                 ->profile('aal')
                                 ->ltr() // Set RTL or use->direction('auto|rtl|ltr')
                                 ->columnSpan('full')
-                                ->label('關於我們故事內容')
+                                ->label('關於我們內容')
                                 ->required(),
+                        ]),
+                    Tabs\Tab::make('故事(story)')
+                        ->schema([
+                            Builder::make('about.story')
+                                ->label('新增故事')
+                                ->blocks([
+                                    Builder\Block::make('about.storyData')
+                                        ->label('新增篇章')
+                                        ->schema([
+                                            Split::make([
+                                                Section::make([
+                                                    TextInput::make('title')
+                                                        ->label('篇章標題')
+                                                        ->required(),
+                                                    Textarea::make('content')
+                                                        ->label('篇章內容')
+                                                        ->rows(5)        // 設置顯示的行數
+                                                        ->default('請輸入內容...') // 可選：設定預設值
+                                                        ->placeholder('在這裡輸入篇章內容...') // 可選：設定佔位符
+                                                        ->required(),
+                                                    Toggle::make('status')
+                                                        ->label('開啟')
+                                                        ->onColor('success')
+                                                    ,
+                                                ]),
+                                                Section::make([
+                                                    FileUpload::make('image')
+                                                        ->label('篇章圖片上傳')
+                                                        ->directory('About/Story')
+                                                        ->image()
+                                                        ->imageEditor(),
+                                                    TextInput::make('alt')
+                                                        ->label('描述'),
+                                                ]),
+                                            ])->from('md')
+
+
+                                        ])
+
+
+                                ]),
                         ]),
                 ]),
         ];

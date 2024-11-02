@@ -17,6 +17,7 @@ class AboutController extends Controller
 
         $this->Slug = 'about';
         $this->Settings = new Setting();
+        $this->Members = new AboutMember();
     }
 
     /**
@@ -28,11 +29,11 @@ class AboutController extends Controller
     {
 
         $SEOData = $this->Settings->SEOdata($this->Slug);
-
-//dd($SEOData);
         $Slug = $this->Slug;
-        $story = $this->Settings->getElseOrGeneral($this->Slug);
-//        dd($story);
+        $members = $this->Members->getData();
+
+        $stories = $this->Settings->getElseOrGeneral($this->Slug);
+//        dd($members);
         $AllNames = array_keys(get_defined_vars());
         return response()
             ->view("About/" . $this->Slug, compact($AllNames));

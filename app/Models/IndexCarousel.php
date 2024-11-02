@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class IndexCarousel extends Model
+class IndexCarousel extends BaseModel implements HasMedia
 {
+    use InteractsWithMedia;
     use HasFactory;
     use SoftDeletes;
 
@@ -18,10 +22,22 @@ class IndexCarousel extends Model
         'alt',
         // Add other fillable attributes here if any
     ];
+
+    public function getTitleAttribute()
+    {
+        return json_decode($this->custom_properties)->title ?? null;
+    }
+
     protected $casts = [
         'image_path' => 'array',//轉URL
+        'custom_properties' => 'array',
     ];
     protected $dates = ['deleted_at']; // 必須加這行才有軟刪除
+
+    public function medias(): BelongsTo
+    {
+        return $this->belongsTo(media::class, 'image_path', 'uuid');
+    }
 
     // 可選：定義關聯
     public function creator()
@@ -34,19 +50,6 @@ class IndexCarousel extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    /**
-     * 取出輪播.
-     */
-    public function Carousels()
-    {
-//        $url = Carousel::where('status', '=', 1)->pluck('image_path')->toArray();//抓有開啟的
-        $data = self::selectRaw('*')
-            ->orderBy('orderby', 'asc')
-            ->where('status', 1)
-            ->get()
-            ->toArray();//抓有開啟的
-        return $data;
-    }
 
 
     // 設置創建和更新者

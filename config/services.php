@@ -34,7 +34,4 @@ return [
         'enabled' => env('GTM_ENABLED', false),
         'id' => env('GTM_ID', 'GTM-XXXXXX'),
     ],
-    'dev' => [
-        'enabled' => env('APP_DEV', false),
-    ],
 ];

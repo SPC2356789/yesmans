@@ -4,7 +4,8 @@ namespace App\Filament\Clusters\About\Resources;
 
 use App\Filament\Clusters\About;
 use App\Filament\Clusters\About\Resources\AboutMemberResource\Pages;
-use App\Filament\Clusters\About\Resources\AboutMemberResource\RelationManagers;
+
+//use App\Filament\Clusters\About\Resources\AboutMemberResource\RelationManagers;
 use App\Models\AboutMember;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
@@ -27,6 +28,7 @@ class AboutMemberResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = About::class;
+
 
     public static function form(Form $form): Form
     {
@@ -51,6 +53,7 @@ class AboutMemberResource extends Resource
                         Forms\Components\FileUpload::make('image_path')
                             ->label('頭貼上傳')
                             ->image()
+                            ->directory('About/Member') // 指定儲存的目錄
                             ->storeFileNamesIn('original_image_names')
                             ->imageEditor(),
                     ]),
@@ -61,11 +64,10 @@ class AboutMemberResource extends Resource
                             ->fileAttachmentsDisk('public')
                             ->fileAttachmentsVisibility('public')
                             ->fileAttachmentsDirectory('uploads')
-                            ->profile('default|simple|full|minimal|none|custom')
-                            ->ltr() // Set RTL or use ->direction('auto|rtl|ltr')
+                            ->profile('aal')
+                            ->ltr() // Set RTL or use->direction('auto|rtl|ltr')
                             ->columnSpan('full')
-                            ->label('內容')
-
+                            ->label('關於我們內容')
                             ->required(),
                     ]),
                 ]),
@@ -75,34 +77,39 @@ class AboutMemberResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderable('orderby')
+            ->defaultSort('orderby', 'asc')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('名稱')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('introduce')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('image_path'),
-                Tables\Columns\ImageColumn::make('original_image_names'),
-                Tables\Columns\IconColumn::make('status')
-                    ->boolean(),
+                Tables\Columns\ImageColumn::make('image_path')
+                    ->label('大頭貼')
+                    ->circular()
+                ,
+                Tables\Columns\ToggleColumn::make('status')
+                    ->label('顯示'),
                 Tables\Columns\TextColumn::make('orderby')
+                    ->label('排序')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+//                Tables\Columns\TextColumn::make('deleted_at')
+//                    ->dateTime()
+//                    ->sortable()
+//                    ->toggleable(isToggledHiddenByDefault: true),
+//                Tables\Columns\TextColumn::make('created_at')
+//                    ->dateTime()
+//                    ->sortable()
+//                    ->toggleable(isToggledHiddenByDefault: true),
+//                Tables\Columns\TextColumn::make('updated_at')
+//                    ->dateTime()
+//                    ->sortable()
+//                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ReplicateAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -110,7 +117,8 @@ class AboutMemberResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->selectCurrentPageOnly();
     }
 
     protected static ?string $title = '成員列表';

@@ -1,0 +1,195 @@
+
+body {
+    margin: 0; /* 移除預設邊距 */
+    position: relative; /* 使子元素可以相對於此定位 */
+    height: 100vh; /* 確保整個頁面高度為視窗高度 */
+    z-index: 98; /* 最高層級，確保覆蓋所有內容 */
+    font-size: 1rem;
+    font-family: "Roboto", sans-serif;
+    line-height: 1.6;
+
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* 半透明黑色薄紗 */
+    z-index: 1040; /* 最高層級，確保覆蓋所有內容 */
+    display: block; /* 初始隱藏 */
+}
+
+.yesman-container {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    position: fixed; /* 固定在視窗中間 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 精確居中 */
+    z-index: 1041; /* 確保字母在覆蓋層上方 */
+}
+
+.letter {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ffffff; /* 白色字體 */
+    transform: translateY(50px); /* 初始位置 */
+    animation: bounce 0.6s forwards; /* 動畫效果 */
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(50px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* 為每個字母添加不同的延遲 */
+.letter:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.letter:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.letter:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.letter:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.letter:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+.letter:nth-child(6) {
+    animation-delay: 0.5s;
+}
+
+/* 進度條樣式 */
+.progress-container {
+    position: fixed;
+    top: calc(50% + 60px); /* 在YESMAN下方，根據字母高度調整 */
+    left: 50%;
+    transform: translateX(-50%); /* 水平居中 */
+    z-index: 1041; /* 確保字母在覆蓋層上方 */
+}
+
+.progress {
+    height: 30px; /* 增加進度條的高度 */
+    background-color: #e0e0e0; /* 背景顏色 */
+    border-radius: 5px; /* 圓角 */
+    overflow: hidden; /* 隱藏超出邊界的部分 */
+}
+
+.progress-bar {
+    height: 100%; /* 進度條高度 */
+    background-color: #007bff; /* 進度條顏色 */
+    transition: width 0.4s ease; /* 寬度變化的過渡效果 */
+    color: white; /* 字體顏色 */
+    font-weight: bold; /* 加粗字體 */
+    display: flex; /* 使用 flexbox 來居中內容 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+}
+
+/* 整體滾動條 */
+::-webkit-scrollbar {
+    width: 8px; /* 滾動條的寬度 */
+}
+
+/* 滾動條的背景 */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 滾動條的背景顏色 */
+}
+
+/* 滾動條的滑塊 */
+::-webkit-scrollbar-thumb {
+    background: rgb(100, 161, 157); /* 滾動條滑塊的顏色 */
+    border-radius: 4px; /* 滾動條滑塊的圓角 */
+}
+
+/* 滾動條滑塊的懸停狀態 */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(53, 84, 82); /* 懸停時的顏色 */
+}
+
+/*按鈕樣式*/
+.nav-link.active {
+    color: #64a19d !important;
+    outline: none;
+    border-bottom: 0.25rem solid #64a19d;
+}
+
+.nav-link {
+    color: #000 !important;
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-bottom: 0.25rem solid transparent;
+}
+
+.text-cus {
+    color: #e19050 !important;
+}
+
+.btn-cus {
+    padding: 0.5rem 0.8rem !important; /* 調整內邊距 */
+    font-size: 0.9rem !important; /* 調整字體大小 */
+}
+
+#mainNav .nav-link:hover{
+    color: #446c6a !important;
+
+}
+/*品牌圖標動畫*/
+@keyframes draw-in {
+    0% {
+        opacity: 0;
+        transform: translateY(10px); /* 初始位置稍微下移 */
+    }
+    50% {
+        opacity: 0.5; /* 半透明 */
+        transform: translateY(5px); /* 向上移动一些 */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* 结束时回到原位置 */
+    }
+}
+
+@keyframes draw-out {
+    0% {
+        opacity: 1;
+        transform: translateY(0); /* 开始位置 */
+    }
+    50% {
+        opacity: 0.5; /* 半透明 */
+        transform: translateY(5px); /* 向下移动一些 */
+    }
+    100% {
+        opacity: 0; /* 完全透明 */
+        transform: translateY(10px); /* 向下移动 */
+    }
+}
+
+.fade-in {
+    animation: draw-in 0.5s forwards; /* 动画时间 1 秒 */
+}
+
+.fade-out {
+    animation: draw-out 0.5s forwards; /* 动画时间 1 秒 */
+}

@@ -1,9 +1,8 @@
 import {defineConfig} from 'vite';
 
 import laravel from 'laravel-vite-plugin';
-import dotenv from 'dotenv';
 
-dotenv.config();
+
 export default defineConfig({
     // base: 'easy-ibex-nearly.ngrok-free.app',
     host: '0.0.0.0',
@@ -14,13 +13,13 @@ export default defineConfig({
         // port:443,
         // https:true,
         hmr: {
-            protocol: 'wss', // 使用 WebSocket Secure
+            // protocol: 'wss', // 使用 WebSocket Secure
             base: '/',
             // host: 'communal-malamute-eternal.ngrok-free.app', // 設定默認值為 'localhost'
-            host: 'fleet-uses-steve-affected.trycloudflare.com', // 設定默認值為 'localhost'
-            clientPort: 443,
+            // host: 'palmer-another-expertise-cardiff.trycloudflare.com', // 設定默認值為 'localhost'
+            // clientPort: 443,
             // port: 80,
-            // host: 'localhost',  // 設定默認值為 'localhost'
+            host: 'yesman.com',  // 設定默認值為 'localhost'
 
         },
         // proxy: {
@@ -41,8 +40,7 @@ export default defineConfig({
                 'resources/js/home.js',
                 'resources/js/about.js',
                 'resources/newLayout/js/scripts.js',
-                'resources/newLayout/css/styles.css',
-                'resources/newLayout/css/refer.css',],
+                'resources/newLayout/css/styles.css',],
             refresh: true,
 
         }),

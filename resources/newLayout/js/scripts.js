@@ -8,11 +8,11 @@ window.addEventListener('DOMContentLoaded', event => {
             return;
         }
 
-            if (window.scrollY === 0 && window.location.pathname === '/') {
-                navbarCollapsible.classList.remove('navbar-shrink');
-            } else {
-                navbarCollapsible.classList.add('navbar-shrink');
-            }
+            // if (window.scrollY === 0 ) {
+            //     navbarCollapsible.classList.remove('fixed-top');
+            // } else {
+            //     navbarCollapsible.classList.add('fixed-top');
+            // }
 
     };
 

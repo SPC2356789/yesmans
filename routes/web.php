@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers', 'middleware' => 'ngrok.header'], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/about', 'About\AboutController@index');
-    Route::get('/contact', 'ContactController@index');
+    Route::get('/t',  function () { return view('t');
+});
 });
 //Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers', 'middleware' => 'ngrok.header'], function () {
 //    Route::get('/', function () use ($request) {

@@ -1,0 +1,37 @@
+
+
+/*首頁文章區 S*/
+.post-title {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #394E5D;
+}
+
+.post-area-index {
+    display: flex;
+    justify-content: space-between; /* 在主軸上分配間距 */
+    gap: 10px; /* 元素之間的間隔 */
+    flex-wrap: wrap; /* 避免在小螢幕上換行 */
+}
+
+.read_more {
+    font-size: 0.8rem;
+}
+
+.img_box {
+    flex: 1; /* 使每個 img_box 擁有相等的寬度 */
+    max-width: 24%; /* 確保每個 img_box 的最大寬度為容器寬度的 24% */
+    box-sizing: border-box; /* 包括 padding 和 border 在內計算寬度 */
+}
+
+.img_box img {
+    width: 100%; /* 確保圖片寬度為 img_box 的 100% */
+    height: auto; /* 使圖片按比例縮放 */
+}
+
+.img_box h2 {
+    text-align: center;
+    margin-top: 10px; /* 調整標題與圖片之間的間隔 */
+}
+
+/*首頁文章區 E*/

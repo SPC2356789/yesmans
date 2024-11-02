@@ -61,6 +61,7 @@ class User extends Authenticatable
             ModelHasRole::create([
                 'model_id' => $user->id,
                 'role_id' => '2',
+                'is_admin' => '0',
                 'model_type'=>'App\Models\User'
             ]);
         });

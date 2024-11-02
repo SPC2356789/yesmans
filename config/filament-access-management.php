@@ -4,6 +4,7 @@ use SolutionForest\FilamentAccessManagement\Http\Middleware;
 use SolutionForest\FilamentAccessManagement\Models;
 use SolutionForest\FilamentAccessManagement\Pages;
 use SolutionForest\FilamentAccessManagement\Resources;
+
 //use App\Filament\NewResources;
 return [
     /**
@@ -33,7 +34,7 @@ return [
             /**
              * Using db based filament navigation if true.
              */
-            'enabled' => env('navigation_enabled'),
+            'enabled' => env('navigation_enabled',false),
             /**
              * Table name db based filament navigation.
              */

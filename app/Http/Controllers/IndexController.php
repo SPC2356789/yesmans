@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use RalphJSmit\Laravel\SEO\Support\SEOData;
 use App\Models\Setting;
 use App\Models\IndexCarousel;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class IndexController extends Controller
 {
@@ -29,16 +29,13 @@ class IndexController extends Controller
     public function index(Request $request)
     {
 
-
-
         $SEOData = $this->Settings->SEOdata($this->Slug);
 
-        $Carousels = $this->Carousel->Carousels();
+        $Carousels = $this->Carousel->getData();
 
         $Slug = $this->Slug;
-//        $request=$request;
         $AllNames = array_keys(get_defined_vars());
-//dd($SEOData);
+
         return response()
             ->view($this->Slug, compact($AllNames))
 

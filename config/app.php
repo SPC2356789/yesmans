@@ -218,6 +218,5 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
-    'dev' => env('APP_DEV',false),
 
 ];

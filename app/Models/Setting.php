@@ -9,6 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use RalphJSmit\Laravel\SEO\SchemaCollection;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Storage;
 
 class Setting extends Model
 {
@@ -92,16 +93,17 @@ class Setting extends Model
         return env('app_url');
     }
 
-    public function devPath($imagePath)
+
+    public function CheckProtocol($imagePath)
     {
-        $dev=false;
-        if (config('services.dev.enabled') && $dev===true) {
+        if (request()->isSecure()) {
+            return $imagePath;
+        } else {
             $imageUrl = url($imagePath);
             return str_replace('https://', 'http://', $imageUrl);
-        } else {
-            return $imagePath;
         }
     }
+
 
     public function SEOdata($where = 'index')
     {
@@ -120,12 +122,12 @@ class Setting extends Model
         return $SEOData = new SEOData(
             title: $Base['seo.title'] ?? null, // 如果不存在，設置為 null
             description: $Base['seo.description'] ?? null,
-            image: !empty($Base['OG.image']) ? $this->devPath('storage/' . $Base['OG.image']) : null,
+            image: !empty($Base['OG.image']) ? $this->CheckProtocol(Storage::url($Base['OG.image'])) : null,
             url: request()->fullUrl(),
             tags: !empty($Base['seo.tag']) ? $Base['seo.tag'] : null,
             schema: $schemaCollection,
             site_name: $General['brand_name'] ?? null,
-            favicon: !empty($General['favicon']) ? $this->devPath('/storage/' . $General['favicon']) : null,
+            favicon: !empty($General['favicon']) ? $this->CheckProtocol(Storage::url($General['favicon'])) : null,
             robots: $Base['seo.robots'] ?? null,
             openGraphTitle: $Base['OG.title'] ?? null
         );
@@ -135,7 +137,7 @@ class Setting extends Model
     public function getElseOrGeneral($where = 'general')
     {
 
-        $results = Setting::where('key', 'like', $where.'.%')->pluck('value', 'key')->toArray();
+        $results = Setting::where('key', 'like', $where . '.%')->pluck('value', 'key')->toArray();
         $processedResults = array_map(function ($key) use ($where) {
             return str_replace($where . '.', '', $key);
         }, array_keys($results));

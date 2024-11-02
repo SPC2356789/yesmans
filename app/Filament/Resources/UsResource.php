@@ -10,8 +10,10 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use http\Client\Curl\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use SolutionForest\FilamentAccessManagement\Support\Utils;
 
@@ -62,6 +64,7 @@ class UsResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('is_admin', false))
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable()
@@ -100,6 +103,7 @@ class UsResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -108,9 +112,16 @@ class UsResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            RelationManagers\RlRelationManager::class,
-        ];
+
+        $relations = [];
+
+        // 检查是否具有 'super-admin' 权限
+        if (auth()->id()==1) {
+            $relations[] = RelationManagers\RlRelationManager::class;
+        }
+
+        // 可以添加其他条件，或者直接返回
+        return $relations;
     }
 
     public static function getPages(): array

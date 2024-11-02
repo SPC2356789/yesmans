@@ -46,11 +46,11 @@ class RlResource extends Resource
                                             ->with('permission') // 加载权限关系
                                             ->get()
                                             ->pluck('permission.name') ; // 直接提取权限名称
-                                        activity()//LOG更新
-                                            ->performedOn($record)
-                                            ->withProperties(['old' =>$oldPermissions, 'new' => $currentPermission])
-                                            ->event('Updated')
-                                            ->log('Updated RoleHasPermissions');
+//                                        activity()//LOG更新
+//                                            ->performedOn($record)
+//                                            ->withProperties(['old' =>$oldPermissions, 'new' => $currentPermission])
+//                                            ->event('Updated')
+//                                            ->log('Updated RoleHasPermissions');
                                     }),
                             ]),
                     ]),
@@ -80,6 +80,7 @@ class RlResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
 
             ])
             ->bulkActions([
