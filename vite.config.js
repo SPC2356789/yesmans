@@ -2,17 +2,24 @@ import {defineConfig} from 'vite';
 
 import laravel from 'laravel-vite-plugin';
 
+import addVersion from 'vite-plugin-add-version';
+import version from './package.json'
+
+const buildVersion = `${version['version'].replace(/\./g, '_')}_${(new Date()).getTime()}`; //customer_version
 
 export default defineConfig({
     // base: 'easy-ibex-nearly.ngrok-free.app',
+
     host: '0.0.0.0',
     server: {
+
         host: '0.0.0.0',
         base: '/',
         // strictPort : true,
         // port:443,
         // https:true,
         hmr: {
+
             // protocol: 'wss', // 使用 WebSocket Secure
             base: '/',
             // host: 'communal-malamute-eternal.ngrok-free.app', // 設定默認值為 'localhost'
@@ -32,19 +39,15 @@ export default defineConfig({
         // },
 
     },
+
     plugins: [
         laravel({
-            input: ['resources/css/app.css',
-                'resources/js/app.js',
-                'resources/js/about.js',
-                'resources/js/home.js',
-                'resources/js/about.js',
-                'resources/newLayout/js/scripts.js',
-                'resources/newLayout/css/styles.css',],
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',],
             refresh: true,
-
         }),
+        addVersion(buildVersion),
 
     ],
-
 });

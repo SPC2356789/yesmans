@@ -29,13 +29,15 @@
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet"/>
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+
+        {{--    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet"/>--}}
+{{--    <link--}}
+{{--        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"--}}
+{{--        rel="stylesheet"/>--}}
+{{--    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">--}}
     {{--統一字體--}}
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+{{--    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">--}}
     {{--        @viteNgrok( ['resources/css/app.css',--}}
     {{--        'resources/newLayout/js/scripts.js',--}}
     {{--        'resources/newLayout/css/styles.css',--}}
@@ -77,38 +79,43 @@
 
 
 <header class="">
-    <nav class="navbar navbar-expand-lg navbar-light navbar-shrink fixed-top" id="mainNav">
-        <div class="flex justify-between w-100 mx-10  sm:mx-32">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-shrink fixed-top h-auto" id="mainNav">
+        <div class="flex items-center justify-around sm:mx-6 md:mx-24 lg:mx-32 xl:mx-48 2xl:mx-60 w-full ">
             {{--            <a class="navbar-brand" href="\">{{$generals['brand_name']??''}}</a>--}}
-            <a class="navbar-brand flex w-3/12 md:w-2/12 items-center" href="/" id="brand-link">
+            <a class="flex items-end justify-start max-h-12 mr-2" href="/" id="brand-link">
                 @if($generals)
-                    <div class="relative min-w-16 h-14">
+                    <div class="relative sm:min-w-16 sm:h-12 min-h-9 aspect-w-4 aspect-h-3 min-w-12 ">
                         @foreach($generals['brand'] as $general)
                             @if($loop->iteration !== 3)
                                 <img
-                                    class="absolute left-0 min-h-14 w-full object-cover {{ $loop->first ? 'opacity-100 top-0 z-10' : 'z-0 bottom-0 lg:opacity-0 lg:transition-opacity' }}"
+                                    class="absolute left-0 w-auto h-full object-cover {{ $loop->first ? 'opacity-100 top-0 z-10' : 'z-0 bottom-0 lg:opacity-0 lg:transition-opacity' }}"
                                     src="{{ Storage::url($general['data']['image']) }}"
-                                    alt="Image"
+                                    alt="YESMAN_LOGO"
                                     id="{{ $loop->first ?'':'hover-image'}}"
                                 >
                             @endif
                         @endforeach
                     </div>
                     @if(isset($generals['brand'][2]))
-                        <img class="h-auto min-h-12 min-w-28 max-w-28"
-                             src="{{ Storage::url($generals['brand'][2]['data']['image']) }}" alt="Image">
+                        <div class="aspect-w-16 aspect-h-5 min-h-8 sm:h-12 h-10 pt-2.5 sm:pt-2 flex">
+                            <img class="h-full  object-contain"
+                                 src="{{ Storage::url($generals['brand'][2]['data']['image']) }}" alt="YESMAN首頁">
+                        </div>
                     @endif
 
                 @endif
             </a>
-            <button class="btn-outline-primary btn-sm  navbar-toggler navbar-toggler-right" type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                Menu
-                <i class="fas fa-bars"></i>
-            </button>
+            <div class="max-h-8 min-h-6">
 
-            <div class="offcanvas offcanvas-start w-32" tabindex="-1" id="offcanvasExample"
+                <button class="btn btn-outline-primary navbar-toggler px-1 sm:px-6 navbar-toggler-right" type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="offcanvas offcanvas-start w-50" tabindex="-1" id="offcanvasExample"
                  aria-labelledby="offcanvasExampleLabel">
                 <div class="offcanvas-header">
                     <button type="button" class="btn-close ms-auto text-reset" data-bs-dismiss="offcanvas"

@@ -5,7 +5,7 @@ body {
     height: 100vh; /* 確保整個頁面高度為視窗高度 */
     z-index: 98; /* 最高層級，確保覆蓋所有內容 */
     font-size: 1rem;
-    font-family: "Roboto", sans-serif;
+    /*font-family: "Roboto", sans-serif;*/
     line-height: 1.6;
 
 }
@@ -193,3 +193,66 @@ body {
 .fade-out {
     animation: draw-out 0.5s forwards; /* 动画时间 1 秒 */
 }
+
+
+
+
+
+/*卡欄寬*/
+.r_sidebar {
+    width: 80%;
+}
+
+.l_sidebar {
+    width: 20%;
+    font-size: 1.1rem;
+}
+
+.n-row, n-row > * {
+    padding: 5px;
+    margin: 1px;
+}
+
+/*卡寬*/
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.nav-title > * {
+
+    /*margin: 0 5px;*/
+    position: relative;
+    cursor: pointer;
+    flex: 1;
+}
+
+.nav-title {
+    gap: 20px;
+}
+
+select {
+    box-sizing: border-box;
+    margin: 0;
+    min-width: 0;
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    border: 1px solid;
+    border-radius: 4px;
+    color: inherit;
+    /*font-family: "Century Gothic", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;*/
+    font-size: 0.875rem;
+    outline: 0;
+    line-height: 1rem;
+    box-shadow: inset 4px 4px 4px -2px rgba(202, 202, 202, 0.25);
+    -webkit-transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out;
+}
+
+
