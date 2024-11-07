@@ -4,57 +4,38 @@
 @section('tlink')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
-
 @endsection
 
 @section('blink')
-    {{--    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>--}}
-    {{--    @viteNgrok([--}}
-    {{--    'resources/js/home.js'])--}}
-    {{--    @vite(['resources/js/home.js'])--}}
-    <!-- Swiper JS -->
-    <!-- Initialize Swiper -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        var swiper = new Swiper(".creative", {
-            grabCursor: true,
-            effect: "creative",
-            // autoplay: {
-            //     delay: 3000,
-            //     disableOnInteraction: false,
-            // },
-            creativeEffect: {
-                prev: {
-                    shadow: true,
-                    translate: [0, 0, -400],
-                },
-                next: {
-                    translate: ["100%", 0, 0],
-                },
-            },
-        });
-    </script>
 @endsection
 @section('content')
-    <section>
-        <div id="carouselExampleInterval" class="carousel slide " data-bs-ride="carousel">
-            <div class="carousel-inner col-12">
-                @foreach($Carousels as $Carousel)
-                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}" data-bs-interval="10000">
-                        <img src="{{ Storage::url($Carousel['image_path']) }}" class="d-block w-100"
-                             alt="{{$Carousel['alt']??''}}">
+    <section class="homepage-carousel ">
+        <div class="md:h-screen h-[75vh] ">
+            <!-- 外层容器设置为屏幕高度 -->
+            <div class="h-full w-full flex items-center justify-center ">
+                <!-- Swiper 容器 -->
+                <div class="swiper carousel w-full h-full fade-on-scroll opacity-100">
+                    <!-- Swiper 的内容 -->
+                    <div class="swiper-wrapper ">
+                        @foreach($Carousels as $Carousel)
+                            <div class="swiper-slide">
+                                <img class="w-full h-full object-cover "
+                                     src="{{ Storage::url($Carousel['image_path']) }}" alt="{{$Carousel['alt']??''}}">
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
 
+
+                </div>
             </div>
-
         </div>
     </section>
-    <section class="py-5">
-        <div class="lg:mx-14 md:mx-16 mx-8 xl:mx-48 2xl:mx-60">
-            <div class="flex flex-col md:flex-col lg:flex-row justify-center gap-6 lg:gap-12 xl:gap-16 2xl:gap-40">
-                <div class="w-full xl:w-[600px] lg:w-1/2">
+
+    <section class="py-5 px-2">
+        <div class="lg:mx-14 md:mx-16 mx-1 sm:mx-8 xl:mx-40 2xl:mx-60">
+            <div class="flex flex-col md:flex-col lg:flex-row justify-center gap-6 lg:gap-8 xl:gap-16 2xl:gap-40 ">
+                <div id="targetElement" class="w-full xl:w-[600px] lg:w-1/2">
                     <section>
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="fw-bold">行程訊息</h3>
@@ -62,379 +43,140 @@
                                 <i class="fas fa-chevron-right"></i>
                             </a>
                         </div>
-                        <nav class="nav d-flex justify-content-between" id="" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#home"
-                                   type="button" role="tab" aria-controls="all" aria-selected="true">近期活動</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                                   type="button" role="tab" aria-controls="profile" aria-selected="false">百岳</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
-                                   type="button" role="tab" aria-controls="contact" aria-selected="false">郊山</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="soon-tab" data-bs-toggle="tab" data-bs-target="#soon"
-                                   type="button" role="tab" aria-controls="soon" aria-selected="false">即將成團</a>
-                            </li>
+
+                        <nav class="flex flex-wrap sm:gap-2 justify-between mt-2 w-full" role="tablist"
+                             id="itinerary_tab">
+                            <?php
+                            $itinerary = [
+                                [
+                                    'id' => 'all-tab',
+                                    'tab' => '近期活動',
+                                    'data' => [
+                                        ["time" => '11/04~11/06', 'name' => "桃山"],
+                                        ["time" => '11/07~11/09', 'name' => "塔塔加"],
+                                        ["time" => '11/10~11/12', 'name' => "玉山"],
+                                        ["time" => '11/13~11/15', 'name' => "雪山"],
+                                        ["time" => '11/16~11/18', 'name' => "合歡山"],
+                                        ["time" => '11/19~11/21', 'name' => "阿里山"]
+                                    ]
+                                ],
+                                [
+                                    'id' => 'soon-tab',
+                                    'tab' => '即將成團',
+                                    'data' => [
+                                        ["time" => '12/01~12/03', 'name' => "太平山"],
+                                        ["time" => '12/05~12/07', 'name' => "南湖大山"],
+                                        ["time" => '12/10~12/12', 'name' => "大霸尖山"],
+                                        ["time" => '12/15~12/17', 'name' => "雪山"], ["time" => '12/15~12/17', 'name' => "雪山"],
+                                        ["time" => '12/20~12/22', 'name' => "大鬼湖"]
+                                    ]
+                                ],
+                                [
+                                    'id' => 'high',
+                                    'tab' => '百岳',
+                                    'data' => [
+                                        ["time" => '12/25~12/27', 'name' => "玉山"],
+                                        ["time" => '12/28~12/30', 'name' => "合歡山"],
+                                        ["time" => '01/05~01/07', 'name' => "雪山"], ["time" => '12/15~12/17', 'name' => "雪山"],
+                                        ["time" => '01/10~01/12', 'name' => "中央山脈"],
+                                        ["time" => '01/15~01/17', 'name' => "大霸尖山"]
+                                    ]
+                                ],
+                                [
+                                    'id' => 'low',
+                                    'tab' => '郊山',
+                                    'data' => [
+                                        ["time" => '11/22~11/24', 'name' => "鶯歌山"],
+                                        ["time" => '11/25~11/27', 'name' => "台北陽明山"],
+                                        ["time" => '12/01~12/03', 'name' => "象山"],
+                                        ["time" => '12/05~12/07', 'name' => "大溪山"], ["time" => '12/15~12/17', 'name' => "雪山"],
+                                        ["time" => '12/10~12/12', 'name' => "九份山"]
+                                    ]
+                                ],
+                                [
+                                    'id' => 'more',
+                                    'tab' => '更多',
+                                    'data' => [
+                                        ["time" => '12/10~12/12', 'name' => "大霸尖山"],
+                                        ["time" => '01/10~01/12', 'name' => "南湖大山"],
+                                        ["time" => '01/15~01/17', 'name' => "玉山"], ["time" => '12/15~12/17', 'name' => "雪山"],
+                                        ["time" => '01/20~01/22', 'name' => "雪山"],
+                                        ["time" => '02/01~02/03', 'name' => "合歡山"]
+                                    ]
+                                ]
+                            ];
+                            ?>
+
+                            @foreach($itinerary as $index => $v)
+                                <button
+                                    class="tabutton w-[18%]  hover:bg-[#5B9894FF] bg-[#b8cac9] rounded-t-xl text-center p-0.5 sm:p-2 {{ $index == 0 ? 'active' : '' }}"
+                                    type="button"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#{{$v['id']}}"
+                                    role="tab"
+                                    aria-controls="{{$v['id']}}"
+                                    aria-selected="{{ $index == 0 ? 'true' : 'false' }}">
+                <span class="text-white text-[12px] sm:text-[calc(100%+1px)]">
+                    {{$v['tab']}}
+                </span>
+                                </button>
+                            @endforeach
                         </nav>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="all-tab">
-                                <div class="card border-0">
-                                    <ul class="list-group list-group-flush fs-6">
-                                        <li class="list-group-item py-6 lg:py-2">
-                                            <div class="flex flex-col lg:flex-row justify-between items-start">
-            <span class="flex items-center text-cus mb-2 lg:mb-0 lg:order-2">
-                2024 <strong class="ml-2">11/04</strong>
-            </span>
-                                                <span
-                                                    class="block fw-bold my-lg-2 fs-5 text-left lg:order-1">松羅湖</span>
-                                            </div>
-                                            <div class="flex gap-1 items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">B級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">郊山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">進階健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6 lg:py-2">
-                                            <div class="flex flex-col lg:flex-row justify-between items-start">
-            <span class="flex items-center text-cus mb-2 lg:mb-0 lg:order-2">
-                2024 <strong class="ml-2">11/07</strong>
-            </span>
-                                                <span
-                                                    class="block fw-bold my-lg-2 fs-5 text-left lg:order-1">大鬼湖</span>
-                                            </div>
-                                            <div class="flex gap-1 items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">C級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">郊山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">進階健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6 lg:py-2">
-                                            <div class="flex flex-col lg:flex-row justify-between items-start">
-            <span class="flex items-center text-cus mb-2 lg:mb-0 lg:order-2">
-                2024 <strong class="ml-2">11/11</strong>
-            </span>
-                                                <span
-                                                    class="block fw-bold my-lg-2 fs-5 text-left lg:order-1">五寮尖</span>
-                                            </div>
-                                            <div class="flex gap-1 items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">A級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">高山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">挑戰健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6 lg:py-2">
-                                            <div class="flex flex-col lg:flex-row justify-between items-start">
-            <span class="flex items-center text-cus mb-2 lg:mb-0 lg:order-2">
-                2024 <strong class="ml-2">11/18</strong>
-            </span>
-                                                <span
-                                                    class="block fw-bold my-lg-2 fs-5 text-left lg:order-1">水漾森林</span>
-                                            </div>
-                                            <div class="flex gap-1 items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">C級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">林道</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">休閒健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6 lg:py-2">
-                                            <div class="flex flex-col lg:flex-row justify-between items-start">
-            <span class="flex items-center text-cus mb-2 lg:mb-0 lg:order-2">
-                2024 <strong class="ml-2">11/25</strong>
-            </span>
-                                                <span
-                                                    class="block fw-bold my-lg-2 fs-5 text-left lg:order-1">合歡山</span>
-                                            </div>
-                                            <div class="flex gap-1 items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">A級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">高山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">挑戰健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6 lg:py-2">
-                                            <div class="flex flex-col lg:flex-row justify-between items-start">
-            <span class="flex items-center text-cus mb-2 lg:mb-0 lg:order-2">
-                2024 <strong class="ml-2">12/02</strong>
-            </span>
-                                                <span
-                                                    class="block fw-bold my-lg-2 fs-5 text-left lg:order-1">加羅湖</span>
-                                            </div>
-                                            <div class="flex gap-1 items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">B級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">湖泊</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">休閒健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                    </ul>
 
+                        <div class="tab-content" id="itinerary_tab_content">
+                            @foreach($itinerary as $index => $v)
+                                <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" id="{{$v['id']}}"
+                                     role="tabpanel" aria-labelledby="{{$v['id']}}">
+                                    <div class="card border-0">
+                                        <ul class="list-group list-group-flush fs-6">
+                                            @foreach($v['data'] as $a)
+                                                <li class="list-group-item py-6 lg:py-2 hover:bg-[#e6efefff] hover:scale-105 hover:z-10 hover:shadow-xl hover:rounded-xl transition-all transform ">
+                                                    <span
+                                                        class="block fw-bold my-lg-2 fs-5 text-left lg:order-1">{{$a['name']}}</span>
+                                                    <div class="flex align-center justify-center gap-2 items-center">
+                                                        <div class="flex sm:flex-row flex-col sm:gap-2">
+                                                            <span class="text-amber-700">{{$a['time']}}</span>
+                                                            <div class="">
+                                                                <span
+                                                                    class="badge rounded-pill bg-secondary text-black">C級</span>
+                                                                <span
+                                                                    class="badge rounded-pill bg-secondary text-black">郊山</span>
+                                                                <span
+                                                                    class="badge rounded-pill bg-secondary text-black">進階健行</span>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button"
+                                                                class="py-1 sm:px-2 px-1 rounded-full bg-[#f9d9a8] text-[#284341] hover:text-[#ffffff] hover:bg-[#e26d1d] ms-auto">
+                                                            報名中
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
-
-                            </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <div class="card border-0">
-                                    <ul class="list-group list-group-flush fs-6">
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/04</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">松羅湖</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">B級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">郊山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">進階健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/11</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">五寮尖</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">A級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">高山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">挑戰健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/18</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">水漾森林</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">C級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">林道</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">休閒健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/25</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">合歡山</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">A級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">高山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">挑戰健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">12/02</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">加羅湖</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">B級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">湖泊</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">休閒健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                <div class="card border-0">
-                                    <ul class="list-group list-group-flush fs-6">
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/04</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5 ">松羅湖</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">B級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">郊山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">進階健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/11</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">五寮尖</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">A級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">高山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">挑戰健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/18</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">水漾森林</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">C級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">林道</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">休閒健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/25</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">合歡山</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">A級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">高山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">挑戰健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">12/02</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">加羅湖</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">B級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">湖泊</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">休閒健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                            <div class="tab-pane fade" id="soon" role="tabpanel" aria-labelledby="soon-tab">
-                                <div class="card border-0">
-                                    <ul class="list-group list-group-flush fs-6">
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/04</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">松羅湖-即將</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">B級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">郊山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">進階健行</span>
-                                                <button type="button" class="btn btn-outline-warning btn-cus ms-auto">
-                                                    再3人成團
-                                                </button>
-                                            </div>
-                                        </li>
-
-
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/11</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">五寮尖</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">A級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">高山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">挑戰健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/18</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">水漾森林</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">C級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">林道</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">休閒健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">11/25</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">合歡山</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">A級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">高山</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">挑戰健行</span>
-                                                <button type="button" class="btn btn-outline-primary btn-cus ms-auto">
-                                                    報名中
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item py-6">
-                        <span class="d-flex align-items-center text-cus">2024
-                            <h4 class="mb-0 ms-2">12/02</h4>
-                        </span>
-                                            <span class="d-block fw-bold  my-1 my-lg-2 fs-5">加羅湖</span>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge rounded-pill bg-secondary text-black">B級</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">湖泊</span>
-                                                <span class="badge rounded-pill bg-secondary text-black">休閒健行</span>
-                                                <button type="button" class="btn btn-outline-warning btn-cus ms-auto">
-                                                    再3人成團
-                                                </button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
+                            @endforeach
                         </div>
                     </section>
+
+                    {{--                                                    <button type="button"--}}
+                    {{--                                                            class="btn btn-outline-warning btn-cus ms-auto">--}}
+                    {{--                                                        再3人成團--}}
+                    {{--                                                    </button>--}}
                 </div>
                 <div class="mt-5 w-full xl:max-w-[484px] lg:min-w-[455px] lg:max-w-[466px] lg:w-1/2">
-                    <div class="swiper creative">
+                    <div class="swiper Itinerary">
                         <div class="swiper-wrapper">
-                            <img class="swiper-slide  " src="{{storage::url('poc1.jpg')}}" loading="lazy"/>
+                            <img class="swiper-slide" src="{{storage::url('poc1.jpg')}}" loading="lazy"/>
                             <img class="swiper-slide" src="{{storage::url('poc2.jpg')}}" loading="lazy"/>
                             <img class="swiper-slide" src="{{storage::url('poc3.jpg')}}" loading="lazy"/>
                             <img class="swiper-slide" src="{{storage::url('poc4.jpg')}}" loading="lazy"/>
                             <img class="swiper-slide" src="{{storage::url('poc5.jpg')}}" loading="lazy"/>
+                            <div
+                                class="swiper-button-next Itinerary s-cus bg-black bg-opacity-50 rounded-full p-3 scale-y-50 scale-x-75"></div>
+                            <div
+                                class="swiper-button-prev Itinerary s-cus bg-black bg-opacity-50 rounded-full p-3 scale-y-50 scale-x-75"></div>
+                            <div class="swiper-pagination Itinerary s-cus bg-black w-full bg-opacity-25  "></div>
                         </div>
                     </div>
                 </div>

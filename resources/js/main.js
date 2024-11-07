@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     adjustProgressBar();
     window.addEventListener('resize', adjustProgressBar);
 
-    function startProgressBar(totalDuration) {
+    function startProgressBar(totalDuration,callback) {
         let progress = 0;
         const targetProgress = 100;
         const increment = targetProgress / (totalDuration / 10); // 每帧大约更新一次
@@ -52,6 +52,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         requestAnimationFrame(updateProgress);
+        // 動畫
+        const element = document.getElementById('hover-image');
+
+        setTimeout(() => {
+            element.classList.remove('opacity-0', 'translate-y-5'); // 移除透明度和偏移
+            element.classList.add('opacity-100', 'translate-y-0');  // 添加完全不透明並移動回原位
+        }, 500); // 延遲 1000 毫秒後開始淡入
     }
     const setTime = 2000; // 设置最小时间
     window.addEventListener('load', function () {
@@ -64,52 +71,58 @@ document.addEventListener('DOMContentLoaded', function () {
         // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
 
         // 启动进度条
-        startProgressBar(setTime);
+        startProgressBar();
+
     });
 
-    const brandLink = document.getElementById('brand-link');
-    const hoverImage = document.getElementById('hover-image');
 
-    let isDesktop = window.matchMedia('(min-width: 768px)').matches;
 
-    // 添加或移除事件监听器的函数
-    function toggleHoverListeners() {
-        if (isDesktop) {
-            brandLink.addEventListener('mouseenter', handleMouseEnter);
-            brandLink.addEventListener('mouseleave', handleMouseLeave);
-        } else {
-            brandLink.removeEventListener('mouseenter', handleMouseEnter);
-            brandLink.removeEventListener('mouseleave', handleMouseLeave);
-
-        }
-    }
-
-    // 处理鼠标进入和离开的函数
-    function handleMouseEnter() {
-        if (hoverImage) {
-            hoverImage.classList.remove('opacity-0', 'fade-out');
-            hoverImage.classList.add('fade-in');
-        }
-    }
-
-    function handleMouseLeave() {
-        if (hoverImage) {
-            hoverImage.classList.remove('fade-in');
-            hoverImage.classList.add('fade-out');
-        }
-    }
-
-    // 初始调用
-    toggleHoverListeners();
-
-    // 监听窗口大小变化
-    window.addEventListener('resize', () => {
-        const newIsDesktop = window.matchMedia('(min-width: 768px)').matches;
-        if (newIsDesktop !== isDesktop) {
-            isDesktop = newIsDesktop;
-            toggleHoverListeners();
-        }
-    });
+    // const brandLink = document.getElementById('brand-link');
+    // const hoverImage = document.getElementById('hover-image');
+    // function LogoStart(){
+    //     hoverImage.classList.add('fade-in');
+    // }
+    //
+    // let isDesktop = window.matchMedia('(min-width: 768px)').matches;
+    //
+    // // 添加或移除事件监听器的函数
+    // function toggleHoverListeners() {
+    //     if (isDesktop) {
+    //         brandLink.addEventListener('mouseenter', handleMouseEnter);
+    //         brandLink.addEventListener('mouseleave', handleMouseLeave);
+    //     } else {
+    //         brandLink.removeEventListener('mouseenter', handleMouseEnter);
+    //         brandLink.removeEventListener('mouseleave', handleMouseLeave);
+    //
+    //     }
+    // }
+    //
+    // // 处理鼠标进入和离开的函数
+    // function handleMouseEnter() {
+    //     if (hoverImage) {
+    //         hoverImage.classList.remove('opacity-0', 'fade-out');
+    //         hoverImage.classList.add('fade-in');
+    //     }
+    // }
+    //
+    // function handleMouseLeave() {
+    //     if (hoverImage) {
+    //         hoverImage.classList.remove('fade-in');
+    //         hoverImage.classList.add('fade-out');
+    //     }
+    // }
+    //
+    // // 初始调用
+    // toggleHoverListeners();
+    //
+    // // 监听窗口大小变化
+    // window.addEventListener('resize', () => {
+    //     const newIsDesktop = window.matchMedia('(min-width: 768px)').matches;
+    //     if (newIsDesktop !== isDesktop) {
+    //         isDesktop = newIsDesktop;
+    //         toggleHoverListeners();
+    //     }
+    // });
 
 
 });

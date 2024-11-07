@@ -31,10 +31,9 @@ class AppServiceProvider extends ServiceProvider
         $foots = $Settings->getBase('foot', '.');
         $generals = $Settings->getBase('general', '.');
 //        dd($foot,$navigation);
-        View::composer('Layouts.app', function ($view) use ($foots, $generals) {
+        View::composer('Layouts.superApp', function ($view) use ($foots, $generals) {
             $view->with('foots', $foots)
                 ->with('generals', $generals);
-
 //                                ->with('navigation', ['foot' => $ssss, 'navigation' => $aaaa])
         });
     }

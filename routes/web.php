@@ -17,11 +17,15 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers', 'middleware' => 'ngrok.header'], function () {
+Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/about', 'About\AboutController@index');
-    Route::get('/t',  function () { return view('t');
-});
+    Route::get('/t', function () {
+        return view('t');
+    });
+    Route::fallback(function () {
+        return response()->view('errors.404', [], 404);
+    });
 });
 //Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers', 'middleware' => 'ngrok.header'], function () {
 //    Route::get('/', function () use ($request) {

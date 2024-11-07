@@ -5,14 +5,9 @@ body {
     height: 100vh; /* 確保整個頁面高度為視窗高度 */
     z-index: 98; /* 最高層級，確保覆蓋所有內容 */
     font-size: 1rem;
-    /*font-family: "Roboto", sans-serif;*/
     line-height: 1.6;
-
 }
 
-* {
-    box-sizing: border-box;
-}
 
 .overlay {
     position: fixed;
@@ -155,47 +150,6 @@ body {
     color: #446c6a !important;
 
 }
-/*品牌圖標動畫*/
-@keyframes draw-in {
-    0% {
-        opacity: 0;
-        transform: translateY(10px); /* 初始位置稍微下移 */
-    }
-    50% {
-        opacity: 0.5; /* 半透明 */
-        transform: translateY(5px); /* 向上移动一些 */
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0); /* 结束时回到原位置 */
-    }
-}
-
-@keyframes draw-out {
-    0% {
-        opacity: 1;
-        transform: translateY(0); /* 开始位置 */
-    }
-    50% {
-        opacity: 0.5; /* 半透明 */
-        transform: translateY(5px); /* 向下移动一些 */
-    }
-    100% {
-        opacity: 0; /* 完全透明 */
-        transform: translateY(10px); /* 向下移动 */
-    }
-}
-
-.fade-in {
-    animation: draw-in 0.5s forwards; /* 动画时间 1 秒 */
-}
-
-.fade-out {
-    animation: draw-out 0.5s forwards; /* 动画时间 1 秒 */
-}
-
-
-
 
 
 /*卡欄寬*/

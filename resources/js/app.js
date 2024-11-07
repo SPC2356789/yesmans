@@ -1,4 +1,6 @@
-import './main.js'
-import '../newLayout/js/scripts.js'
 
+import './main.js'
+import './home.js'
+
+import '../newLayout/js/scripts.js'
 

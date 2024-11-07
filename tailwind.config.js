@@ -12,7 +12,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'Noto Sans TC', 'Microsoft JhengHei', 'Arial', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', 'Noto Sans TC', 'Microsoft JhengHei', 'Arial'],
             },
         },
     },

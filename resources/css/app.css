@@ -1,6 +1,9 @@
 
 @import './main.css';
+@import './home.css';
 @import '../newLayout/css/styles.css';
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +12,7 @@
 @layer base {
     html, body {
         font-family: 'Inter', 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
+        /*font-family: "Helvetica", "Arial","LiHei Pro","Microsoft JhengHei", sans-serif;*/
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -18,4 +22,3 @@
         box-sizing: inherit;
     }
 }
-
