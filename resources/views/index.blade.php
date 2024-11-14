@@ -264,33 +264,5 @@
 
 
     </section>
-    <!--post-->
-    {{--    <section>--}}
-    {{--        <div class="container">--}}
-    {{--            <div class="row">--}}
-    {{--                <div class="post-area-index font-weight-bold ">--}}
-
-    {{--                    <div class="img_box">--}}
-    {{--                        <img src="https://via.placeholder.com/1024x1024">--}}
-    {{--                        <div class="post-title">登山實用</div>--}}
-    {{--                    </div>--}}
-    {{--                    <div class="img_box">--}}
-    {{--                        <img src="https://via.placeholder.com/1024x1024">--}}
-    {{--                        <div class="post-title">帶團契機</div>--}}
-    {{--                    </div>--}}
-    {{--                    <div class="img_box">--}}
-    {{--                        <img src="https://via.placeholder.com/1024x1024">--}}
-    {{--                        <div class="post-title">山上救護分享</div>--}}
-
-    {{--                    </div>--}}
-    {{--                    <div class="img_box">--}}
-    {{--                        <img src="https://via.placeholder.com/1024x1024">--}}
-    {{--                        <div class="post-title">惡劣天氣判斷</div>--}}
-    {{--                    </div>--}}
-    {{--                </div>--}}
-    {{--                <div class="mt-5"><a class="text-decoration-none read_more" href="#">看更多文章....</a></div>--}}
-    {{--            </div>--}}
-    {{--        </div>--}}
-    {{--    </section>--}}
 
 @endsection

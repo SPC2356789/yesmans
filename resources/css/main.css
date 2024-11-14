@@ -151,7 +151,18 @@ body {
 
 }
 
+/* 默认隐藏元素 */
+.fade-in {
+    opacity: 0;
+    transform: translateY(50px); /* 元素从下方滑入 */
+    transition: opacity 2s ease, transform 2s ease; /* 添加动画效果 */
+}
 
+/* 当元素进入视口时，添加动画 */
+.animate {
+    opacity: 1;
+    transform: translateY(0); /* 使元素恢复原位 */
+}
 /*卡欄寬*/
 .r_sidebar {
     width: 80%;

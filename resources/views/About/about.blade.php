@@ -15,7 +15,7 @@
     <section class=" flex justify-center" id="projects">
         <div class="xl:w-[1040px] lg:w-[900px] md:mx-28 sm:mx-16 lg:mx-4 xs:mx-6 xxx:mx-2 xxx:pt-6 sm:pt-12 md:pt-16 ">
             <!-- Featured Project Row -->
-            <div class="flex flex-col lg:flex-row mb-4 mb-lg-5 items-center gap-3">
+            <div class="flex flex-col lg:flex-row mb-4 mb-lg-5 items-center gap-3 ">
                 <div class="w-full lg:w-2/3 relative">
                     <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
                     <img class="w-full h-auto " src="{{ Storage::url($stories['image']) }}" alt="..."/>
@@ -31,21 +31,19 @@
                 @foreach($stories['story'] as $storyK=> $story)
                     @if($story['data']['status'])
                         <div
-                            class="flex flex-col {{ $storyK % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse' }} justify-center mb-0 ">
-                            <div class="w-full md:w-1/2 relative mx-auto relative">
+                            class="flex bg-black flex-col {{ $storyK % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse' }} justify-center items-center  fade-in animation">
+                            <div class="w-full md:w-1/2  mx-auto relative">
                                 <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
                                 <img class="w-full h-auto" src="{{ Storage::url($story['data']['image']) }}" alt="..."/>
                             </div>
-                            <div class="w-full md:w-1/2">
-                                <div class="bg-black text-center h-full">
-                                    <div class="flex h-full py-12  px-6 sm:p-24 md:px-12 md:py-8 xl:px-24 2xl:px-32 lg:px-12 lg:pt-12">
-                                        <div class="w-full my-auto text-center md:text-left">
-                                            <h4 class="text-white">{{$story['data']['title'] ?? ''}}</h4>
-                                            <p class="mb-0 text-gray-500 opacity-50">{{$story['data']['content'] ?? ''}}</p>
-                                        </div>
-                                    </div>
-                                </div>
+{{--<div>--}}
+{{--    --}}
+{{--</div>--}}
+                            <div class="xxx:h-[200px] xxx:px-5 xxs:h-[240px] md:h-full   xxs:px-10 w-full md:w-1/2 flex flex-col justify-center  items-center text-center ">
+                                <h4 class="text-white">{{$story['data']['title'] ?? ''}}</h4>
+                                <p class="mb-0 text-gray-500 opacity-50">{{$story['data']['content'] ?? ''}}</p>
                             </div>
+
                         </div>
                     @endif
                 @endforeach
