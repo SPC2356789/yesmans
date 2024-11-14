@@ -19,14 +19,20 @@
 /*}*/
 
 
-.s-cus, .s-cus .swiper-pagination-bullet-active {
-    color: #ee9900;
-    background: #ee9900;
+.s-cus {
+    color: #ee9900 !important;
+
 }
 
-.s-cus:hover, .s-cus .swiper-pagination-bullet:hover {
-    color: #fbfbfc;
-    background: #fbfbfc;
+.s-cus .swiper-pagination-bullet-active {
+    background: #ee9900!important;
+}
+.s-cus .swiper-pagination-bullet:hover{
+    background: #fbfbfc!important;
+}
+.s-cus:hover {
+    color: #fbfbfc !important;
+
 }
 
 .tabutton.active, .tabutton:hover {

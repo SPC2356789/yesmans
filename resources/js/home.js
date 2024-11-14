@@ -1,4 +1,11 @@
 import $ from 'jquery';
+// import Swiper styles
+// core version + navigation, pagination modules:
+
+import Swiper from 'swiper/bundle';
+
+// import styles bundle
+import 'swiper/css/bundle';
 
 $(document).ready(function () {
 
