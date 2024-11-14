@@ -25,9 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', adjustProgressBar);
 
     function startProgressBar(totalDuration,callback) {
-        let progress = 0;
+        let progress = 5;
         const targetProgress = 100;
-        const increment = targetProgress / (totalDuration / 10); // 每帧大约更新一次
+        const increment = targetProgress / (totalDuration / 17); // 每帧大约更新一次
 
         // 显示遮罩层
         overlay.style.display = 'block';
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
 
         // 启动进度条
-        startProgressBar();
+        startProgressBar(loadTimes);
 
     });
 

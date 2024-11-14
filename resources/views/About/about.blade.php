@@ -12,12 +12,13 @@
 @section('content')
 
     <!-- Projects -->
-    <section class="pt-6 sm:pt-12 md:pt-24 flex justify-center" id="projects">
-        <div class="px-2 sm:mx-10 md:mx-16   lg:max-w-[1426px] ">
+    <section class=" flex justify-center" id="projects">
+        <div class="xl:w-[1040px] lg:w-[900px] md:mx-28 sm:mx-16 lg:mx-4 xs:mx-6 xxx:mx-2 xxx:pt-6 sm:pt-12 md:pt-16 ">
             <!-- Featured Project Row -->
             <div class="flex flex-col lg:flex-row mb-4 mb-lg-5 items-center gap-3">
-                <div class="w-full lg:w-2/3">
-                    <img class="w-full h-auto mb-3 md:mb-0" src="{{ Storage::url($stories['image']) }}" alt="..."/>
+                <div class="w-full lg:w-2/3 relative">
+                    <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
+                    <img class="w-full h-auto " src="{{ Storage::url($stories['image']) }}" alt="..."/>
                 </div>
                 <div class="w-full lg:w-1/3">
                     <div class="text-center md:text-left py-12 ">
@@ -31,7 +32,8 @@
                     @if($story['data']['status'])
                         <div
                             class="flex flex-col {{ $storyK % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse' }} justify-center mb-0 ">
-                            <div class="w-full md:w-1/2 relative mx-auto">
+                            <div class="w-full md:w-1/2 relative mx-auto relative">
+                                <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
                                 <img class="w-full h-auto" src="{{ Storage::url($story['data']['image']) }}" alt="..."/>
                             </div>
                             <div class="w-full md:w-1/2">

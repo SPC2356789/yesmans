@@ -1,7 +1,7 @@
 
 @import './main.css';
-@import './home.css';
 @import '../newLayout/css/styles.css';
+@import './home.css';
 
 
 @tailwind base;

@@ -1,24 +1,22 @@
+/*!* 首页轮播淡化滚动条的样式 *!*/
+/*.homepage-carousel::-webkit-scrollbar {*/
+/*    width: 8px; !* 控制滚动条宽度 *!*/
+/*}*/
 
-/* 首页轮播淡化滚动条的样式 */
-.homepage-carousel::-webkit-scrollbar {
-    width: 8px;  /* 控制滚动条宽度 */
-}
+/*.homepage-carousel::-webkit-scrollbar-thumb {*/
+/*    background-color: rgba(0, 0, 0, 0.2); !* 设置透明度的颜色 *!*/
+/*    border-radius: 4px; !* 圆角效果 *!*/
+/*}*/
 
-.homepage-carousel::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);  /* 设置透明度的颜色 */
-    border-radius: 4px;  /* 圆角效果 */
-}
-
-.homepage-carousel::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.1);  /* 背景轨道透明度 */
-}
+/*.homepage-carousel::-webkit-scrollbar-track {*/
+/*    background-color: rgba(0, 0, 0, 0.1); !* 背景轨道透明度 *!*/
+/*}*/
 
 
- .fade-on-scroll {
-     position: relative; /* 使元素能夠擁有絕對定位的子元素 */
-     transition: opacity 0.2s ease-out, filter 0.2s ease-out; /* 添加過渡效果 */
- }
-
+/*.fade-on-scroll {*/
+/*    position: relative; !* 使元素能夠擁有絕對定位的子元素 *!*/
+/*    transition: opacity 0.2s ease-out, filter 0.2s ease-out; !* 添加過渡效果 *!*/
+/*}*/
 
 
 .s-cus, .s-cus .swiper-pagination-bullet-active {
@@ -26,11 +24,18 @@
     background: #ee9900;
 }
 
-.s-cus:hover ,.s-cus .swiper-pagination-bullet:hover  {
+.s-cus:hover, .s-cus .swiper-pagination-bullet:hover {
     color: #fbfbfc;
     background: #fbfbfc;
 }
 
-.tabutton.active {
-    background: #5B9894FF;
+.tabutton.active, .tabutton:hover {
+    /*height: 100%;*/
+    @apply pb-1 ss:pb-2 bg-[#5B9894FF] !text-white ;
 }
+
+.tab-lock img.lock-active {
+    opacity: 1 !important;
+    z-index: 10 !important;
+}
+

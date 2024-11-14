@@ -39,8 +39,8 @@
 </div>
 
 <header class="">
-    <nav class="navbar navbar-expand-lg navbar-light navbar-shrink fixed-top h-auto" id="mainNav">
-        <div class="flex items-center justify-around sm:mx-6 md:mx-24 lg:mx-32 xl:mx-48 2xl:mx-60 w-full ">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-shrink fixed-top h-auto flex flex-col " id="mainNav">
+        <div class="flex  justify-between items-center xl:w-[1040px] lg:w-[900px] w-[500px]  xxx:w-full md:px-28 sm:px-20 lg:px-2 ss:px-12 xxx:px-4 xxs:px-6">
             {{--            <a class="navbar-brand" href="\">{{$generals['brand_name']??''}}</a>--}}
             <a class="flex items-end justify-start max-h-12 mr-2" href="/" id="brand-link">
                 @if($generals)
