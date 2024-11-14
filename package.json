@@ -23,7 +23,6 @@
         "@heroicons/react": "^2.1.5",
         "dotenv": "^16.4.5",
         "jquery": "^3.7.1",
-        "motion": "^10.18.0",
         "swiper": "^11.1.14"
     }
 }

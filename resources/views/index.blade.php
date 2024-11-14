@@ -2,12 +2,12 @@
 @section($Slug,'active')
 {{--{{dd($Carousels)}}--}}
 @section('tlink')
-{{--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>--}}
+    {{--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>--}}
 
 @endsection
 
 @section('blink')
-{{--    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>--}}
+    {{--    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>--}}
 @endsection
 @section('content')
     <section class="">
@@ -19,12 +19,12 @@
                          src="{{ Storage::url($Carousel['image_path']) }}"
                          alt="{{$Carousel['alt']??''}}">
                 @endforeach
-                <div
-                    class="swiper-button-prev carousel_arrow s-cus bg-black bg-opacity-50 rounded-full p-3 scale-50 font-extrabold"></div>
-
-                <div
-                    class="swiper-button-next carousel_arrow s-cus bg-black bg-opacity-50 rounded-full p-3 scale-50 font-extrabold"></div>
             </div>
+            <div
+                class="swiper-button-prev carousel_arrow "></div>
+
+            <div
+                class="swiper-button-next carousel_arrow "></div>
         </div>
     </section>
     <section class="py-5 xxx:px-4 xs:px-6 ss:px-8 md:px-12 lg:px-2 min-w-[302px]">
@@ -203,7 +203,7 @@
                     <div class="swiper Itinerary relative">
                         <div class="swiper-wrapper tab-lock">
                             {{--hide--}}
-                            <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
+{{--                            <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>--}}
                             <img class="swiper-slide" src="{{Storage::url('poc1.jpg')}}" loading="lazy"
                                  data-lock="1"/>
                             <img class="swiper-slide" src="{{Storage::url('poc2.jpg')}}" loading="lazy"
@@ -215,14 +215,14 @@
                             <img class="swiper-slide" src="{{Storage::url('poc5.jpg')}}" loading="lazy"
                                  data-lock="5"/>
 
-                            <div
-                                class="swiper-button-next Itinerary z-21 s-cus bg-black bg-opacity-50 rounded-full p-3 scale-50 font-extrabold "></div>
-                            <div
-                                class="swiper-button-prev Itinerary z-21 s-cus bg-black bg-opacity-50 rounded-full p-3 scale-50 font-extrabold"></div>
-                            <div class="swiper-pagination Itinerary z-21 s-cus bg-black w-full bg-opacity-10  "></div>
-
-
                         </div>
+                        <div
+                            class="swiper-button-next Itinerary "></div>
+                        <div
+                            class="swiper-button-prev Itinerary "></div>
+                        <div class="swiper-pagination Itinerary z-21 s-cus bg-black w-full bg-opacity-10  "></div>
+
+
                     </div>
 
                 </div>

@@ -1,11 +1,11 @@
 import $ from 'jquery';
-// import Swiper styles
-// core version + navigation, pagination modules:
-
-import Swiper from 'swiper/bundle';
-
-// import styles bundle
-import 'swiper/css/bundle';
+import Swiper from 'swiper';
+import { Navigation, Pagination ,Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/autoplay';
+import 'swiper/css/effect-fade';
 
 $(document).ready(function () {
 
@@ -20,6 +20,7 @@ $(document).ready(function () {
             nextEl: ".swiper-button-next.carousel_arrow",
             prevEl: ".swiper-button-prev.carousel_arrow",
         },
+        modules: [Navigation, Pagination,Autoplay],
     });
 
     // 初始化 Itinerary 轮播
@@ -34,6 +35,7 @@ $(document).ready(function () {
             el: ".swiper-pagination.Itinerary",
             clickable: true,
         },
+        modules: [Navigation, Pagination,Autoplay],
     });
 
 //行程欄位圖片鎖定

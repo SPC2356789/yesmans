@@ -19,20 +19,12 @@
 /*}*/
 
 
-.s-cus {
-    color: #ee9900 !important;
-
+.swiper-pagination-bullet-active {
+    background: #ee9900 !important;
 }
 
-.s-cus .swiper-pagination-bullet-active {
-    background: #ee9900!important;
-}
-.s-cus .swiper-pagination-bullet:hover{
-    background: #fbfbfc!important;
-}
-.s-cus:hover {
-    color: #fbfbfc !important;
-
+.swiper-pagination-bullet:hover {
+    background: #fbfbfc !important;
 }
 
 .tabutton.active, .tabutton:hover {
@@ -45,3 +37,25 @@
     z-index: 10 !important;
 }
 
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    @apply !text-4xl   !px-[0.894rem]  hover:text-[#fbfbfc] text-[#ee9900] scale-50
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    @apply aspect-square bg-[rgba(0,0,0,0.3)]  rounded-full  font-extrabold
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    @apply bg-[rgba(0,0,0,0.5)]
+}
+
+.swiper-button-prev {
+    @apply ml-3
+}
+
+.swiper-button-next {
+    @apply mr-3
+}
