@@ -14,11 +14,7 @@ return new class extends Migration
         Schema::create('blog_categories', function (Blueprint $table) {
             $table->id();  // 自動增長ID
             $table->string('name');  // 分類名稱
-            $table->string('slug')->unique();  // 用於URL的短語，應該是唯一的
-            $table->text('description')->nullable();  // 分類的描述，對SEO和用戶有幫助
-            $table->boolean('is_active')->default(true);  // 狀態，表示此分類是否為啟用狀態
-            $table->unsignedBigInteger('parent_id')->nullable();  // 父類別ID（支持階層結構）
-            $table->foreign('parent_id')->references('id')->on('blog_categories')->onDelete('cascade');  // 外鍵關聯至同一張表，用於階層分類
+            $table->string('slug')->unique();
             $table->timestamps();  // 自動生成 created_at 和 updated_at
         });
     }

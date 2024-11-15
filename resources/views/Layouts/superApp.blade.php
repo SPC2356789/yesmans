@@ -86,9 +86,9 @@
                                     class="fa-solid fa-house"></i><span class="mx-1">首頁</span></a></li>
                         <li class="nav-item"><a class="nav-link @yield('about')" href="/about">
                                 <i class="fa-solid fa-mountain-sun"></i><span class="mx-1">關於我們</span></a></li>
-                        <li class="nav-item"><a class="nav-link @yield('projects')" href="/projects">
+                        <li class="nav-item"><a class="nav-link @yield('itinerary')" href="/itinerary_">
                                 <i class="fa-solid fa-person-hiking"></i><span class="mx-1">行程資訊</span></a></li>
-                        <li class="nav-item"><a class="nav-link @yield('post')" href="/post">
+                        <li class="nav-item"><a class="nav-link @yield('blog')" href="/blog">
                                 <i class="fa-solid fa-newspaper"></i><span class="mx-1">文章區</span></a></li>
                     </ul>
                 </div>
