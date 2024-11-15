@@ -58,9 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             element.classList.remove('opacity-0', 'translate-y-5'); // 移除透明度和偏移
             element.classList.add('opacity-100', 'translate-y-0');  // 添加完全不透明並移動回原位
-        }, 500); // 延遲 1000 毫秒後開始淡入
+        }, 2000); // 延遲 1000 毫秒後開始淡入
     }
-    const setTime = 2000; // 设置最小时间
+    const setTime = 1500; // 设置最小时间
     const endTime = Date.now();
     const loadTime = endTime - startTime;
 
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
 
     // 启动进度条
-    startProgressBar(setTime,);
+    startProgressBar(setTime);
 
     // window.addEventListener('load', function () {
     //     // const setTime = 2000; // 设置最小时间
