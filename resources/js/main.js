@@ -53,14 +53,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         element.classList.remove('opacity-0', 'translate-y-5'); // 移除透明度和偏移
                         element.classList.add('opacity-100', 'translate-y-0');  // 添加完全不透明並移動回原位
-                }, 1000);
+                }, 500);
 
             }
         }
 
         requestAnimationFrame(updateProgress);
     }
-    const setTime = 1500; // 设置最小时间
+    const setTime = 2000; // 设置最小时间
     const endTime = Date.now();
     const loadTime = endTime - startTime;
 
