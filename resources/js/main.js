@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     adjustProgressBar();
     window.addEventListener('resize', adjustProgressBar);
 
-    function startProgressBar(totalDuration,callback) {
+    function startProgressBar(totalDuration, callback) {
         let progress = 5;
         const targetProgress = 100;
         const increment = targetProgress / (totalDuration / 17); // 每帧大约更新一次
@@ -42,12 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 progressBar.style.width = targetProgress + '%';
                 progressBar.textContent = targetProgress + '%';
-                setTimeout(function () {
-                    overlay.style.display = 'none'; // 淡出遮罩
-                    document.querySelector('.progress-container').style.display = 'none'; // 淡出进度条
-                    yesmanContainer.style.display = 'none'; // 淡出 YESMAN
-                    enableScroll(); // 启用滚动
-                }, 2000);
+                overlay.style.display = 'none'; // 淡出遮罩
+                document.querySelector('.progress-container').style.display = 'none'; // 淡出进度条
+                yesmanContainer.style.display = 'none'; // 淡出 YESMAN
+                enableScroll(); // 启用滚动
             }
         }
 
@@ -60,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             element.classList.add('opacity-100', 'translate-y-0');  // 添加完全不透明並移動回原位
         }, 2000); // 延遲 1000 毫秒後開始淡入
     }
+
     const setTime = 1500; // 设置最小时间
     const endTime = Date.now();
     const loadTime = endTime - startTime;
@@ -84,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //     startProgressBar(loadTimes);
     //
     // });
-
 
 
     // const brandLink = document.getElementById('brand-link');
