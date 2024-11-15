@@ -7,7 +7,7 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     {{--統一字體--}}
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <link rel="stylesheet" href="https://static.zeoseven.com/zsft/303/main/result.css">
+    <link rel="stylesheet" href="https://static.zeoseven.com/zsft/83/main/result.css">
     @yield('metaInfo')
     @vite(['resources/css/app.css','resources/js/app.js'])
 
