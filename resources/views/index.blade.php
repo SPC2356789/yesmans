@@ -36,7 +36,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="fw-bold fs-3">行程訊息</h3>
                             <a type="button"
-                               class="w-[18.8%] text-center ms-auto xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-black hover:text-white focus:outline-none">
+                               class="w-[18.8%] text-center ms-auto xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] hover:text-white focus:outline-none">
                                 <span class="w-11/12 "></span> 看更多
                                 <i class="fas fa-chevron-right w-1/12"> </i>
                             </a>
@@ -112,7 +112,7 @@
 
                             @foreach($itinerary as $index => $v)
                                 <button
-                                    class="text-[#4d4c4c] tabutton h-full  ss:py-1 xxx:w-[19.5%] xxs:w-[18.8%] {{--us-420:w-[18%]  lg:w-[18%]--}}  bg-[#b8cac9] rounded-t-lg text-center {{ $index == 0 ? 'active' : '' }} group element  hover:shadow-md transition-all transform duration-300 ease-out relative"
+                                    class="text-black tabutton h-full  ss:py-1 xxx:w-[19.5%] xxs:w-[18.8%] {{--us-420:w-[18%]  lg:w-[18%]--}}  bg-[#b8cac9] rounded-t-lg text-center {{ $index == 0 ? 'active' : '' }} group element  hover:shadow-md transition-all transform duration-300 ease-out relative"
                                     data-bs-toggle="tab"
                                     data-bs-target="#{{$v['id']}}"
                                     role="tab"

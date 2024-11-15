@@ -27,13 +27,14 @@
     background: #fbfbfc !important;
 }
 
-.tabutton.active {
-    /*height: 100%;*/
-    @apply pb-1 ss:pb-2 bg-[#5B9894FF] text-white ;
+
+.tabutton:hover {
+    @apply pb-1 ss:pb-2 bg-[#F7DBAB];
 }
-.tabutton:hover{
-    @apply pb-1 ss:pb-2 bg-[#F7DBAB]
+.tabutton.active,.tabutton.active:hover {
+    @apply pb-1 ss:pb-2 bg-[#5B9894FF] !text-white;
 }
+
 .tab-lock img.lock-active {
     opacity: 1 !important;
     z-index: 20 !important;

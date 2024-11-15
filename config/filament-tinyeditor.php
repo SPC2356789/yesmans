@@ -37,7 +37,7 @@ return [
             'plugins' => 'accordion autoresize code directionality advlist autolink link image lists charmap preview anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media table emoticons help',
             'toolbar' => 'undo redo removeformat code | fontfamily  fontsizeinput font_size_formats styles | bold italic underline | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist outdent indent accordion | forecolor backcolor | blockquote table toc hr code | image link  media codesample emoticons | visualblocks preview wordcount fullscreen help',
             'upload_directory' => null,
-            ],
+        ],
         'simple' => [
             'plugins' => 'autoresize directionality emoticons link wordcount',
             'toolbar' => 'removeformat | blocks fontfamily fontsize | bold italic | rtl ltr | numlist bullist | link emoticons',
@@ -73,7 +73,8 @@ return [
     'extra' => [
         'toolbar' => [
             'fontsize' => '10px 12px 13px 14px 16px 18px 20px',
-            'fontfamily' => 'Tahoma=tahoma,arial,helvetica,sans-serif;',
+            'fontfamily' =>'泉源體=GenSenRounded2 TW R,Inter,Noto Sans TC ,Microsoft JhengHei , Arial, sans-serif;英文預設=Inter,GenSenRounded2 TW R,Noto Sans TC ,Microsoft JhengHei , Arial, sans-serif;微軟正黑=Microsoft JhengHei,GenSenRounded2 TW R,Inter,Noto Sans TC , Arial, sans-serif;',
+
         ]
     ]
 ];

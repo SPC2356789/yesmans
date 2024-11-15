@@ -7,6 +7,7 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     {{--統一字體--}}
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://static.zeoseven.com/zsft/303/main/result.css">
     @yield('metaInfo')
     @vite(['resources/css/app.css','resources/js/app.js'])
 
@@ -66,10 +67,10 @@
                 @endif
             </a>
             <div class="max-h-8 min-h-6">
-                <button class="btn btn-outline-primary navbar-toggler px-1 sm:px-6 navbar-toggler-right" type="button"
+                <button class=" btn-outline-primary navbar-toggler px-2 sm:px-6 navbar-toggler-right" type="button"
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    Menu
+                    MENU
                     <i class="fas fa-bars"></i>
                 </button>
             </div>

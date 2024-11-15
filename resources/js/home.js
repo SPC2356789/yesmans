@@ -20,7 +20,7 @@ $(document).ready(function () {
             nextEl: ".swiper-button-next.carousel_arrow",
             prevEl: ".swiper-button-prev.carousel_arrow",
         },
-        modules: [Navigation, Pagination,Autoplay,EffectFade],
+        modules: [Navigation,Autoplay,EffectFade],
     });
 
     // 初始化 Itinerary 轮播
@@ -35,7 +35,7 @@ $(document).ready(function () {
             el: ".swiper-pagination.Itinerary",
             clickable: true,
         },
-        modules: [Navigation,Autoplay,EffectFade],
+        modules: [Navigation, Pagination,Autoplay,EffectFade],
     });
 
 //行程欄位圖片鎖定
