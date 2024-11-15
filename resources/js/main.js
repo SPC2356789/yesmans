@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.querySelector('.progress-container').style.display = 'none'; // 淡出进度条
                     yesmanContainer.style.display = 'none'; // 淡出 YESMAN
                     enableScroll(); // 启用滚动
-                }, 500);
+                }, 2000);
             }
         }
 
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
 
     // 启动进度条
-    startProgressBar(setTime);
+    startProgressBar(setTime,);
 
     // window.addEventListener('load', function () {
     //     // const setTime = 2000; // 设置最小时间
