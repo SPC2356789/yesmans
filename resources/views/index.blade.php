@@ -112,7 +112,7 @@
 
                             @foreach($itinerary as $index => $v)
                                 <button
-                                    class="text-[#4d4c4c] tabutton h-full  ss:py-1 xxx:w-[19.5%] xxs:w-[18.8%] {{--us-420:w-[18%]  lg:w-[18%]--}} active:bg-[#5B9894FF] bg-[#b8cac9] rounded-t-lg text-center {{ $index == 0 ? 'active' : '' }} group element  hover:shadow-md transition-all transform duration-300 ease-out relative"
+                                    class="text-[#4d4c4c] tabutton h-full  ss:py-1 xxx:w-[19.5%] xxs:w-[18.8%] {{--us-420:w-[18%]  lg:w-[18%]--}}  bg-[#b8cac9] rounded-t-lg text-center {{ $index == 0 ? 'active' : '' }} group element  hover:shadow-md transition-all transform duration-300 ease-out relative"
                                     data-bs-toggle="tab"
                                     data-bs-target="#{{$v['id']}}"
                                     role="tab"
@@ -136,7 +136,7 @@
                                     <div class="card border-0 ">
                                         <ul class="list-group list-group-flush fs-6 ">
                                             @foreach($v['data'] as $a)
-                                                <li class="xxx:pt-2 xs:pt-3 pl-2 sm:pt-4 sm:pl-3  ss:py-2  lg:py-3 hover:scale-105 hover:z-50 hover:shadow-[0_-8px_12px_-2px_rgba(0,0,0,0.15),0_8px_12px_-2px_rgba(0,0,0,0.15)] hover:rounded-xl transition-all transform itinerary_tab {{--hover:bg-[#dbdada]--}} bg-[#efefef] border-b border-b-[#a8b6ad]"
+                                                <li class="xxx:pt-2 xs:pt-3 pl-2 sm:pt-4 sm:pl-3  xxx:py-2  lg:py-3 hover:scale-105 hover:z-50 hover:shadow-[0_-8px_12px_-2px_rgba(0,0,0,0.15),0_8px_12px_-2px_rgba(0,0,0,0.15)] hover:rounded-xl transition-all transform itinerary_tab {{--hover:bg-[#dbdada]--}} bg-[#efefef] border-b border-b-[#a8b6ad]"
                                                     data-tab="{{$a['uuid']}}">
                                                     <div class="flex items-center ">
                                                         <img class="mr-1 xxx:w-4 ss:w-5 sm:w-5 "
@@ -154,25 +154,20 @@
                                                             <div
                                                                 class="flex flex-wrap xxx:gap-1 ss:gap-1.5  items-center">
                                                                 <span
-                                                                    class="ss:badge xxx:p-0.5 xxs:px-1 ss:px-1.5 rounded-pill text-black bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">C級</span>
+                                                                    class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">C級</span>
                                                                 <span
-                                                                    class="ss:badge xxx:p-0.5 xxs:px-1 ss:px-1.5 rounded-pill  text-black bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">郊山</span>
+                                                                    class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl  bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">郊山</span>
                                                                 <span
-                                                                    class="ss:badge xxx:p-0.5 xxs:px-1 ss:px-1.5 rounded-pill text-black bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">進階健行</span>
+                                                                    class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">進階健行</span>
                                                             </div>
                                                         </div>
                                                         <div class="w-1/5 flex flex-col align-end h-full">
                                                             <button type="button "
-                                                                    class="w-11/12 xxx:p-1  sm:p-2  rounded-full bg-[#55958d] text-[#f7dbab] hover:text-[#467771] hover:bg-[#f8b551] xxx:text-xs xxs:text-sm xs:text-base sm:text-lg lg:text-base ">
+                                                                    class="w-11/12 xxx:px-1 xxx:py-2 sm:p-2  rounded-full bg-[#55958d] text-[#f7dbab] hover:text-[#467771] hover:bg-[#f8b551] xxx:text-xs xxs:text-sm xs:text-base sm:text-lg lg:text-base ">
                                                                 報名中
 
                                                             </button>
                                                         </div>
-
-                                                        {{--                                                        <button type="button"--}}
-                                                        {{--                                                                class="py-1 sm:px-4 px-2 rounded-full btn btn-cus btn-outline-dark ms-auto ">--}}
-                                                        {{--                                                            報名中--}}
-                                                        {{--                                                        </button>--}}
                                                     </div>
                                                     <div
                                                         class="lg:hidden xxx:mr-2 sm:mr-3 flex justify-center  items-center ">

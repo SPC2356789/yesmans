@@ -27,14 +27,16 @@
     background: #fbfbfc !important;
 }
 
-.tabutton.active, .tabutton:hover {
+.tabutton.active {
     /*height: 100%;*/
-    @apply pb-1 ss:pb-2 bg-[#5B9894FF] !text-white ;
+    @apply pb-1 ss:pb-2 bg-[#5B9894FF] text-white ;
 }
-
+.tabutton:hover{
+    @apply pb-1 ss:pb-2 bg-[#F7DBAB]
+}
 .tab-lock img.lock-active {
     opacity: 1 !important;
-    z-index: 10 !important;
+    z-index: 20 !important;
 }
 
 .swiper-button-prev:after,

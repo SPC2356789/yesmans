@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import Swiper from 'swiper';
-import { Navigation, Pagination ,Autoplay } from 'swiper/modules';
+import { Navigation, Pagination ,Autoplay,EffectFade  } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -20,7 +20,7 @@ $(document).ready(function () {
             nextEl: ".swiper-button-next.carousel_arrow",
             prevEl: ".swiper-button-prev.carousel_arrow",
         },
-        modules: [Navigation, Pagination,Autoplay],
+        modules: [Navigation, Pagination,Autoplay,EffectFade],
     });
 
     // 初始化 Itinerary 轮播
@@ -35,17 +35,19 @@ $(document).ready(function () {
             el: ".swiper-pagination.Itinerary",
             clickable: true,
         },
-        modules: [Navigation, Pagination,Autoplay],
+        modules: [Navigation,Autoplay,EffectFade],
     });
 
 //行程欄位圖片鎖定
     $('li.itinerary_tab').hover(
         function () {
             const lock_data = $('.tab-lock img[data-lock="' + $(this).data('tab') + '"]');
+            console.log(lock_data)
             lock_data.addClass('lock-active')
         },
         function () {
             const lock_data = $('.tab-lock img[data-lock="' + $(this).data('tab') + '"]');
+            console.log(2)
             lock_data.removeClass('lock-active');
         }
     );
