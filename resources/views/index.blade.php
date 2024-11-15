@@ -27,7 +27,7 @@
                 class="swiper-button-next carousel_arrow "></div>
         </div>
     </section>
-    <section class="py-5 xxx:px-4 xs:px-6 ss:px-8 md:px-12 lg:px-2 min-w-[302px]">
+    <section class="py-5 xxx:px-4 xxs:px-6 ss:px-12 sm:px-10 md:px-12 lg:px-2 min-w-[302px]">
         <div class="md:mx-16 sm:mx-10 lg:mx-4 {{--xl:mx-40 -2xl:mx-60 --}}">
             <div
                 class="flex flex-col items-end lg:flex-row justify-center gap-6 lg:gap-8 xl:gap-16  ">
@@ -176,7 +176,7 @@
                                                     </div>
                                                     <div
                                                         class="lg:hidden xxx:mr-2 sm:mr-3 flex justify-center  items-center ">
-                                                        <i class="fas fa-angle-down "> </i>
+                                                        <i class="fa-solid fa-sort-down text-[#5B9894FF]"> </i>
 
                                                     </div>
                                                 </li>

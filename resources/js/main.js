@@ -61,19 +61,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 500); // 延遲 1000 毫秒後開始淡入
     }
     const setTime = 2000; // 设置最小时间
-    window.addEventListener('load', function () {
-        // const setTime = 2000; // 设置最小时间
-        const endTime = Date.now();
-        const loadTime = endTime - startTime;
+    const endTime = Date.now();
+    const loadTime = endTime - startTime;
 
-        // console.log(`网页加载时间: ${loadTime} 毫秒`);
-        const loadTimes = loadTime > setTime ? loadTime : setTime;
-        // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
+    // console.log(`网页加载时间: ${loadTime} 毫秒`);
+    const loadTimes = loadTime > setTime ? loadTime : setTime;
+    // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
 
-        // 启动进度条
-        startProgressBar(loadTimes);
+    // 启动进度条
+    startProgressBar(setTime);
 
-    });
+    // window.addEventListener('load', function () {
+    //     // const setTime = 2000; // 设置最小时间
+    //     const endTime = Date.now();
+    //     const loadTime = endTime - startTime;
+    //
+    //     // console.log(`网页加载时间: ${loadTime} 毫秒`);
+    //     const loadTimes = loadTime > setTime ? loadTime : setTime;
+    //     // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
+    //
+    //     // 启动进度条
+    //     startProgressBar(loadTimes);
+    //
+    // });
 
 
 
