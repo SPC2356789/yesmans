@@ -112,7 +112,7 @@
 
                             @foreach($itinerary as $index => $v)
                                 <button
-                                    class="text-black tabutton h-full  ss:py-1 xxx:w-[19.5%] xxs:w-[18.8%] {{--us-420:w-[18%]  lg:w-[18%]--}}  bg-[#b8cac9] rounded-t-lg text-center {{ $index == 0 ? 'active' : '' }} group element  hover:shadow-md transition-all transform duration-300 ease-out relative"
+                                    class="text-black tabutton h-full  ss:py-1 xxx:w-[19.5%] xxs:w-[18.8%] {{--us-420:w-[18%]  lg:w-[18%]--}}  bg-[#b8cac9] rounded-t-lg  {{ $index == 0 ? 'active' : '' }} group element  hover:shadow-md transition-all transform duration-300 ease-out relative"
                                     data-bs-toggle="tab"
                                     data-bs-target="#{{$v['id']}}"
                                     role="tab"
@@ -121,7 +121,7 @@
 
                                     <!-- Tab content -->
                                     <span
-                                        class=" {{--px-2--}}  xxx:text-xs  ss:text-sm  group-hover:translate-y-[-5px]  group-active:translate-y-[-2px]">
+                                        class=" {{--px-2--}}  xxx:text-xs  ss:text-sm ">
                 {{$v['tab']}}
             </span>
 
@@ -163,7 +163,7 @@
                                                         </div>
                                                         <div class="w-1/5 flex flex-col align-end h-full">
                                                             <button type="button "
-                                                                    class="w-11/12 xxx:px-1 xxx:py-2 sm:p-2  rounded-full bg-[#55958d] text-[#f7dbab] hover:text-[#467771] hover:bg-[#f8b551] xxx:text-xs xxs:text-sm xs:text-base sm:text-lg lg:text-base ">
+                                                                    class="w-11/12 xxx:px-1 xxx:py-2 sm:p-2   rounded-full bg-[#55958d] text-[#f7dbab] hover:text-[#467771] hover:bg-[#f8b551] xxx:text-xs xxs:text-sm xs:text-base sm:text-lg lg:text-base ">
                                                                 報名中
 
                                                             </button>
