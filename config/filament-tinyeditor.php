@@ -73,7 +73,7 @@ return [
     'extra' => [
         'toolbar' => [
             'fontsize' => '10px 12px 13px 14px 16px 18px 20px',
-            'fontfamily' =>'寒蟬圓黑=Chill Round Gothic,Inter,Noto Sans TC ,Microsoft JhengHei , Arial, sans-serif;英文預設=Inter,Chill Round Gothic,Noto Sans TC ,Microsoft JhengHei , Arial, sans-serif;微軟正黑=Microsoft JhengHei,Chill Round Gothic,Inter,Noto Sans TC , Arial, sans-serif;',
+            'fontfamily' =>'泉源體=GenSenRounded2 TW R,Inter,Noto Sans TC ,Microsoft JhengHei , Arial, sans-serif;英文預設=Inter,GenSenRounded2 TW R,Noto Sans TC ,Microsoft JhengHei , Arial, sans-serif;微軟正黑=Microsoft JhengHei,GenSenRounded2 TW R,Inter,Noto Sans TC , Arial, sans-serif;',
 
         ]
     ]

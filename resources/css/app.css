@@ -2,7 +2,7 @@
 @import './main.css';
 @import '../newLayout/css/styles.css';
 @import './home.css';
-@import url('https://static.zeoseven.com/zsft/181/main/result.css');
+@import url('https://static.zeoseven.com/zsft/83/main/result.css');
 
 
 @tailwind base;
@@ -10,12 +10,8 @@
 @tailwind utilities;
 
 @layer base {
-
     html, body {
-
-        font-family: '未来圆SC','Chill Round Gothic','ZSFT-ENMIN-83','Inter', 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
-        /*font-family: "Helvetica", "Arial","LiHei Pro","Microsoft JhengHei", sans-serif;*/
-        font-weight: normal;
+        font-family: 'GenSenRounded2 TW R','Inter', 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
