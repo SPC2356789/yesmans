@@ -151,15 +151,13 @@
                                                             class="flex xxs:flex-row flex-col  sm:mt-2 w-4/5 ">
                                                             <span
                                                                 class="text-[#da8a51] text-base ss:text-xl xxx:w-[115px] ss:w-[140px]">{{$a['time']}}</span>
-                                                            <div
-                                                                class="flex flex-wrap xxx:gap-1 ss:gap-1.5  items-center">
-                                                                <span
-                                                                    class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">C級</span>
-                                                                <span
-                                                                    class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl  bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">郊山</span>
-                                                                <span
-                                                                    class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm">進階健行</span>
-                                                            </div>
+
+                                                                <div class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center">
+                                                                    <span class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm flex items-center justify-center">C級</span>
+                                                                    <span class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm flex items-center justify-center">郊山</span>
+                                                                    <span class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm flex items-center justify-center">進階健行</span>
+                                                                </div>
+
                                                         </div>
                                                         <div class="w-1/5 flex flex-col align-end h-full">
                                                             <button type="button "

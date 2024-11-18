@@ -37,7 +37,7 @@ return [
             'plugins' => 'accordion autoresize code directionality advlist autolink link image lists charmap preview anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media table emoticons help',
             'toolbar' => 'undo redo removeformat code | fontfamily  fontsizeinput font_size_formats styles | bold italic underline | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist outdent indent accordion | forecolor backcolor | blockquote table toc hr code | image link  media codesample emoticons | visualblocks preview wordcount fullscreen help',
             'upload_directory' => null,
-        ],
+            ],
         'simple' => [
             'plugins' => 'autoresize directionality emoticons link wordcount',
             'toolbar' => 'removeformat | blocks fontfamily fontsize | bold italic | rtl ltr | numlist bullist | link emoticons',

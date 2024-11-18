@@ -2,23 +2,18 @@
 @import './main.css';
 @import '../newLayout/css/styles.css';
 @import './home.css';
+@import url('https://static.zeoseven.com/zsft/181/main/result.css');
 
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-    font-family: 'ZSFT-ENMIN-83';
-    src: url('https://static.zeoseven.com/zsft/83/main.woff2') format('woff2'),
-    url('https://static-host.zeoseven.com/zsft/83/main.woff2') format('woff2');
-    unicode-range: U+0061-007A, U+0041-005A, U+0030-0039, U+FF0C, U+3002, U+002E, U+002C, U+0021, U+003F, U+003A, U+003B, U+002D, U+FF01, U+FF1F;
-}
 @layer base {
 
     html, body {
 
-        font-family: 'Chill Round Gothic','ZSFT-ENMIN-83','Inter', 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
+        font-family: '未来圆SC','Chill Round Gothic','ZSFT-ENMIN-83','Inter', 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
         /*font-family: "Helvetica", "Arial","LiHei Pro","Microsoft JhengHei", sans-serif;*/
         font-weight: normal;
         margin: 0;
