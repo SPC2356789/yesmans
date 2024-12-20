@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
-    public function getData()
+    public static  function getData()
     {
         return self::selectRaw('*')
             ->orderBy('orderby', 'asc')

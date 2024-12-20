@@ -16,15 +16,7 @@ class AboutMember extends BaseModel
     protected $casts = [
         'image_path' => 'array',//轉URL
     ];
-    protected function getMember()
-    {
-        $data = self::selectRaw('*')
-            ->orderBy('orderby', 'asc')
-            ->where('status', 1)
-            ->get()
-            ->toArray();//抓有開啟的
-        return $data;
-    }
+
     protected static function boot()
     {
         parent::boot();

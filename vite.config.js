@@ -6,6 +6,7 @@ import addVersion from 'vite-plugin-add-version';
 import version from './package.json'
 
 const buildVersion = `${version['version'].replace(/\./g, '_')}_${(new Date()).getTime()}`; //customer_version
+import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
     // base: 'easy-ibex-nearly.ngrok-free.app',
@@ -48,6 +49,7 @@ export default defineConfig({
             refresh: true,
         }),
         addVersion(buildVersion),
+        vue(),
 
     ],
 });

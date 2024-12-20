@@ -153,9 +153,9 @@
                                                                 class="text-[#da8a51] text-base ss:text-xl xxx:w-[115px] ss:w-[140px]">{{$a['time']}}</span>
 
                                                                 <div class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center">
-                                                                    <span class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm flex items-center justify-center">C級</span>
-                                                                    <span class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm flex items-center justify-center">郊山</span>
-                                                                    <span class="xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm flex items-center justify-center">進階健行</span>
+                                                                    <span class="span_tag">C級</span>
+                                                                    <span class="span_tag">郊山</span>
+                                                                    <span class="span_tag">進階健行</span>
                                                                 </div>
 
                                                         </div>
@@ -196,7 +196,7 @@
                     <div class="swiper Itinerary relative">
                         <div class="swiper-wrapper tab-lock">
                             {{--hide--}}
-{{--                            <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>--}}
+                            <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
                             <img class="swiper-slide" src="{{Storage::url('poc1.jpg')}}" loading="lazy"
                                  data-lock="1"/>
                             <img class="swiper-slide" src="{{Storage::url('poc2.jpg')}}" loading="lazy"

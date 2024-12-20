@@ -17,7 +17,7 @@
             })(window, document, 'script', 'dataLayer', '{{ config('services.GTM.id') }}');</script>
 
     @endif
-    {!! seo($SEOData)??null !!}
+    {!! seo($SEOData??null) !!}
     @yield('tlink')
 @endsection
 {{--@yield('tlink')--}}

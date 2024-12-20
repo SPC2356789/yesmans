@@ -12,8 +12,8 @@
 @section('content')
 
     <!-- Projects -->
-    <section class=" flex justify-center" id="projects">
-        <div class="xl:w-[1040px] lg:w-[900px] md:mx-28 sm:mx-16 lg:mx-4 xs:mx-6 xxx:mx-2 xxx:pt-6 sm:pt-12 md:pt-16 ">
+    <section class="flex justify-center" id="projects">
+        <div class="xl:w-[1040px] lg:w-[900px] xxs:mx-6 md:mx-28 sm:mx-20 lg:mx-4 xs:mx-6 ss:mx-12 xxx:mx-4 xxx:pt-6 sm:pt-12 md:pt-16 ">
             <!-- Featured Project Row -->
             <div class="flex flex-col lg:flex-row mb-4 mb-lg-5 items-center gap-3 ">
                 <div class="w-full lg:w-2/3 relative">

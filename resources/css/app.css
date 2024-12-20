@@ -1,8 +1,9 @@
-
 @import './main.css';
 @import '../newLayout/css/styles.css';
 @import './home.css';
+
 @import url('https://static.zeoseven.com/zsft/303/main/result.css');
+@import url('https://rsms.me/inter/inter.css');
 
 
 @tailwind base;
@@ -10,17 +11,74 @@
 @tailwind utilities;
 
 @layer base {
+
     html, body {
-        font-family: 'GenSenRounded2 TW R','Inter', 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
+        font-family: 'GenSenRounded2 TW R', 'Inter', 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        -webkit-font-smoothing: antialiased;  /* 优化 iOS 字体显示 */
-        -moz-osx-font-smoothing: grayscale;   /* 优化 MacOS 字体显示 */
+        -webkit-font-smoothing: antialiased; /* 优化 iOS 字体显示 */
+        -moz-osx-font-smoothing: grayscale; /* 优化 MacOS 字体显示 */
 
     }
 
     *, *::before, *::after {
         box-sizing: inherit;
     }
+
+    /*標籤樣式*/
+    span.span_tag {
+        @apply bg-[#bccbc8]
+    }
+
+    .span_tag {
+        @apply xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs sm:text-sm flex items-center justify-center
+    }
+
+    button.span_tag {
+        @apply hover:bg-[#64A19D]
+    }
+
+    button.span_tag.active {
+        @apply bg-[#64A19D]
+    }
+
+
+    /*標準化選擇器樣式*/
+    div .relative[name="select"] [role="menu"] button {
+        @apply hover:bg-[#f7dbab]
+    }
+
+    div .relative[name="select"] [role="menu"] button.active {
+        @apply text-[#64A19D]
+    }
+
+    /*標準化選擇器樣式*/
+    /*div .relative[name="select"] :hover{*/
+    /*    @apply b*/
+    /*}*/
+    /*    左側版導航欄*/
+    div[name="navbar-l_theme"]  {
+        @apply hidden md:flex md:flex-col gap-3
+    }
+    div[name="navbar-l_theme"] a {
+        @apply text-base text-[#5b5b5c] m-0 hover:text-[#64A19D]
+        /*background-color: #5b5b5c;*/
+    }
+    div[name="navbar-l_theme"] a.active {
+        @apply text-xl text-[#64A19D];
+
+    }
+    /*全域搜尋*/
+    div .relative[name="select"] [role="menu"] button.active.global_sort {
+        @apply text-[#FBFCFDFF]
+    }
+    div .relative[name="select"] [role="menu"] button.global_sort{
+        @apply bg-[#508f88]  block p-2 text-sm text-[#B4C6C5FF] hover:text-[#FBFCFDFF] hover:bg-[#508f88] text-start w-full border-0  outline-none
+    }
+    /*提取顏色用*/
+    .a123456{
+        background-color: #fbfcfd;
+    }
 }
+

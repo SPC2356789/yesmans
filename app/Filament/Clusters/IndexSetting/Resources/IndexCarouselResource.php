@@ -66,24 +66,6 @@ class IndexCarouselResource extends Resource
     {
         return $form
             ->schema([
-
-//                Select::make('image_path')
-////                    ->relationship('medias', 'custom_properties') // 假設你用 `id` 作為選擇的值
-//                    ->label('Title') // 這裡可以設置顯示的標籤
-//                    ->options(Media::all()->mapWithKeys(function ($media) {
-//                        // 解碼 JSON 並獲取 title
-//                        $title = json_decode($media->custom_properties)->title ?? null;
-//                        $thumbnailUrl = Storage::url($media->id . '/' . $media->uuid);
-////                        dd($thumbnailUrl);
-//                        return [
-//                            $media->uuid => '<img src="' . $thumbnailUrl . '" alt="' . $title . '" style="width: 50px; height: auto;"> ' . $title,
-//                        ];
-//
-//                    }))//json_decode($record->custom_properties)->title ?? '')// 提取 JSON 中的 title
-//                    ->searchable() // 讓下拉選單可搜索
-////                    ->html() // 這個方法允許選項顯示 HTML
-//                    ->reactive(),
-
                 FileUpload::make('image_path')
                     ->label('首圖跑馬燈')
                     ->directory('IndexCarousel') // 指定儲存的目錄
