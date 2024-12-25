@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('metaInfo')
     @vite(['resources/css/app.css','resources/js/app.js'])
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -91,10 +92,8 @@
                                     <i class="fa-solid fa-person-hiking"></i><span class="ml-1">行程資訊</span></a></li>
                             <li class="nav-item"><a class="px-0 nav-link @yield('blog')" href="/blog">
                                     <i class="fa-solid fa-newspaper"></i><span class="ml-1">文章區</span></a></li>
-                            <li class="nav-item"><a class="px-0 nav-link @yield('blog')" href="">
+                            <li class="nav-item"><a class="px-0 nav-link @yield('search')" href="">
                                     <i class="fa-solid fa-newspaper"></i><span class="ml-1">訂單查詢</span></a></li>
-
-
                         </ul>
 
                     </div>
@@ -105,47 +104,47 @@
                         class="flex items-center rounded-md bg-white  outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-neutral-800 max-w-sm mx-auto max-h-12">
 
 
-                        <div class="grid shrink-0 grid-cols-1 items-end focus-within:relative ">
-                            <div class="relative col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pl-3 pr-2 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-neutral-800 sm:text-sm/6" name="select">
+{{--                        <div class="grid shrink-0 grid-cols-1 items-end focus-within:relative ">--}}
+{{--                            <div class="relative col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pl-3 pr-2 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-neutral-800 sm:text-sm/6" name="select">--}}
 
-                                <button type="button" data-select="none"
-                                        class="inline-flex w-full justify-center gap-x-1   text-sm  text-gray-500 "
-                                        id="menu-button" aria-expanded="true" aria-haspopup="true">
-                                    <span>活動分類</span>
-                                    <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-                                         aria-hidden="true" data-slot="icon">
-                                        <path fill-rule="evenodd"
-                                              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                                              clip-rule="evenodd"/>
-                                    </svg>
-                                </button>
-                                <div
-                                    class="absolute right-0 z-10 mt-2   origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"
-                                    role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                                    <button href="#"
-                                            class="global_sort"
-                                            role="menuitem" tabindex="-1"
-                                            data-value="Edit">近期活動
-                                    </button>
-                                    <button href="#"
-                                            class="global_sort"
-                                            role="menuitem" tabindex="-1"
-                                            data-value="Duplicate">即將成團
-                                    </button>
-                                    <button href="#"
-                                            class="global_sort"
-                                            role="menuitem" tabindex="-1"
-                                            data-value="Duplicate">高山百岳
-                                    </button>
-                                    <button href="#"
-                                            class="global_sort"
-                                            role="menuitem" tabindex="-1"
-                                            data-value="Duplicate">簡單郊山
-                                    </button>
+{{--                                <button type="button" data-select="none"--}}
+{{--                                        class="inline-flex w-full justify-center gap-x-1   text-sm  text-gray-500 "--}}
+{{--                                        id="menu-button" aria-expanded="true" aria-haspopup="true">--}}
+{{--                                    <span>活動分類</span>--}}
+{{--                                    <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"--}}
+{{--                                         aria-hidden="true" data-slot="icon">--}}
+{{--                                        <path fill-rule="evenodd"--}}
+{{--                                              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"--}}
+{{--                                              clip-rule="evenodd"/>--}}
+{{--                                    </svg>--}}
+{{--                                </button>--}}
+{{--                                <div--}}
+{{--                                    class="absolute right-0 z-10 mt-2   origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"--}}
+{{--                                    role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">--}}
+{{--                                    <button href="#"--}}
+{{--                                            class="global_sort"--}}
+{{--                                            role="menuitem" tabindex="-1"--}}
+{{--                                            data-value="Edit">近期活動--}}
+{{--                                    </button>--}}
+{{--                                    <button href="#"--}}
+{{--                                            class="global_sort"--}}
+{{--                                            role="menuitem" tabindex="-1"--}}
+{{--                                            data-value="Duplicate">即將成團--}}
+{{--                                    </button>--}}
+{{--                                    <button href="#"--}}
+{{--                                            class="global_sort"--}}
+{{--                                            role="menuitem" tabindex="-1"--}}
+{{--                                            data-value="Duplicate">高山百岳--}}
+{{--                                    </button>--}}
+{{--                                    <button href="#"--}}
+{{--                                            class="global_sort"--}}
+{{--                                            role="menuitem" tabindex="-1"--}}
+{{--                                            data-value="Duplicate">簡單郊山--}}
+{{--                                    </button>--}}
 
-                                </div>
-                            </div>
-                        </div>
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <input type="text" name="price" id="price"
                                class="block w-[88px] grow py-1.5 pl-1 pr-0.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
                                placeholder="探索行程">
@@ -158,45 +157,45 @@
                     class="flex items-center rounded-md bg-white  outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-neutral-800 max-w-sm mx-auto max-h-12">
 
 
-                    <div class="relative col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pl-3 pr-2 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-neutral-800 sm:text-sm/6" name="select">
+{{--                    <div class="relative col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pl-3 pr-2 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-neutral-800 sm:text-sm/6" name="select">--}}
 
-                        <button type="button" data-select="none"
-                                class="inline-flex w-full justify-center gap-x-1   text-sm  text-gray-500 "
-                                id="menu-button" aria-expanded="true" aria-haspopup="true">
-                            <span>活動分類</span>
-                            <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-                                 aria-hidden="true" data-slot="icon">
-                                <path fill-rule="evenodd"
-                                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                                      clip-rule="evenodd"/>
-                            </svg>
-                        </button>
-                        <div
-                            class="absolute right-0 z-10 mt-2   origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"
-                            role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                            <button href="#"
-                                    class="global_sort"
-                                    role="menuitem" tabindex="-1"
-                                    data-value="Edit">近期活動
-                            </button>
-                            <button href="#"
-                                    class="global_sort"
-                                    role="menuitem" tabindex="-1"
-                                    data-value="Duplicate">即將成團
-                            </button>
-                            <button href="#"
-                                    class="global_sort"
-                                    role="menuitem" tabindex="-1"
-                                    data-value="Duplicate">高山百岳
-                            </button>
-                            <button href="#"
-                                    class="global_sort"
-                                    role="menuitem" tabindex="-1"
-                                    data-value="Duplicate">簡單郊山
-                            </button>
+{{--                        <button type="button" data-select="none"--}}
+{{--                                class="inline-flex w-full justify-center gap-x-1   text-sm  text-gray-500 "--}}
+{{--                                id="menu-button" aria-expanded="true" aria-haspopup="true">--}}
+{{--                            <span>活動分類</span>--}}
+{{--                            <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"--}}
+{{--                                 aria-hidden="true" data-slot="icon">--}}
+{{--                                <path fill-rule="evenodd"--}}
+{{--                                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"--}}
+{{--                                      clip-rule="evenodd"/>--}}
+{{--                            </svg>--}}
+{{--                        </button>--}}
+{{--                        <div--}}
+{{--                            class="absolute right-0 z-10 mt-2   origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"--}}
+{{--                            role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">--}}
+{{--                            <button href="#"--}}
+{{--                                    class="global_sort"--}}
+{{--                                    role="menuitem" tabindex="-1"--}}
+{{--                                    data-value="Edit">近期活動--}}
+{{--                            </button>--}}
+{{--                            <button href="#"--}}
+{{--                                    class="global_sort"--}}
+{{--                                    role="menuitem" tabindex="-1"--}}
+{{--                                    data-value="Duplicate">即將成團--}}
+{{--                            </button>--}}
+{{--                            <button href="#"--}}
+{{--                                    class="global_sort"--}}
+{{--                                    role="menuitem" tabindex="-1"--}}
+{{--                                    data-value="Duplicate">高山百岳--}}
+{{--                            </button>--}}
+{{--                            <button href="#"--}}
+{{--                                    class="global_sort"--}}
+{{--                                    role="menuitem" tabindex="-1"--}}
+{{--                                    data-value="Duplicate">簡單郊山--}}
+{{--                            </button>--}}
 
-                        </div>
-                    </div>
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <input type="text" name="price" id="price"
                            class="block w-[88px] grow py-1.5 pl-1 pr-0.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
                            placeholder="探索行程">
@@ -211,26 +210,25 @@
 </header>
 @yield('content')
 
-<section class="bg-white ">
-    <div class=" pt-16 lg:px-5">
-        <div class="flex  gap-3 justify-content-center ">
+<section class="bg-white">
+    <div class="pt-16 lg:px-5">
+        <div class="flex gap-3 justify-center">
             @if($foots)
-                @foreach($foots['media'] as $foot )
-
+                @foreach($foots['media'] as $foot)
                     @if($foot['data']['status'])
-
-                        <a class="w-12 h-12 text-black " href="{{$foot['data']['url']??''}}"><img
-                                src=" {{ Storage::url($foot['data']['image']) }} "
-                                class="w-full h-full object-cover"></a>
+                        <a href="{{ $foot['data']['url'] ?? '#' }}" class="w-12 h-12">
+                            <img src="{{ Storage::url($foot['data']['image']) }}" class="w-full h-full object-cover" alt="Social Media Icon">
+                        </a>
                     @endif
                 @endforeach
             @endif
         </div>
     </div>
-    <footer class=" bg-white text-center text-white-50   py-6 lg:px-5 ">
-        <div class=" text-black">{{$foots['copyright']??''}}</div>
+    <footer class="bg-white text-center py-6 lg:px-5">
+        <div class="text-black">{{ $foots['copyright'] ?? '' }}</div>
     </footer>
 </section>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 @yield('blink')

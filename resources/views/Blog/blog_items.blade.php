@@ -1,0 +1,35 @@
+<div class="flex flex-wrap my-4 ">
+    @if($items && count($items) > 0)
+        @foreach($items as $item)
+
+            <a href="/blog/{{$item->category_slug . '/item/' . $item->slug}}"
+               class="w-1/2 lg:w-1/3 2xl:w-1/3 p-3 transform transition-transform duration-300 hover:scale-105 hover:z-50">
+                <div class="bg-white bg-opacity-90 shadow-lg rounded-md overflow-hidden">
+                    <!-- 保證圖片的比例為 1:1 -->
+                    <div class="relative w-full" style="padding-top: 100%;">
+                        <img
+                            src="{{Storage::url('Blog/items/1024X768.png')}}"
+                            class="absolute top-0 left-0 w-full h-full object-cover rounded-t-md object-contain "
+                            alt="Image">
+
+                    </div>
+                    <div class="p-4 text-center font-bold text-gray-800 text-lg">
+                        {{$item->title}}
+                    </div>
+                </div>
+            </a>
+
+        @endforeach
+
+    @else
+        <div class="flex justify-center  w-full h-50 items-center">
+            <p>找不到相關文章...........</p>
+        </div>
+
+    @endif
+
+</div>
+{{ $items->appends(array('term' => $term))->links('pagination::tailwind') }}
+
+
+

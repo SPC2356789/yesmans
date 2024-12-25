@@ -8,12 +8,14 @@ use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+
 //use App\Models\Categories;
 class BlogItem extends BaseModel
 {
     use HasFactory;
 
     use SoftDeletes;
+
     protected $casts = [
         'featured_image' => 'array',//轉URL
     ];
@@ -31,21 +33,39 @@ class BlogItem extends BaseModel
         'seo_description',          // SEO
 
     ];
+
     public function Categories(): BelongsTo
     {
         return $this->belongsTo(Categories::class, 'category_id', 'id');
     }
+
     public function category()
     {
         return $this->belongsTo(Categories::class, 'category_id');
     }
-    public static  function getData($cate=null)
+
+    public static function getData($cate = null, $term = null)
     {
 
-        return BlogItem::whereHas('category', function ($query) use ($cate) {
-            // 根據 category 的 slug 查找 blog_items
-            $query->where('slug', $cate); // 使用傳入的 $cate 作為 slug 的過濾條件
-        })->get();
+        return BlogItem::when($cate !== '*', function ($query, $term) use ($cate) {
+            // 根據 Categories 的 slug 查找對應的 BlogItem
+            $query->whereHas('category', function ($query) use ($cate) {
+                $query->where('slug', $cate) // 使用傳入的 $cate 來過濾 slug
+
+      ;
+            });
+
+
+        })
+            ->when($term !== '', function ($query) use ($term) {
+                $query->where(function ($query) use ($term) {
+                    $query->where('title', 'LIKE', '%' . $term . '%')
+                        ->orWhere('content', 'LIKE', '%' . $term . '%');
+                });
+            })
+            ->leftJoin('categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
+            ->select('blog_items.*', 'categories.slug as category_slug') // 選擇 blog_items 的所有欄位並加上 slug
+            ;
 //        return self::selectRaw('*')
 //            ->orderBy('orderby', 'asc')
 //            ->where('category_id', $cate)
@@ -54,17 +74,25 @@ class BlogItem extends BaseModel
 //            ->get()
 //            ->toArray();
     }
-    public static function MapData($cate=null,): array
+
+    public static function MapData($cate = null,): array
     {
         $data = self::selectRaw('*')
             ->where('category_id', $cate)
             ->get()
-
             ->mapWithKeys(function ($item) {
                 return [$item->id => "{$item->id}: {$item->title}"];
             })
             ->toArray();//抓有開啟的
         return $data;
     }
-
+    public static function getItem($cate,$itemSlug = null){
+        $data = self::selectRaw('*')
+//            ->where('category_id', $cate)
+            ->where('slug', $itemSlug)
+            ->where('is_published', 1)
+            ->firstOrFail()
+        ; // 如果找不到符合條件的資料，會拋出異常
+        return $data;
+    }
 }

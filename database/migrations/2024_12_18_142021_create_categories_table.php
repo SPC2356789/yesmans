@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('seo_title')->nullable();
             $table->string('seo_description')->nullable();
             $table->string('seo_image')->nullable();
-            $table->boolean('status'); // 狀態
+            $table->boolean('status')->default(false); // 狀態
             $table->string('orderby')->nullable();
             $table->timestamps();
             $table->softDeletes();  // 添加软删除字段 deleted_at

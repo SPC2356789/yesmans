@@ -3,6 +3,11 @@ import $ from "jquery";
 let startTime;
 
 $(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // 從 <meta> 中取得 CSRF Token
+        }
+    });
     cus_select() //調用選擇器行為
     ABCopy()
     Loading()
@@ -10,7 +15,7 @@ $(document).ready(function () {
 
 
 // 選擇器的行為 selector選擇器 submenu子菜單 submenuitem子菜單項
-function ABCopy(a,b){
+function ABCopy(a, b) {
     const A = document.getElementById('mainNav');
     const B = document.getElementById('B');
 
@@ -28,6 +33,7 @@ function ABCopy(a,b){
     B.style.height = `${A.offsetHeight}px`;
 
 }
+
 function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"]', submenuitem = '[role="menuitem"]') {
     // 點擊按鈕時，切換該按鈕所在父元素的菜單顯示/隱藏
     $(selector).click(function () {
@@ -44,12 +50,12 @@ function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"
         const expanded = $button.attr('aria-expanded') === 'true' ? 'false' : 'true';
         $button.attr('aria-expanded', expanded);
 
-        $menu.find(submenuitem).removeClass('active');
 
         // 如果有選中的項目，給它添加 active 樣式
         const selectedText = $button.attr('data-select');
         $menu.find(submenuitem).each(function () {
             if ($(this).text().trim() === selectedText) {
+                $menu.find(submenuitem).removeClass('active');
                 $(this).addClass('active'); // 添加 active 樣式
             }
         });
@@ -70,7 +76,8 @@ function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"
 
     });
 }
-function Loading(){
+
+function Loading() {
     startTime = Date.now();
 
     const yesmanContainer = document.getElementById('yesmanContainer');
@@ -202,6 +209,7 @@ function Loading(){
     //         toggleHoverListeners();
     //     }
     // });
+    // 解決 ios 11.3 的 bug 移除空的上傳欄位
 
 
 }

@@ -22,6 +22,10 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function
     Route::get('/about', 'About\AboutController@index');
     Route::get('/itinerary', 'Itinerary\ItineraryListController@index');
     Route::get('/blog/{key}', 'Blog\BlogController@index');
+    Route::get('/blog/{key}/item/{item}', 'Blog\BlogItemController@index');
+    Route::PATCH('/blog/{key}', 'Blog\BlogController@search');
+    Route::get('/blog', 'Blog\BlogController@index');
+//    Route::get('/blog/Search/{key}', 'Blog\BlogController@Search');
     Route::fallback(function () {
         return response()->view('errors.404', [], 404);
     });

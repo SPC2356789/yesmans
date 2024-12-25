@@ -71,12 +71,16 @@ class BlogCategoryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderable('orderby')
+            ->defaultSort('orderby', 'asc')
             ->modifyQueryUsing(fn(Builder $query) => $query->where('area', 1)->where('type', 1)) //area 文章1 行程2 type 分類1 標籤2
             ->columns([
                 Tables\Columns\textColumn::make('name')
                     ->label('名稱'),
                 Tables\Columns\textColumn::make('slug')
                     ->label('分類代號'),
+                Tables\Columns\ToggleColumn::make('status')
+                    ->label('顯示'),
             ])
             ->filters([
                 //

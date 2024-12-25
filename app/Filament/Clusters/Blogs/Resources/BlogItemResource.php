@@ -135,6 +135,8 @@ class BlogItemResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderable('orderby')
+            ->defaultSort('orderby', 'asc')
             ->columns([
                 Tables\Columns\textColumn::make('id')
                     ->label('id'),
