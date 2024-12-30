@@ -20,11 +20,20 @@ class Categories extends BaseModel
             ->where('type', $type)
             ->where('area', $area)
             ->where('status', 1)
-
             ->orderBy('orderby', 'asc')
             ->get()
             ->pluck('name', $key) // 使用 pluck 获取键值对
             ->toArray();//抓有開啟的
+        return $data;
+    }
+
+    public static function getData_mlt($id = null)
+    {
+        $data = self::selectRaw('*')
+            ->where('id', $id)
+            ->where('status', 1)
+            ->get()
+            ->firstOrFail();
         return $data;
     }
 }

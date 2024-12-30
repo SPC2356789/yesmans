@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->sidebarWidth('13rem')
             ->userMenuItems([
                 'profile' => MenuItem::make()->label('個人資料編輯'),
                 // ...

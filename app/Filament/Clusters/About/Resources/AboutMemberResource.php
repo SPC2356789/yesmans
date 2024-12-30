@@ -80,31 +80,32 @@ class AboutMemberResource extends Resource
             ->reorderable('orderby')
             ->defaultSort('orderby', 'asc')
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->label('名稱')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('image_path')
-                    ->label('大頭貼')
-                    ->circular()
-                ,
-                Tables\Columns\ToggleColumn::make('status')
-                    ->label('顯示'),
-                Tables\Columns\TextColumn::make('orderby')
-                    ->label('排序')
-                    ->searchable(),
-//                Tables\Columns\TextColumn::make('deleted_at')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
-//                Tables\Columns\TextColumn::make('created_at')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
-//                Tables\Columns\TextColumn::make('updated_at')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\Layout\Stack::make([
+                    Tables\Columns\ImageColumn::make('image_path')
+                        ->circular()
+                        ->height('50%')
+                        ->width('100%'),
+                    Tables\Columns\Layout\Split::make([
+                        Tables\Columns\TextColumn::make('name')
+                            ->label('名稱')
+                            ->searchable(),
+                        Tables\Columns\ToggleColumn::make('status')
+                            ->label('顯示'),
+                    ]),
+                ])->space(3),
             ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
+            ])
+            ->paginated([
+                18,
+                36,
+                72,
+                'all',
+            ])
+
             ->filters([
                 //
             ])

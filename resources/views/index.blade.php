@@ -36,7 +36,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="fw-bold fs-3">行程訊息</h3>
                             <a type="button"
-                               class="w-[18.8%] text-center ms-auto xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] hover:text-white focus:outline-none">
+                               class="w-[18.8%] text-center ms-auto xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white focus:outline-none">
                                 <span class="w-11/12 "></span> 看更多
                                 <i class="fas fa-chevron-right w-1/12"> </i>
                             </a>
@@ -45,70 +45,7 @@
                         <nav
                             class="flex flex-wrap  justify-between mt-2 w-full  items-end relative overflow-visible group"
                             role="tablist" id="itinerary_tab">
-                            <?php
-                            $itinerary = [
-                                [
-                                    'id' => 'all-tab',
-                                    'tab' => '近期活動',
-                                    'data' => [
-                                        ["uuid" => "1", "time" => '11/04~11/06', 'name' => "桃山", "img" => Storage::url('poc1.jpg')],
-                                        ["uuid" => "2", "time" => '11/07~11/09', 'name' => "塔塔加", "img" => Storage::url('poc2.jpg')],
-                                        ["uuid" => "3", "time" => '11/10~11/12', 'name' => "玉山", "img" => Storage::url('poc3.jpg')],
-                                        ["uuid" => "4", "time" => '11/13~11/15', 'name' => "雪山", "img" => Storage::url('poc4.jpg')],
-                                        ["uuid" => "5", "time" => '11/16~11/18', 'name' => "合歡山", "img" => Storage::url('poc5.jpg')],
-                                        ["uuid" => "6", "time" => '11/19~11/21', 'name' => "阿里山", "img" => Storage::url('poc1.jpg')]
-                                    ]
-                                ],
-                                [
-                                    'id' => 'soon-tab',
-                                    'tab' => '即將成團',
-                                    'data' => [
-                                        ["time" => '12/01~12/03', 'name' => "太平山"],
-                                        ["time" => '12/05~12/07', 'name' => "南湖大山"],
-                                        ["time" => '12/10~12/12', 'name' => "大霸尖山"],
-                                        ["time" => '12/15~12/17', 'name' => "雪山"],
-                                        ["time" => '12/15~12/17', 'name' => "雪山"],
-                                        ["time" => '12/20~12/22', 'name' => "大鬼湖"]
-                                    ]
-                                ],
-                                [
-                                    'id' => 'high',
-                                    'tab' => '高山百岳',
-                                    'data' => [
-                                        ["time" => '12/25~12/27', 'name' => "玉山"],
-                                        ["time" => '12/28~12/30', 'name' => "合歡山"],
-                                        ["time" => '01/05~01/07', 'name' => "雪山"],
-                                        ["time" => '12/15~12/17', 'name' => "雪山"],
-                                        ["time" => '01/10~01/12', 'name' => "中央山脈"],
-                                        ["time" => '01/15~01/17', 'name' => "大霸尖山"]
-                                    ]
-                                ],
-                                [
-                                    'id' => 'low',
-                                    'tab' => '簡單郊山',
-                                    'data' => [
-                                        ["time" => '11/22~11/24', 'name' => "鶯歌山"],
-                                        ["time" => '11/25~11/27', 'name' => "台北陽明山"],
-                                        ["time" => '12/01~12/03', 'name' => "象山"],
-                                        ["time" => '12/05~12/07', 'name' => "大溪山"],
-                                        ["time" => '12/15~12/17', 'name' => "雪山"],
-                                        ["time" => '12/10~12/12', 'name' => "九份山"]
-                                    ]
-                                ],
-                                [
-                                    'id' => 'more',
-                                    'tab' => '更多',
-                                    'data' => [
-                                        ["time" => '12/10~12/12', 'name' => "大霸尖山"],
-                                        ["time" => '01/10~01/12', 'name' => "南湖大山"],
-                                        ["time" => '01/15~01/17', 'name' => "玉山"],
-                                        ["time" => '12/15~12/17', 'name' => "雪山"],
-                                        ["time" => '01/20~01/22', 'name' => "雪山"],
-                                        ["time" => '02/01~02/03', 'name' => "合歡山"]
-                                    ]
-                                ]
-                            ];
-                            ?>
+
 
                             @foreach($itinerary as $index => $v)
                                 <button
@@ -136,7 +73,7 @@
                                     <div class="card border-0 ">
                                         <ul class="list-group list-group-flush fs-6 ">
                                             @foreach($v['data'] as $a)
-                                                <li class="xxx:pt-2 xs:pt-3 pl-2 sm:pt-4 sm:pl-3  xxx:py-2  lg:py-3 hover:scale-105 hover:z-50 hover:shadow-[0_-8px_12px_-2px_rgba(0,0,0,0.15),0_8px_12px_-2px_rgba(0,0,0,0.15)] hover:rounded-xl transition-all transform itinerary_tab {{--hover:bg-[#dbdada]--}} bg-[#efefef] border-b border-b-[#a8b6ad]"
+                                                <li class="xxx:pt-2 xs:pt-3 pl-2 sm:pt-4 sm:pl-3  xxx:py-2  lg:py-3 hover:scale-105 hover:z-50 hover:shadow-[0_-8px_12px_-2px_rgba(0,0,0,0.15),0_8px_12px_-2px_rgba(0,0,0,0.15)] hover:rounded-xl transition-all transform itinerary_tab bg-neutral-50 border-b border-b-[#a8b6ad]"
                                                     data-tab="{{$a['uuid']}}">
                                                     <div class="flex items-center ">
                                                         <img class="mr-1 xxx:w-4 ss:w-5 sm:w-5 "
@@ -152,11 +89,12 @@
                                                             <span
                                                                 class="text-[#da8a51] text-base ss:text-xl xxx:w-[115px] ss:w-[140px]">{{$a['time']}}</span>
 
-                                                                <div class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center">
-                                                                    <span class="span_tag">C級</span>
-                                                                    <span class="span_tag">郊山</span>
-                                                                    <span class="span_tag">進階健行</span>
-                                                                </div>
+                                                            <div
+                                                                class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center">
+                                                                <span class="span_tag">C級</span>
+                                                                <span class="span_tag">郊山</span>
+                                                                <span class="span_tag">進階健行</span>
+                                                            </div>
 
                                                         </div>
                                                         <div class="w-1/5 flex flex-col align-end h-full">
@@ -191,7 +129,7 @@
                     {{--                                                        再3人成團--}}
                     {{--                                                    </button>--}}
                 </div>
-                <div class="mt-5  lg:w-[418px]   ">
+                <div class="mt-5  lg:w-[418px]   hidden lg:block">
 
                     <div class="swiper Itinerary relative">
                         <div class="swiper-wrapper tab-lock">
@@ -222,40 +160,6 @@
             </div>
         </div>
     </section>
-    <section class="flex items-center flex-col ">
-
-        <div
-            class="flex flex-wrap justify-center  xl:w-[1040px] lg:w-[900px] md:mx-24 sm:mx-16 lg:mx-4 xs:mx-6 xxx:mx-2">
-
-
-            @for ($i = 0; $i < 4; $i++)
-                <a href="#"
-                   class="w-full xxx:w-1/2 lg:w-1/4 p-1 transform transition-transform duration-300 hover:scale-105 hover:z-50">
-                    <div class="bg-white bg-opacity-50 shadow-lg rounded-lg overflow-hidden">
-                        <img src="https://via.placeholder.com/1024x1024" class="w-full h-auto">
-                        <div
-                            class="xxx:p-2 xs:p-3 ss:p-4 lg:p-3 xxx:text-base md:text-lg lg:text-base xl:text-lg  text-center font-bold">
-                            登山實用
-                        </div>
-                    </div>
-                </a>
-            @endfor
-
-
-        </div>
-
-        <div class="my-5 text-center">
-            <a href="#"
-               class="inline-flex items-center px-4 py-2 text-white bg-primary rounded-lg hover:bg-blue-600 transition duration-300 transform hover:translate-x-1">
-                看更多文章
-                <svg class="ml-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5-5 5m6-5H6"/>
-                </svg>
-            </a>
-        </div>
-
-
-    </section>
+    @include('blog.blog_hot', ['BlogItems' => $BlogItems])
 
 @endsection

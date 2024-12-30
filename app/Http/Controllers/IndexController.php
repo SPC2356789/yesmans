@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use App\Models\BlogItem;
 use App\Models\IndexCarousel;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-
+use App\Http\Controllers\Blog\BlogController;
 class IndexController extends Controller
 {
-    protected $Settings;
-    protected $Slug;
+    protected Setting $Settings;
+    protected string $Slug;
+    private IndexCarousel $Carousel;
+
+    private BlogController $BlogHot;
 
     public function __construct()
     {
@@ -19,6 +23,7 @@ class IndexController extends Controller
         $this->Slug = 'index';
         $this->Settings = new Setting();
         $this->Carousel = new IndexCarousel();
+        $this->BlogHot = new BlogController();
     }
 
     /**
@@ -26,15 +31,15 @@ class IndexController extends Controller
      */
 
 
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Http\Response
     {
 
         $SEOData = $this->Settings->SEOdata($this->Slug);
 
         $Carousels = $this->Carousel->getData();
+        $BlogItems= $this->blogHot();
 
         $Slug = $this->Slug;
-
         $itinerary = [
             [
                 'id' => 'all-tab',
@@ -107,50 +112,10 @@ class IndexController extends Controller
         ;
     }
     /**
-     * Show the form for creating a new resource.
+     * 熱門文章
      */
-    public function create()
+    public function blogHot()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+     return   $this->BlogHot->cutData()['hot'];
     }
 }

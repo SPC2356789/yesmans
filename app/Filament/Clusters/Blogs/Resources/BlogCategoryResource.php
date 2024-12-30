@@ -51,17 +51,17 @@ class BlogCategoryResource extends Resource
                     ->validationMessages([
                         'unique' => '此 :attribute 的值，已經被使用了',
                     ]),
-                TextInput::make('seo_title')
-                    ->label('seo主題')
-                ,
-                TextInput::make('seo_description')
-                    ->label('seo介紹')
-                ,
-                Select::make('seo_image')
-                    ->label('設定SEO代表圖(取首圖)')
-                    ->options(BlogItem::MapData($form->getRecord() ? $form->getRecord()->id : null))// 從分類模型中獲取選項
-                    ->searchable() // 支持搜索
-                ,
+//                TextInput::make('seo_title')
+//                    ->label('seo主題')
+//                ,
+//                TextInput::make('seo_description')
+//                    ->label('seo介紹')
+//                ,
+//                Select::make('seo_image')
+//                    ->label('設定SEO代表圖(取首圖)')
+//                    ->options(BlogItem::MapData($form->getRecord() ? $form->getRecord()->id : null))// 從分類模型中獲取選項
+//                    ->searchable() // 支持搜索
+//                ,
             ]);
 
 
@@ -76,8 +76,10 @@ class BlogCategoryResource extends Resource
             ->modifyQueryUsing(fn(Builder $query) => $query->where('area', 1)->where('type', 1)) //area 文章1 行程2 type 分類1 標籤2
             ->columns([
                 Tables\Columns\textColumn::make('name')
+                    ->searchable()
                     ->label('名稱'),
                 Tables\Columns\textColumn::make('slug')
+                    ->searchable()
                     ->label('分類代號'),
                 Tables\Columns\ToggleColumn::make('status')
                     ->label('顯示'),

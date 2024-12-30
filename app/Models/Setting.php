@@ -75,7 +75,7 @@ class Setting extends Model
     }
 
 
-    public function getBase($where, $cut = '_')
+    public function getBase($where, $cut = '_'): array
     {
         $results = Setting::where('key', 'like', $where . '_%')->pluck('value', 'key')->toArray();
 
@@ -83,9 +83,7 @@ class Setting extends Model
             return str_replace($where . $cut, '', $key);
         }, array_keys($results));
 
-        $finalResults = array_combine($processedResults, $results);
-
-        return $finalResults;
+        return array_combine($processedResults, $results);
     }
 
     public function secure_url()
@@ -105,7 +103,8 @@ class Setting extends Model
     }
 
 
-    public function SEOdata($where = 'index')
+
+    public function SEOdata($where = 'index'): SEOData
     {
 
 //        dd(env('APP_DEV'));
@@ -117,8 +116,6 @@ class Setting extends Model
 
         $array = json_decode($Base['seo.schema_markup'], true); // 第二个参数设为 true 以将其转换为关联数组
         $schemaCollection->add($array);
-
-//        dd($array);
         return $SEOData = new SEOData(
             title: $Base['seo.title'] ?? null, // 如果不存在，設置為 null
             description: $Base['seo.description'] ?? null,

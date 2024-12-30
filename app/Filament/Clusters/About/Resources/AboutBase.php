@@ -23,6 +23,7 @@ class AboutBase extends BaseSettings
     protected static ?string $cluster = About::class;
 
     protected static ?string $title = '基礎設定';
+    protected static ?string $area ='about';
 
     public static function getModelLabel(): string
     {
@@ -46,25 +47,25 @@ class AboutBase extends BaseSettings
                 ->schema([
                     Tabs\Tab::make('關鍵字(Seo)')
                         ->schema([
-                            TextInput::make('about_seo.title')
+                            TextInput::make(self::$area.'_seo.title')
                                 ->label('主題')
                                 ->required(),
-                            TextInput::make('about_seo.description')
+                            TextInput::make(self::$area.'_seo.description')
                                 ->label('介紹')
                                 ->required(),
-                            Textarea::make('about_seo.schema_markup')
+                            Textarea::make(self::$area.'_seo.schema_markup')
                                 ->label('結構化資料')
                                 ->rows(5)
                                 ->placeholder('https://search.google.com/test/rich-results?hl=zh-tw'),
-                            TextInput::make('about_OG.title')
+                            TextInput::make(self::$area.'_OG.title')
                                 ->label('OG標題')
                                 ->placeholder('標題不要超過 25 – 30 個中文字')
                                 ->required(),
-                            FileUpload::make('about_OG.image')
+                            FileUpload::make(self::$area.'_OG.image')
                                 ->label('OG圖片上傳')
                                 ->image()
                                 ->imageEditor(),
-                            Select::make('about_seo.robots')
+                            Select::make(self::$area.'_seo.robots')
                                 ->label('索引')
                                 ->options([
                                     'index, follow' => 'Index, Follow',
@@ -77,18 +78,18 @@ class AboutBase extends BaseSettings
                         ->schema([
 
                             Split::make([
-                                TextInput::make('about.title')
+                                TextInput::make(self::$area.'.title')
                                     ->label('關於我們標題')
                                     ->required(),
-                                TextInput::make('about.imgAlt')
+                                TextInput::make(self::$area.'.imgAlt')
                                     ->label('圖片描述')
                             ]),
-                            FileUpload::make('about.image')
+                            FileUpload::make(self::$area.'.image')
                                 ->label('關於我們圖片')
-                                ->directory('About') // 指定儲存的目錄
+                                ->directory(self::$area.'') // 指定儲存的目錄
                                 ->image()
                                 ->imageEditor(),
-                            TinyEditor::make('about.introduce')
+                            TinyEditor::make(self::$area.'.introduce')
                                 ->fileAttachmentsDisk('public/About')
                                 ->fileAttachmentsVisibility('public/About')
                                 ->fileAttachmentsDirectory('uploads')
@@ -100,10 +101,10 @@ class AboutBase extends BaseSettings
                         ]),
                     Tabs\Tab::make('故事(story)')
                         ->schema([
-                            Builder::make('about.story')
+                            Builder::make(self::$area.'.story')
                                 ->label('新增故事')
                                 ->blocks([
-                                    Builder\Block::make('about.storyData')
+                                    Builder\Block::make(self::$area.'.storyData')
                                         ->label('新增篇章')
                                         ->schema([
                                             Split::make([
@@ -125,7 +126,7 @@ class AboutBase extends BaseSettings
                                                 Section::make([
                                                     FileUpload::make('image')
                                                         ->label('篇章圖片上傳')
-                                                        ->directory('About/Story')
+                                                        ->directory(self::$area.'/Story')
                                                         ->image()
                                                         ->imageEditor(),
                                                     TextInput::make('alt')

@@ -89,15 +89,26 @@ class IndexCarouselResource extends Resource
             ->reorderable('orderby')
             ->defaultSort('orderby', 'asc')
             ->columns([
-                Tables\Columns\ImageColumn::make('image_path'),
-                Tables\Columns\ToggleColumn::make('status')
-                    ->label('顯示'),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('更新時間')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
 
+                Tables\Columns\Layout\Stack::make([
+                    Tables\Columns\ImageColumn::make('image_path')
+                        ->height('50%')
+                        ->width('100%'),
+                    Tables\Columns\Layout\Stack::make([
+                        Tables\Columns\ToggleColumn::make('status')
+                            ->label('顯示'),
+                    ]),
+                ])->space(3),
+            ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
+            ])
+            ->paginated([
+                18,
+                36,
+                72,
+                'all',
             ])
             ->filters([
 

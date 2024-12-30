@@ -12,6 +12,7 @@ class Blogs extends Cluster
     protected static ?int $navigationSort = 1;
     protected static ?string $title = '文章區';
 
+
     public static function getClusterBreadcrumb(): string
     {
         return self::$title;
@@ -21,4 +22,9 @@ class Blogs extends Cluster
     {
         return self::$title;
     }
+//    public static function (): string
+//    {
+//        return '9rem';
+//    }
+
 }

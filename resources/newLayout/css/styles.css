@@ -4356,7 +4356,7 @@ textarea.form-control-lg {
 
 .navbar-toggler:hover {
     /*text-decoration: none;*/
-    color: rgb(251, 251, 252) !important;
+    /*color: rgb(251, 251, 252) !important;*/
 
 }
 
@@ -12599,9 +12599,9 @@ body {
 }
 
 #mainNav .navbar-toggler {
-    font-size: 80%;
-    padding: 0.75rem;
-    color: #64a19d;
+    /*font-size: 80%;*/
+    /*padding: 0.75rem;*/
+
     border: 1px solid #64a19d;
 }
 

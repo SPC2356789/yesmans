@@ -11,7 +11,7 @@
 
 </head>
 
-<body id="page-top" class="bg-light flex flex-col justify-between">
+<body id="page-top" class="bg-[#efefef] flex flex-col justify-between">
 @if (config('services.GTM.enabled'))
     <!-- Google Tag Manager (noscript) -->
     <noscript>
@@ -66,141 +66,56 @@
 
                     @endif
                 </a>
-
-                <div class="max-h-8 min-h-6 flex items-center">
-                    <button class=" btn-outline-primary navbar-toggler px-2 sm:px-6 navbar-toggler-right" type="button"
+                <div class="flex flex-row xsm:gap-2 xxx:gap-1 items-center">
+                    <div class="max-h-8 min-h-6 flex items-center order-3">
+                        <button
+                            class="btn-outline-primary navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-[#64a19d] hover:text-cyan-50 text-[#64a19d]"
+                            type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                        MENU
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-
-                <div class="offcanvas offcanvas-start w-auto order-2" tabindex="-1" id="offcanvasExample"
-                     aria-labelledby="offcanvasExampleLabel">
-                    <div class="offcanvas-header">
-                        <button type="button" class="btn-close ms-auto text-reset" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
+                            選單
+                            <i class="fas fa-bars"></i>
+                        </button>
                     </div>
-                    <div class="offcanvas-body lg992:ms-auto ">
-                        <ul class="navbar-nav   md:gap-3 lg:gap-4 lg:items-center">
-                            <li class="nav-item "><a class="px-0 nav-link @yield('index')" href="/"><i
-                                        class="fa-solid fa-house"></i><span class="ml-1">首頁</span></a></li>
-                            <li class="nav-item"><a class="px-0 nav-link @yield('about')" href="/about">
-                                    <i class="fa-solid fa-mountain-sun"></i><span class="ml-1">關於我們</span></a></li>
-                            <li class="nav-item"><a class="px-0 nav-link @yield('itinerary')" href="/itinerary_">
-                                    <i class="fa-solid fa-person-hiking"></i><span class="ml-1">行程資訊</span></a></li>
-                            <li class="nav-item"><a class="px-0 nav-link @yield('blog')" href="/blog">
-                                    <i class="fa-solid fa-newspaper"></i><span class="ml-1">文章區</span></a></li>
-                            <li class="nav-item"><a class="px-0 nav-link @yield('search')" href="">
-                                    <i class="fa-solid fa-newspaper"></i><span class="ml-1">訂單查詢</span></a></li>
-                        </ul>
 
+                    <div class="offcanvas offcanvas-start w-auto order-1" tabindex="-1" id="offcanvasExample"
+                         aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <button type="button" class="btn-close ms-auto text-reset" data-bs-dismiss="offcanvas"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body lg992:ms-auto ">
+                            <ul class="navbar-nav   md:gap-3 lg:gap-4 lg:items-center">
+                                <li class="nav-item "><a class="px-0 nav-link @yield('index')" href="/"><i
+                                            class="fa-solid fa-house"></i><span class="ml-1">首頁</span></a></li>
+                                <li class="nav-item"><a class="px-0 nav-link @yield('about')" href="/about">
+                                        <i class="fa-solid fa-mountain-sun"></i><span class="ml-1">關於我們</span></a>
+                                </li>
+                                <li class="nav-item"><a class="px-0 nav-link @yield('itinerary')" href="/itinerary_">
+                                        <i class="fa-solid fa-person-hiking"></i><span class="ml-1">行程資訊</span></a>
+                                </li>
+                                <li class="nav-item"><a class="px-0 nav-link @yield('blog')" href="/blog">
+                                        <i class="fa-solid fa-newspaper"></i><span class="ml-1">文章區</span></a></li>
+                                <li class="nav-item"><a class="px-0 nav-link @yield('search')" href="">
+                                        <i class="fa-solid fa-newspaper"></i><span class="ml-1">訂單查詢</span></a></li>
+                            </ul>
+
+                        </div>
                     </div>
-                </div>
-                <div class="flex items-ceenter hidden xsm:block order-1  xsm:ms-auto">
-
-                    <div
-                        class="flex items-center rounded-md bg-white  outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-neutral-800 max-w-sm mx-auto max-h-12">
-
-
-{{--                        <div class="grid shrink-0 grid-cols-1 items-end focus-within:relative ">--}}
-{{--                            <div class="relative col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pl-3 pr-2 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-neutral-800 sm:text-sm/6" name="select">--}}
-
-{{--                                <button type="button" data-select="none"--}}
-{{--                                        class="inline-flex w-full justify-center gap-x-1   text-sm  text-gray-500 "--}}
-{{--                                        id="menu-button" aria-expanded="true" aria-haspopup="true">--}}
-{{--                                    <span>活動分類</span>--}}
-{{--                                    <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"--}}
-{{--                                         aria-hidden="true" data-slot="icon">--}}
-{{--                                        <path fill-rule="evenodd"--}}
-{{--                                              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"--}}
-{{--                                              clip-rule="evenodd"/>--}}
-{{--                                    </svg>--}}
-{{--                                </button>--}}
-{{--                                <div--}}
-{{--                                    class="absolute right-0 z-10 mt-2   origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"--}}
-{{--                                    role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">--}}
-{{--                                    <button href="#"--}}
-{{--                                            class="global_sort"--}}
-{{--                                            role="menuitem" tabindex="-1"--}}
-{{--                                            data-value="Edit">近期活動--}}
-{{--                                    </button>--}}
-{{--                                    <button href="#"--}}
-{{--                                            class="global_sort"--}}
-{{--                                            role="menuitem" tabindex="-1"--}}
-{{--                                            data-value="Duplicate">即將成團--}}
-{{--                                    </button>--}}
-{{--                                    <button href="#"--}}
-{{--                                            class="global_sort"--}}
-{{--                                            role="menuitem" tabindex="-1"--}}
-{{--                                            data-value="Duplicate">高山百岳--}}
-{{--                                    </button>--}}
-{{--                                    <button href="#"--}}
-{{--                                            class="global_sort"--}}
-{{--                                            role="menuitem" tabindex="-1"--}}
-{{--                                            data-value="Duplicate">簡單郊山--}}
-{{--                                    </button>--}}
-
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-                        <input type="text" name="price" id="price"
-                               class="block w-[88px] grow py-1.5 pl-1 pr-0.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                               placeholder="探索行程">
+                    <div class="order-2 xxx:pl-0.5 xsm:pl-3">
+                        <div class="flex items-center rounded-md bg-white outline outline-1 outline-gray-300
+                focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-neutral-800
+                max-w-sm mx-auto max-h-12">
+                            <i class="fa-regular fa-compass pl-2 pr-1 cursor-pointer" id="itinerary_compass"></i>
+                            <input type="text" id="itinerary_search"
+                                   class="block xsm:w-[90px] xxx:w-[70px] grow my-1 mx-1 xxx:text-xs xsm:text-sm text-gray-900 placeholder:text-gray-400
+                      focus:outline-none "
+                                   placeholder="探索行程">
+                        </div>
                     </div>
+
+
                 </div>
-            </div>
-            <div class="flex items-center  w-full xsm:hidden">
-
-                <div
-                    class="flex items-center rounded-md bg-white  outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-neutral-800 max-w-sm mx-auto max-h-12">
-
-
-{{--                    <div class="relative col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pl-3 pr-2 text-base text-gray-500 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-neutral-800 sm:text-sm/6" name="select">--}}
-
-{{--                        <button type="button" data-select="none"--}}
-{{--                                class="inline-flex w-full justify-center gap-x-1   text-sm  text-gray-500 "--}}
-{{--                                id="menu-button" aria-expanded="true" aria-haspopup="true">--}}
-{{--                            <span>活動分類</span>--}}
-{{--                            <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"--}}
-{{--                                 aria-hidden="true" data-slot="icon">--}}
-{{--                                <path fill-rule="evenodd"--}}
-{{--                                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"--}}
-{{--                                      clip-rule="evenodd"/>--}}
-{{--                            </svg>--}}
-{{--                        </button>--}}
-{{--                        <div--}}
-{{--                            class="absolute right-0 z-10 mt-2   origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"--}}
-{{--                            role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">--}}
-{{--                            <button href="#"--}}
-{{--                                    class="global_sort"--}}
-{{--                                    role="menuitem" tabindex="-1"--}}
-{{--                                    data-value="Edit">近期活動--}}
-{{--                            </button>--}}
-{{--                            <button href="#"--}}
-{{--                                    class="global_sort"--}}
-{{--                                    role="menuitem" tabindex="-1"--}}
-{{--                                    data-value="Duplicate">即將成團--}}
-{{--                            </button>--}}
-{{--                            <button href="#"--}}
-{{--                                    class="global_sort"--}}
-{{--                                    role="menuitem" tabindex="-1"--}}
-{{--                                    data-value="Duplicate">高山百岳--}}
-{{--                            </button>--}}
-{{--                            <button href="#"--}}
-{{--                                    class="global_sort"--}}
-{{--                                    role="menuitem" tabindex="-1"--}}
-{{--                                    data-value="Duplicate">簡單郊山--}}
-{{--                            </button>--}}
-
-{{--                        </div>--}}
-{{--                    </div>--}}
-                    <input type="text" name="price" id="price"
-                           class="block w-[88px] grow py-1.5 pl-1 pr-0.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                           placeholder="探索行程">
-                </div>
-            </div>
         </div>
 
     </nav>
@@ -217,7 +132,8 @@
                 @foreach($foots['media'] as $foot)
                     @if($foot['data']['status'])
                         <a href="{{ $foot['data']['url'] ?? '#' }}" class="w-12 h-12">
-                            <img src="{{ Storage::url($foot['data']['image']) }}" class="w-full h-full object-cover" alt="Social Media Icon">
+                            <img src="{{ Storage::url($foot['data']['image']) }}" class="w-full h-full object-cover"
+                                 alt="Social Media Icon">
                         </a>
                     @endif
                 @endforeach

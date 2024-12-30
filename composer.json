@@ -18,13 +18,14 @@
         "laravel/tinker": "^2.8",
         "league/commonmark": "^2.6.0",
         "outerweb/filament-settings": "^1.2",
+        "overtrue/pinyin": "^5.3",
         "ralphjsmit/laravel-filament-seo": "^1.4",
         "solution-forest/filament-access-management": "^2.2",
         "tomatophp/filament-media-manager": "^1.1",
         "z3d0x/filament-logger": "^0.7.2"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
+        "fakerphp/faker": "^1.24",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",

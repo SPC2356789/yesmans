@@ -24,6 +24,7 @@ class IndexBase extends BaseSettings
     protected static ?string $cluster = IndexSetting::class;
 
     protected static ?string $title = '基礎設定';
+    protected static ?string $area = 'index';
 
     public static function getModelLabel(): string
     {
@@ -88,31 +89,31 @@ class IndexBase extends BaseSettings
 
                     Tabs\Tab::make('關鍵字(Seo)')
                         ->schema([
-                            TextInput::make('index_seo.title')
+                            TextInput::make(self::$area.'_seo.title')
                                 ->label('網頁標題')
                                 ->placeholder('標題不要超過 25 – 30 個中文字')
                                 ->required(),
-                            TextInput::make('index_seo.description')
+                            TextInput::make(self::$area.'_seo.description')
                                 ->label('介紹')
                                 ->placeholder('網頁描述字數控制在 50 – 76 個中文字')
                                 ->required(),
-                            Textarea::make('index_seo.schema_markup')
+                            Textarea::make(self::$area.'_seo.schema_markup')
                                 ->label('結構化資料')
                                 ->rows(5)
                                 ->placeholder('https://search.google.com/test/rich-results?hl=zh-tw'),
-//                            TagsInput::make('index_seo.tag')
+//                            TagsInput::make(self::$area.'_seo.tag')
 //                                ->label('標籤')
 //                                ->reorderable()
 //                                ->color('info'),
-                            TextInput::make('index_OG.title')
+                            TextInput::make(self::$area.'_OG.title')
                                 ->label('OG標題')
                                 ->placeholder('標題不要超過 25 – 30 個中文字')
                                 ->required(),
-                            FileUpload::make('index_OG.image')
+                            FileUpload::make(self::$area.'_OG.image')
                                 ->label('OG圖片上傳')
                                 ->imageEditor()
                                 ->image(),
-                            Select::make('index_seo.robots')
+                            Select::make(self::$area.'_seo.robots')
                                 ->label('索引')
                                 ->options([
                                     'index, follow' => 'Index, Follow',

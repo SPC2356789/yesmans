@@ -13,22 +13,20 @@
 
 @section('content')
     <section class="flex flex-col  my-4 w-full justify-start items-center" id="">
-        <div class=" flex md:flex-row flex-col gap-8  xl:w-[1065px] lg:w-[925px] w-[500px]  xxx:w-full justify-center xxs:px-3  xs:px-3 ss:px-12 xsm:px-8 sm:px-16 md:px-12 lg:px-0 ">
+        <div
+            class=" flex md:flex-row flex-col gap-8  xl:w-[1065px] lg:w-[925px] w-[500px]  xxx:w-full justify-center xxs:px-3  xs:px-3 ss:px-12 xsm:px-8 sm:px-16 md:px-12 lg:px-0 ">
             <!-- 左側篩選區 -->
-            <div class="flex flex-col md:w-1/4 w-full justify-start space-y-6 hidden md:block" name="navbar-l">
+            <div class="flex flex-col md:w-1/5 w-full justify-start space-y-6 hidden md:block" name="navbar-l">
                 <!-- 導航藍 -->
                 <div name="navbar-l_theme">
                     <h1 class="text-xl font-bold text-gray-800 mb-2">文章分類</h1>
                     @foreach($Categories as $Ck=>$Cv)
                         <a href="/blog/{{$Ck}}" class="{{($urlSlug===$Ck ? 'active' :'')}}">{{$Cv}}</a>
                     @endforeach
-                    {{--                    <a href="all" class="w-full">如何選擇登山路線</a>--}}
-                    {{--                    <a href="#" class="">登山基礎知識</a>--}}
-                    {{--                    <a href="#" class="">如何選擇登山路線</a>--}}
                 </div>
             </div>
             <!-- 右側內容區 -->
-            <div class="md:w-3/4 w-full flex-col items-center justify-between" name="info_data">
+            <div class="md:w-4/5 w-full flex-col items-center justify-between" name="info_data">
                 <div class="flex flex-row justify-between items-center px-3" name="data_h">
                     <div class="relative inline-block text-left md:hidden" name="select">
                         <button type="button" data-select="All"
@@ -55,10 +53,9 @@
                     </div>
                     <nav aria-label="Breadcrumb" class="hidden md:block">
                         <ol class="flex space-x-2 text-sm items-center">
-
                             <li aria-current="page" class="text-2xl">
-{{--                                <div  class="hover:text-[#64A19D]">{{$Categories[$urlSlug]}}</div></li>--}}
-                                <div >{{$Categories[$urlSlug]}}</div></li>
+                                <div>{{$Categories[$urlSlug]}}</div>
+                            </li>
                         </ol>
                     </nav>
                     <div class="flex items-ceenter  order-1  xsm:ms-auto">
@@ -79,5 +76,5 @@
 
         </div>
     </section>
-
+    @include('blog.blog_hot', ['BlogItems' => $BlogItems])
 @endsection

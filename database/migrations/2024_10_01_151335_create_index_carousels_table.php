@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('original_image_names'); // 原始照片名
             $table->string('alt'); // 原始照片名
             $table->boolean('status'); // 狀態
-            $table->string('orderby')->nullable();
+            $table->integer('orderby')->nullable();
             $table->softDeletes(); // 软删除
             $table->timestamps();
         });

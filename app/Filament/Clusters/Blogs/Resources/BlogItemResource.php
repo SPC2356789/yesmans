@@ -6,10 +6,12 @@ use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Clusters\Blogs;
 use App\Filament\Clusters\Blogs\Resources\BlogItemResource\Pages;
 use App\Filament\Clusters\Blogs\Resources\BlogItemResource\RelationManagers;
-
+use Filament\Tables\Filters\SelectFilter;
 use App\Models\BlogItem;
 use App\Models\Categories;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms;
+use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Form;
@@ -52,13 +54,17 @@ class BlogItemResource extends Resource
                 ]),
                 Split::make([
                     Section::make([
+                        TextInput::make('id')
+                            ->readonly(), // 設置為只讀
                         TextInput::make('title')
-                            ->label('文章標題') // 自訂欄位標籤
+                            ->label('主標題') // 自訂欄位標籤
                             ->required() // 必填
-                            ->maxLength(255), // 最大長度
+                            ->maxLength(6), // 最大長度
+                        TextInput::make('subtitle')
+                            ->label('副標題') // 自訂欄位標籤
+                            ->maxLength(8), // 最大長度
                         Select::make('category_id')
                             ->label('文章分類')
-//                            ->relationship('Categories', 'name') // 建立與關聯模型的對應
                             ->options(self::$category::getData(1, 1))// 從分類模型中獲取選項
                             ->searchable() // 支持搜索
                             ->required(),
@@ -139,20 +145,46 @@ class BlogItemResource extends Resource
             ->defaultSort('orderby', 'asc')
             ->columns([
                 Tables\Columns\textColumn::make('id')
-                    ->label('id'),
+                    ->sortable()
+                    ->label('id')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                , Tables\Columns\textColumn::make('orderby')
+                    ->sortable()
+                    ->label('排序')
+                    ->toggleable()
+                ,
                 Tables\Columns\ImageColumn::make('featured_image')
                     ->label('首圖'),
                 Tables\Columns\textColumn::make('title')
-                    ->label('文章標題'),
+                    ->label('主標題')
+                    ->limit(10)
+                    ->searchable(),
                 Tables\Columns\textColumn::make('Categories.name')
                     ->label('文章分類'),
                 Tables\Columns\textColumn::make('slug')
-                    ->label('文章代號'),
+                    ->label('文章代號')
+                    ->searchable()
+                    ->toggleable()
+                    ->limit(15),
                 Tables\Columns\ToggleColumn::make('is_published')
                     ->label('發布狀態'),
+                Tables\Columns\textColumn::make('published_at')
+                    ->sortable()
+                    ->toggleable()
+                    ->label('發布時間')
+                ,
             ])
             ->filters([
-                //
+
+                SelectFilter::make('category_id')
+                    ->label('文章分類')
+                    ->options(self::$category::getData(1, 1)),// 根據 'name' 排序)// 從分類模型中獲取選項
+                Filter::make('is_published')
+                    ->label('發布狀態')
+                    ->query(fn(Builder $query): Builder => $query->where('is_published', true))
+                    ->toggle()
+                ,
+
             ])
             ->actions([
                 Tables\Actions\ReplicateAction::make()
