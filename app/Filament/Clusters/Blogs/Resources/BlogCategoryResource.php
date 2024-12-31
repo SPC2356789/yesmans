@@ -20,7 +20,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Validation\Rule;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Str;
-use mysql_xdevapi\TableSelect;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 
 class BlogCategoryResource extends Resource
 {
@@ -75,13 +76,13 @@ class BlogCategoryResource extends Resource
             ->defaultSort('orderby', 'asc')
             ->modifyQueryUsing(fn(Builder $query) => $query->where('area', 1)->where('type', 1)) //area 文章1 行程2 type 分類1 標籤2
             ->columns([
-                Tables\Columns\textColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->label('名稱'),
-                Tables\Columns\textColumn::make('slug')
+                TextColumn::make('slug')
                     ->searchable()
                     ->label('分類代號'),
-                Tables\Columns\ToggleColumn::make('status')
+                ToggleColumn::make('status')
                     ->label('顯示'),
             ])
             ->filters([

@@ -125,11 +125,14 @@ class BlogItem extends BaseModel
 
     public static function active($id): void
     {
-        $item = self::find($id)->first(); // 根據 ID 查找單一項目
-        if ($item) {
-            $item->active += 1;  // active 欄位加 1
-            $item->save();       // 儲存更新到資料庫
-        }
+        activity()->withoutLogs(function () use ($id) {
+            $item = self::find($id)->first(); // 根據 ID 查找單一項目
+            if ($item) {
+                $item->active += 1;  // active 欄位加 1
+                $item->save();       // 儲存更新到資料庫
+            }
+        });
+
     }
 
 }

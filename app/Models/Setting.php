@@ -107,13 +107,9 @@ class Setting extends Model
     public function SEOdata($where = 'index'): SEOData
     {
 
-//        dd(env('APP_DEV'));
         $Base = $this->getBase($where);
         $General = $this->getElseOrGeneral();
-
         $schemaCollection = new SchemaCollection();
-
-
         $array = json_decode($Base['seo.schema_markup'], true); // 第二个参数设为 true 以将其转换为关联数组
         $schemaCollection->add($array);
         return $SEOData = new SEOData(
@@ -131,7 +127,7 @@ class Setting extends Model
 
     }
 
-    public function getElseOrGeneral($where = 'general')
+    public function getElseOrGeneral($where = 'general'): array
     {
 
         $results = Setting::where('key', 'like', $where . '.%')->pluck('value', 'key')->toArray();
@@ -139,9 +135,7 @@ class Setting extends Model
             return str_replace($where . '.', '', $key);
         }, array_keys($results));
 
-        $finalResults = array_combine($processedResults, $results);
-
-        return $finalResults;
+        return array_combine($processedResults, $results);
     }
 
 

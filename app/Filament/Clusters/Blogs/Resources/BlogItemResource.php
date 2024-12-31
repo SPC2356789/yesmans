@@ -144,31 +144,31 @@ class BlogItemResource extends Resource
             ->reorderable('orderby')
             ->defaultSort('orderby', 'asc')
             ->columns([
-                Tables\Columns\textColumn::make('id')
+                Tables\Columns\TextColumn::make('id')
                     ->sortable()
                     ->label('id')
                     ->toggleable(isToggledHiddenByDefault: true)
-                , Tables\Columns\textColumn::make('orderby')
+                , Tables\Columns\TextColumn::make('orderby')
                     ->sortable()
                     ->label('排序')
                     ->toggleable()
                 ,
                 Tables\Columns\ImageColumn::make('featured_image')
                     ->label('首圖'),
-                Tables\Columns\textColumn::make('title')
+                Tables\Columns\TextColumn::make('title')
                     ->label('主標題')
                     ->limit(10)
                     ->searchable(),
-                Tables\Columns\textColumn::make('Categories.name')
+                Tables\Columns\TextColumn::make('Categories.name')
                     ->label('文章分類'),
-                Tables\Columns\textColumn::make('slug')
+                Tables\Columns\TextColumn::make('slug')
                     ->label('文章代號')
                     ->searchable()
                     ->toggleable()
                     ->limit(15),
                 Tables\Columns\ToggleColumn::make('is_published')
                     ->label('發布狀態'),
-                Tables\Columns\textColumn::make('published_at')
+                Tables\Columns\TextColumn::make('published_at')
                     ->sortable()
                     ->toggleable()
                     ->label('發布時間')

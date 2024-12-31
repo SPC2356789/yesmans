@@ -36,11 +36,6 @@ class Controller extends BaseController
             // 将构建的 Schema 添加到 SchemaCollection 中
         }
             $schemaCollection->add($data);
-
-        // 将 SchemaCollection 转换为 JSON-LD 格式
-//        $jsonLd = $schemaCollection->toJson();
-
-//        dd($schemaCollection);
         return $schemaCollection;  // 这里我们将 JSON 字符串转为数组再返
     }
 

@@ -70,11 +70,11 @@
                 </div>
                 <!-- 活動卡片區域 -->
                 <div class=" " id="search-results">
-                    @include('blog.blog_items', ['items' => $items])
+                    @include('Blog.blog_items', ['items' => $items])
                 </div>
             </div>
 
         </div>
     </section>
-    @include('blog.blog_hot', ['BlogItems' => $BlogItems])
+    @include('Blog.blog_hot', ['BlogItems' => $BlogItems])
 @endsection

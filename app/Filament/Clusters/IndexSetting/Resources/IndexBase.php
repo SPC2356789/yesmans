@@ -49,7 +49,6 @@ class IndexBase extends BaseSettings
                     Tabs\Tab::make('一般設定(general)')
                         ->schema([
                             Split::make([
-
                                 Section::make([
                                     TextInput::make('general.brand_name')
                                         ->label('品牌名稱')
@@ -101,10 +100,7 @@ class IndexBase extends BaseSettings
                                 ->label('結構化資料')
                                 ->rows(5)
                                 ->placeholder('https://search.google.com/test/rich-results?hl=zh-tw'),
-//                            TagsInput::make(self::$area.'_seo.tag')
-//                                ->label('標籤')
-//                                ->reorderable()
-//                                ->color('info'),
+
                             TextInput::make(self::$area.'_OG.title')
                                 ->label('OG標題')
                                 ->placeholder('標題不要超過 25 – 30 個中文字')

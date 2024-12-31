@@ -7,7 +7,7 @@
                     <!-- 保證圖片的比例為 1:1 -->
                     <div class="relative w-full" style="padding-top: 100%;">
                         <img
-                            src="{{Storage::url('Blog/items/1024X768.png')}}"
+                            src="{{Storage::url($item->featured_image ??'Blog/Items/1024X768.png')}}"
                             class="absolute top-0 left-0 w-full h-full object-cover rounded-t-md object-contain "
                             alt="Image">
 

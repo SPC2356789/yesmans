@@ -14,8 +14,8 @@ use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class BlogItemController extends Controller
 {
-    protected $Settings;
-    protected $Slug;
+    protected Setting $Settings;
+    protected string $Slug;
     private BlogItem $Items;
     private Categories $Categories;
     private BlogController $BlogHot;

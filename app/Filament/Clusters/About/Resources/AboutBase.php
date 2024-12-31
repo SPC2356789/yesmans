@@ -15,7 +15,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 
 use Filament\Forms\Components\Toggle;
-use Outerweb\FilamentSettings\Filament\Pages\Settings as BaseSettings;
+use App\Filament\Pages\SettingsN as BaseSettings;
 
 class AboutBase extends BaseSettings
 {

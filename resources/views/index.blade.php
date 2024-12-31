@@ -160,6 +160,6 @@
             </div>
         </div>
     </section>
-    @include('blog.blog_hot', ['BlogItems' => $BlogItems])
+    @include('Blog.blog_hot', ['BlogItems' => $BlogItems])
 
 @endsection
