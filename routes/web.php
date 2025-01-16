@@ -20,7 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/about', 'About\AboutController@index');
-    Route::get('/itinerary', 'Itinerary\ItineraryListController@index');
+    Route::get('/itinerary', function() {
+        return view('Itinerary.itinerary');
+    });
+    Route::get('/t', function() {
+        return view('t');
+    });
     Route::get('/blog/{key}', 'Blog\BlogController@index');
     Route::get('/blog/{key}/item/{item}', 'Blog\BlogItemController@index');
     Route::POST('/blog/active', 'Blog\BlogController@store');

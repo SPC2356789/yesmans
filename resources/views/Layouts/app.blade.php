@@ -18,7 +18,7 @@
 
     @endif
     {!! seo($SEOData??null) !!}
-    @yield('tlink')
+
 @endsection
 {{--@yield('tlink')--}}
 

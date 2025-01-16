@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('metaInfo')
+    @yield('tlink')
     @vite(['resources/css/app.css','resources/js/app.js'])
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
@@ -91,13 +92,13 @@
                                 <li class="nav-item"><a class="px-0 nav-link @yield('about')" href="/about">
                                         <i class="fa-solid fa-mountain-sun"></i><span class="ml-1">關於我們</span></a>
                                 </li>
-                                <li class="nav-item"><a class="px-0 nav-link @yield('itinerary')" href="/itinerary_">
+                                <li class="nav-item"><a class="px-0 nav-link @yield('itinerary')" href="/itinerary">
                                         <i class="fa-solid fa-person-hiking"></i><span class="ml-1">行程資訊</span></a>
                                 </li>
                                 <li class="nav-item"><a class="px-0 nav-link @yield('blog')" href="/blog">
-                                        <i class="fa-solid fa-newspaper"></i><span class="ml-1">文章區</span></a></li>
-                                <li class="nav-item"><a class="px-0 nav-link @yield('search')" href="">
-                                        <i class="fa-solid fa-newspaper"></i><span class="ml-1">訂單查詢</span></a></li>
+                                        <i cflex justify-centerlass="fa-solid fa-newspaper"></i><span class="ml-1">文章區</span></a></li>
+                                <li class="nav-item"><button class="px-0 nav-link " name="getOrder" >
+                                        <i class="fa-solid fa-newspaper"></i><span class="ml-1">訂單查詢</span></button></li>
                             </ul>
 
                         </div>
@@ -116,6 +117,7 @@
 
 
                 </div>
+            </div>
         </div>
 
     </nav>
@@ -123,8 +125,13 @@
     </nav>
 
 </header>
-@yield('content')
-
+@yield('head_content')
+<section class="flex justify-center" >
+    <div
+        class="flex flex-col w-full xl:w-[1040px] lg:w-[900px] xxs:px-6 md:px-16 sm:px-20 lg:px-0 xs:px-6 ss:px-12 xxx:px-4  py-5">
+        @yield('content')
+    </div>
+</section>
 <section class="bg-white">
     <div class="pt-16 lg:px-5">
         <div class="flex gap-3 justify-center">

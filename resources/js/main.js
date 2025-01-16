@@ -1,5 +1,5 @@
 import $ from "jquery";
-
+import Swal from 'sweetalert2'
 let startTime;
 
 $(document).ready(function () {
@@ -8,13 +8,37 @@ $(document).ready(function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // 從 <meta> 中取得 CSRF Token
         }
     });
+    $(document).on('click', '[name="getOrder"]', function () {
+        getOrder();
+    });
     cus_select() //調用選擇器行為
     ABCopy()
     Loading()
 });
 
+function getOrder() {
+    Swal.fire({
+        title: "<strong>HTML <u>example</u></strong>",
+        icon: "info",
+        html: `
+    You can use <b>bold text</b>,
+    <a href="#" autofocus>links</a>,
+    and other HTML tags
+  `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: `
+    <i class="fa fa-thumbs-up"></i> Great!
+  `,
+        confirmButtonAriaLabel: "Thumbs up, great!",
+        cancelButtonText: `
+    <i class="fa fa-thumbs-down"></i>
+  `,
+        cancelButtonAriaLabel: "Thumbs down"
+    });
+}
 
-// 選擇器的行為 selector選擇器 submenu子菜單 submenuitem子菜單項
 function ABCopy(a, b) {
     const A = document.getElementById('mainNav');
     const B = document.getElementById('B');
@@ -36,7 +60,8 @@ function ABCopy(a, b) {
 
 function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"]', submenuitem = '[role="menuitem"]') {
     // 點擊按鈕時，切換該按鈕所在父元素的菜單顯示/隱藏
-    $(selector).click(function () {
+
+    $(document).on('click', selector, function () {
         const $button = $(this);  // 當前點擊的按鈕
         const $menu = $button.next(submenu);  // 獲取該按鈕的菜單
 
@@ -62,8 +87,8 @@ function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"
     });
 
 // 如果菜單項被點擊，隱藏該菜單
-    $(submenuitem).click(function () {
 
+    $(document).on('click', submenuitem, function () {
         const $menu = $(this).closest('[role="menu"]');  // 獲取該菜單
 
         $menu.addClass('hidden');  // 隱藏該菜單
@@ -141,76 +166,11 @@ function Loading() {
     const endTime = Date.now();
     const loadTime = endTime - startTime;
 
-    // console.log(`网页加载时间: ${loadTime} 毫秒`);
+
     const loadTimes = loadTime > setTime ? loadTime : setTime;
-    // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
 
     // 启动进度条
     startProgressBar(setTime);
-
-    // window.addEventListener('load', function () {
-    //     // const setTime = 2000; // 设置最小时间
-    //     const endTime = Date.now();
-    //     const loadTime = endTime - startTime;
-    //
-    //     // console.log(`网页加载时间: ${loadTime} 毫秒`);
-    //     const loadTimes = loadTime > setTime ? loadTime : setTime;
-    //     // console.log(`进度条使用时间: ${loadTimes} 毫秒`);
-    //
-    //     // 启动进度条
-    //     startProgressBar(loadTimes);
-    //
-    // });
-
-
-    // const brandLink = document.getElementById('brand-link');
-    // const hoverImage = document.getElementById('hover-image');
-    // function LogoStart(){
-    //     hoverImage.classList.add('fade-in');
-    // }
-    //
-    // let isDesktop = window.matchMedia('(min-width: 768px)').matches;
-    //
-    // // 添加或移除事件监听器的函数
-    // function toggleHoverListeners() {
-    //     if (isDesktop) {
-    //         brandLink.addEventListener('mouseenter', handleMouseEnter);
-    //         brandLink.addEventListener('mouseleave', handleMouseLeave);
-    //     } else {
-    //         brandLink.removeEventListener('mouseenter', handleMouseEnter);
-    //         brandLink.removeEventListener('mouseleave', handleMouseLeave);
-    //
-    //     }
-    // }
-    //
-    // // 处理鼠标进入和离开的函数
-    // function handleMouseEnter() {
-    //     if (hoverImage) {
-    //         hoverImage.classList.remove('opacity-0', 'fade-out');
-    //         hoverImage.classList.add('fade-in');
-    //     }
-    // }
-    //
-    // function handleMouseLeave() {
-    //     if (hoverImage) {
-    //         hoverImage.classList.remove('fade-in');
-    //         hoverImage.classList.add('fade-out');
-    //     }
-    // }
-    //
-    // // 初始调用
-    // toggleHoverListeners();
-    //
-    // // 监听窗口大小变化
-    // window.addEventListener('resize', () => {
-    //     const newIsDesktop = window.matchMedia('(min-width: 768px)').matches;
-    //     if (newIsDesktop !== isDesktop) {
-    //         isDesktop = newIsDesktop;
-    //         toggleHoverListeners();
-    //     }
-    // });
-    // 解決 ios 11.3 的 bug 移除空的上傳欄位
-
 
 }
 

@@ -8,35 +8,9 @@ import 'swiper/css/autoplay';
 import 'swiper/css/effect-fade';
 
 $(document).ready(function () {
+    // 輪播渲染
+    Carousel()
 
-    var swiperCarousel = new Swiper(".swiper.carousel", {
-        spaceBetween: 30,
-        effect: "fade",
-        autoplay: {
-            delay: 2500,
-            // disableOnInteraction: false,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next.carousel_arrow",
-            prevEl: ".swiper-button-prev.carousel_arrow",
-        },
-        modules: [Navigation,Autoplay,EffectFade],
-    });
-
-    // 初始化 Itinerary 轮播
-    var swiperItinerary = new Swiper(".swiper.Itinerary", {
-        spaceBetween: 30,
-        effect: "fade",
-        navigation: {
-            nextEl: ".swiper-button-next.Itinerary",
-            prevEl: ".swiper-button-prev.Itinerary",
-        },
-        pagination: {
-            el: ".swiper-pagination.Itinerary",
-            clickable: true,
-        },
-        modules: [Navigation, Pagination,Autoplay,EffectFade],
-    });
 
 //行程欄位圖片鎖定
     $('li.itinerary_tab').hover(
@@ -51,10 +25,7 @@ $(document).ready(function () {
             lock_data.removeClass('lock-active');
         }
     );
-    // $('li.itinerary_tab.active').on('click', function () {
-    //     console.log(212121)
-    //     $(this).removeClass('active');
-    // });
+
     // 點擊 tab 切換圖片顯示
     $('li.itinerary_tab').on('click', function () {
         const tab = $(this);  // 當前被點擊的 tab
@@ -91,37 +62,37 @@ $(document).ready(function () {
         // 5. 滾動到當前圖片的位置
         $('#itinerary_tab_content .card')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });  // 滾動到圖片
     });
-
-
-
-//
-// // 使用 jQuery 选择目标元素
-//     const fadeElement = $('#targetElement');
-//     const fadeElements = $('.fade-on-scroll');
-//
-// // 创建 IntersectionObserver 实例
-//     const observer = new IntersectionObserver((entries, observer) => {
-//         entries.forEach(entry => {
-//
-//             // 判断 B元素是否进入视口，且有 50% 进入视口
-//             if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
-//                 // 如果元素进入视口 50%，添加透明度和模糊效果
-//                 fadeElements.addClass('opacity-25 backdrop-blur-sm'); // 添加透明度 25% 类 和 模糊效果
-//                 fadeElements.removeClass('opacity-100'); // 移除完全透明类
-//                 // console.log(2);
-//             } else {
-//                 // 元素离开视口，恢复默认效果
-//                 fadeElements.addClass('opacity-100'); // 添加完全透明类
-//                 fadeElements.removeClass('opacity-25 backdrop-blur-sm'); // 移除透明度和模糊效果
-//                 // console.log('Element is not visible, reset opacity and blur');
-//             }
-//         });
-//     }, {
-//         threshold: 0.5 // 触发条件：元素进入视口 50%
-//     });
-//
-// // 开始观察 B元素
-//     observer.observe(document.querySelector('#targetElement'));
-
 })
+
+
 ;
+function Carousel(){
+    const swiperCarousel = new Swiper(".swiper.carousel", {
+        spaceBetween: 30,
+        effect: "fade",
+        autoplay: {
+            delay: 2500,
+            // disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next.carousel_arrow",
+            prevEl: ".swiper-button-prev.carousel_arrow",
+        },
+        modules: [Navigation, Autoplay, EffectFade],
+    });
+
+    // 初始化 Itinerary 轮播
+    const swiperItinerary = new Swiper(".swiper.Itinerary", {
+        spaceBetween: 30,
+        effect: "fade",
+        navigation: {
+            nextEl: ".swiper-button-next.Itinerary",
+            prevEl: ".swiper-button-prev.Itinerary",
+        },
+        pagination: {
+            el: ".swiper-pagination.Itinerary",
+            clickable: true,
+        },
+        modules: [Navigation, Pagination,Autoplay,EffectFade],
+    });
+}

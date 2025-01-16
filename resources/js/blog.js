@@ -1,5 +1,5 @@
 import $ from 'jquery';
-
+import axios from 'axios';
 $(document).ready(function () {
 
     //標籤行為
@@ -8,16 +8,16 @@ $(document).ready(function () {
     });
     // 熱門
     $('a.addHot').click(function () {
-        const id = $(this).attr('id'); // 正確獲取元素的 id 屬性
-        $.ajax({
-            url: '/blog/active',
-            method: 'POST',
-            data: {id: id},
-            success: function () {
-           },
-            error: function () {
-            }
-        });
+        const id = $(this).attr('id'); // 獲取元素的 id 屬性
+        axios.post('/blog/active', { id: id })
+            .then(response => {
+
+
+            })
+            .catch(error => {
+
+
+            });
 
 
     });
@@ -33,19 +33,18 @@ $(document).ready(function () {
     });
 
     function blogItem(key, searchTerm) {
-        $.ajax({
-            url: '/blog/' + key + '?term=' + searchTerm,
-            method: 'PATCH',
-            data: {term: searchTerm, key: key},
-            success: function (data) {
-                console.log(data)
-                // $('#search-results').empty();  // 清空從+
-                $('#search-results').html(data);  // 假設返回的是 HTML 內容，將其插入到頁面中
-            },
-            error: function () {
-                $('#search-results').html('<div>搜索時發生錯誤。</div>');
-            }
-        });
+        axios.patch('/blog/' + key, {
+            term: searchTerm,
+            key: key
+        })
+            .then(response => {
+                // console.log(response.data);
+                $('#search-results').html(response.data);
+            })
+            .catch(error => {
+                // console.error('搜尋時發生錯誤：', error);
+                $('#search-results').html('<div>搜尋時發生錯誤。</div>');
+            });
     }
 });
 

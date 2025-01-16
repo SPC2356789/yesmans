@@ -5,4 +5,7 @@ import '../newLayout/js/scripts.js'
 import './home.js'
 import './about.js'
 import './blog.js'
+// import './trip.js'
+
+
 

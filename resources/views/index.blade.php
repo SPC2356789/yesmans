@@ -9,7 +9,7 @@
 @section('blink')
     {{--    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>--}}
 @endsection
-@section('content')
+@section('head_content')
     <section class="">
         <div class="swiper carousel ">
             <div class="swiper-wrapper relative">
@@ -27,8 +27,12 @@
                 class="swiper-button-next carousel_arrow "></div>
         </div>
     </section>
-    <section class="py-5 xxx:px-4 xxs:px-6 ss:px-12 sm:px-10 md:px-12 lg:px-2 min-w-[302px]">
-        <div class="md:mx-16 sm:mx-10 lg:mx-4 {{--xl:mx-40 -2xl:mx-60 --}}">
+@endsection
+
+@section('content')
+
+{{--    <section class="py-5 xxx:px-4 xxs:px-6 ss:px-12 sm:px-10 md:px-12 lg:px-2 min-w-[302px]">--}}
+{{--        <div class="md:mx-16 sm:mx-10 lg:mx-4 --}}{{--xl:mx-40 -2xl:mx-60 --}}{{--">--}}
             <div
                 class="flex flex-col items-end lg:flex-row justify-center gap-6 lg:gap-8 xl:gap-16  ">
                 <div id="targetElement" class="xxx:w-full xl:w-[550px] lg:w-[450px] lg:h-full">
@@ -158,8 +162,6 @@
 
                 </div>
             </div>
-        </div>
-    </section>
-    @include('Blog.blog_hot', ['BlogItems' => $BlogItems])
+    @include('blog.blog_hot', ['BlogItems' => $BlogItems])
 
 @endsection

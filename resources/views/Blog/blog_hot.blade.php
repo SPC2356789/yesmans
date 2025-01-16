@@ -1,7 +1,11 @@
-<section class="flex items-center flex-col ">
-
-    <div
-        class="flex flex-wrap justify-center  w-full xl:w-[1090px] lg:w-[960px] md:px-24 sm:px-16 lg:px-4 xsm:px-8 xs:px-4 xxx:px-4">
+<section class="flex items-center flex-col  scale-105">
+    <ol class="flex space-x-2 text-sm items-center my-12">
+        <li aria-current="page" class="text-2xl">
+            <div>精選文章</div>
+        </li>
+    </ol>
+{{--    <div class="flex flex-wrap justify-center  w-full xl:w-[1090px] lg:w-[960px] md:px-24 sm:px-16 lg:px-4 xsm:px-8 xs:px-4 xxx:px-4">--}}
+    <div class="flex flex-wrap justify-center  w-full">
         @if($BlogItems && count($BlogItems) == 4)
             @foreach($BlogItems as $BlogItem)
                 <a href="/blog/{{$BlogItem->category_slug . '/item/' . $BlogItem->slug}}"
