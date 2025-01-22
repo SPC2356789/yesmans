@@ -5,7 +5,6 @@ namespace App\Filament\Clusters\Blogs\Resources;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Clusters\Blogs;
 use App\Filament\Clusters\Blogs\Resources\BlogCategoryResource\Pages;
-use App\Filament\Clusters\Blogs\Resources\BlogCategoryResource\RelationManagers;
 use App\Models\BlogItem;
 use App\Models\Categories;
 use Filament\Forms\Components\FileUpload;
@@ -40,6 +39,7 @@ class BlogCategoryResource extends Resource
                     ->label('文章分類'),
                 TextInput::make('slug')
                     ->label('分類代號')
+
                     ->required()
                     ->rule(
                         Rule::unique('categories', 'slug')

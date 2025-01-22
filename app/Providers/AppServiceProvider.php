@@ -22,9 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-//        Blade::directive('viteNgrok', function ($paths) {
-//            return vite_ngrok($paths);
-//        });
+
+
 
 
         $Settings = new Setting();

@@ -1,7 +1,7 @@
 @extends('Layouts.app')
 @section($Slug=null, 'active')
 
-@section('tlink')
+@section('tLink')
     @vite(['resources/js/itinerary.js'])
 @endsection
 
@@ -11,9 +11,9 @@
 
 @section('content')
 
-    <section class="flex flex-col  my-4 w-full justify-start items-center" id="">
+
         <div
-            class=" flex md:flex-row flex-col gap-8  xl:w-[1065px] lg:w-[925px] w-[500px]  xxx:w-full justify-center xxs:px-3  xs:px-3 ss:px-12 xsm:px-8 sm:px-16 md:px-12 lg:px-0 ">
+            class=" flex md:flex-row flex-col gap-8   justify-center">
             @include('Itinerary.itinerary_sidebar', ['xx' => 'xx'])
             <!-- 右側內容區 -->
             <div class="md:w-4/5 w-full flex-col items-center justify-between" name="info_data">
@@ -70,6 +70,6 @@
             </div>
 
         </div>
-    </section>
+
 
 @endsection

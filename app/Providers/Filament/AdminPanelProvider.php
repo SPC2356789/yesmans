@@ -10,6 +10,7 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentAsset;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -20,25 +21,33 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
 use SolutionForest\FilamentAccessManagement\FilamentAccessManagementPanel;
-use Rmsramos\Activitylog\ActivitylogPlugin;
-use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
-use Filament\Navigation\MenuItem;
 
+use Filament\Navigation\MenuItem;
+use Filament\Support\Assets\Css;
 //env
 use Outerweb\FilamentSettings\Filament\Plugins\FilamentSettingsPlugin;
-use Outerweb\FilamentImageLibrary\Filament\Plugins\FilamentImageLibraryPlugin;
 
 //use App\Filament\Clusters\IndexSetting\Resources\IndexBase ;
 //單頁非條目
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+
+        FilamentAsset::register([
+            Css::make('media-select', __DIR__ . '/../../../resources/css/mediaSelect.css')->loadedOnRequest(),
+        ]);
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
+            ->authGuard('web')
+            ->profile(isSimple: false)
             ->login()
             ->sidebarWidth('13rem')
             ->userMenuItems([
@@ -84,8 +93,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \FilipFonal\FilamentLogManager\FilamentLogManager::make(),
+                \Awcodes\Curator\CuratorPlugin::make()
+                    ->resource(\App\Filament\Resources\MediaResource::class)
+                ,
             ]);
-//            ->plugin(\TomatoPHP\FilamentMediaManager\FilamentMediaManagerPlugin::make());
+
 
     }
 }

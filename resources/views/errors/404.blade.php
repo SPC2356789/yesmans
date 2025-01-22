@@ -1,5 +1,5 @@
 @extends('Layouts.superApp')
-
+@section('bg', 'bg-[#000000]')
 @section('metaInfo')
     <title>404 - 迷路了!</title>
 @endsection

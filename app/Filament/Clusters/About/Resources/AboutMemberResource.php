@@ -80,7 +80,6 @@ class AboutMemberResource extends Resource
             ->reorderable('orderby')
             ->defaultSort('orderby', 'asc')
             ->columns([
-
                 Tables\Columns\Layout\Stack::make([
                     Tables\Columns\ImageColumn::make('image_path')
                         ->circular()

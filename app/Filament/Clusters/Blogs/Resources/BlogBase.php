@@ -58,9 +58,9 @@ class BlogBase extends BaseSettings
                                 ->schema([
                                     Select::make('blogItem')
                                         ->label('選擇文章')
-                                        ->options([
+                                        ->options(
                                             BlogItem::SelectDataImg()
-                                        ])
+                                        )
                                         ->searchable()
                                         ->distinct()
                                         ->helperText('每篇文章只能選一次')

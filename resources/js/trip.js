@@ -116,9 +116,12 @@ function applyAgree() {
         $tripFrom.toggleClass('hidden');  // 勾選 checkbox
         console.log(1);
     });
-    // 聚焦行為
-    $(document).on('click', '#signupBtn', function () {
-        $agreementButton.focus();
+    // 聚焦行為IOS不支持
+    // $('[name="signupBtn"]').on('click', function () {
+    //     $agreementButton.focus();
+    // });
+    $(document).on('click', '[name="signupBtn"]', function () {
+        $agreementButton[0].scrollIntoView({behavior: 'smooth', block: 'start'});  // 滾動到圖片
     });
     $(document).on('click', '[name="agree_btn"]', function () {
         $('#agreeCheckbox').change();  // 勾選 checkbox 並觸發 change 事件

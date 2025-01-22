@@ -2,7 +2,7 @@
 @section($Slug, 'active')
 
 
-@section('tlink')
+@section('tLink')
     {{-- @vite(['resources/css/about.css']) --}}
 
 @endsection

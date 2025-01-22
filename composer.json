@@ -8,6 +8,7 @@
         "php": "^8.1",
         "amidesfahani/filament-tinyeditor": "^2.0",
         "awcodes/filament-curator": "^3.6",
+        "coolsam/flatpickr": "^3.1",
         "filament/filament": "^3.2",
         "filipfonal/filament-log-manager": "^2.0",
         "geo-sot/filament-env-editor": "*",
@@ -21,7 +22,6 @@
         "overtrue/pinyin": "^5.3",
         "ralphjsmit/laravel-filament-seo": "^1.4",
         "solution-forest/filament-access-management": "^2.2",
-        "tomatophp/filament-media-manager": "^1.1",
         "z3d0x/filament-logger": "^0.7.2"
     },
     "require-dev": {

@@ -1,7 +1,7 @@
 @extends('Layouts.app')
 @section($Slug,'active')
 {{--{{dd($Carousels)}}--}}
-@section('tlink')
+@section('tLink')
     {{--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>--}}
 
 @endsection
@@ -162,6 +162,6 @@
 
                 </div>
             </div>
-    @include('blog.blog_hot', ['BlogItems' => $BlogItems])
+    @include('Blog.blog_hot', ['BlogItems' => $BlogItems])
 
 @endsection

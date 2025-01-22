@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('metaInfo')
-    @yield('tlink')
+    @yield('tLink')
     @vite(['resources/css/app.css','resources/js/app.js'])
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
 </head>
 
-<body id="page-top" class="bg-[#efefef] flex flex-col justify-between">
+<body id="page-top" class="@yield('bg') flex flex-col justify-between">
 @if (config('services.GTM.enabled'))
     <!-- Google Tag Manager (noscript) -->
     <noscript>

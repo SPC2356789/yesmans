@@ -1,4 +1,6 @@
 @extends('Layouts.superApp')
+@section('bg', 'bg-[#efefef]')
+
 @section('metaInfo')
     @if (config('services.GTM.enabled'))
         <!-- Google Tag Manager -->

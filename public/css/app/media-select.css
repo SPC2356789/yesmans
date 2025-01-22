@@ -1,0 +1,37 @@
+
+.media-select-mut .choices__list--multiple .choices__item{
+    display: flex;
+    flex-direction: column;
+    width: 19%;
+}
+/* 當螢幕寬度小於 1024px（平板裝置） */
+@media (max-width: 1024px) {
+    .media-select-mut .choices__list--multiple .choices__item {
+        width: 24%; /* 調整為 30% */
+    }
+}
+
+/* 當螢幕寬度小於 768px（手機裝置） */
+@media (max-width: 768px) {
+    .media-select-mut .choices__list--multiple .choices__item {
+        width: 32%; /* 調整為 45% */
+    }
+}
+
+/* 當螢幕寬度小於 480px（小型手機） */
+@media (max-width: 480px) {
+    .media-select-mut .choices__list--multiple .choices__item {
+        width: 49%; /* 每行一個項目 */
+    }
+}
+.media-select-mut .choices__item {
+    width: 50%;
+}
+.media-select-mut .choices__list--dropdown .choices__list,.media-select-mut .choices__list[aria-expanded] .choices__list{
+    max-height: 25rem;
+}
+.media-select-mut .choices__list--dropdown .choices__list,.media-select-mut .choices__list[aria-expanded] .choices__list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap
+}

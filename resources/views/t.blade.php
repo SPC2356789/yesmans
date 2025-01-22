@@ -1,6 +1,6 @@
 @extends('Layouts.app')
 
-@section('tlink')
+@section('tLink')
     @vite(['resources/js/trip.js'])
 
 @endsection
@@ -13,6 +13,7 @@
     </style>
 @endsection
 @section('content')
+    <?php phpinfo() ?>
     <?php use Illuminate\Support\Facades\Storage; ?>
     <div class=" flex lg:flex-row flex-col gap-5 w-full justify-center ">
         <div class="flex flex-col  gap-6 w-full lg:w-1/2">
@@ -50,7 +51,7 @@
                     走進水樣森林，你會被環繞在翠綠的山林與清澈的水域之間，感受到大自然的鬼斧神工。在這裡，除了欣賞迷人的景色外，也能觀察到豐富的生態，聆聽鳥鳴與溪流的交響，體驗到一種與自然共鳴的寧靜與和諧。水樣森林，是一處讓人遠離塵囂、感受心靈平靜的秘境。
                 </p>
             </div>
-            <div>
+            <div class="w-full flex flex-col">
                 <div class="flex flex-row ">
                     <div class="flex flex-row gap-2 w-1/2">
                         <h1 class="text-2xl">報名日期</h1>
@@ -66,14 +67,13 @@
                     </div>
                 </div>
                 <button
-                    id="signupBtn"
-                    class=" text-center ms-auto xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white focus:outline-none">
+                    name="signupBtn"
+                    class="w-[200px] text-center xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white">
                     <span class="w-auto ">我要報名</span>
                     <i class="fas fa-chevron-right w-1/12"> </i>
                 </button>
             </div>
         </div>
-
     </div>
     <div class="my-2">
         <h1>探索台灣的壯麗山岳</h1>
