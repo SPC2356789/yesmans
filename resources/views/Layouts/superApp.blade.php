@@ -68,9 +68,9 @@
                     @endif
                 </a>
                 <div class="flex flex-row xsm:gap-2 xxx:gap-1 items-center">
-                    <div class="max-h-8 min-h-6 flex items-center order-3">
+                    <div class="max-h-8 min-h-6 flex items-center order-3 lg:hidden">
                         <button
-                            class="btn-outline-primary navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-[#64a19d] hover:text-cyan-50 text-[#64a19d]"
+                            class="btn-outline-primary navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-yes-major hover:text-cyan-50 text-yes-major"
                             type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
@@ -126,7 +126,7 @@
 
 </header>
 @yield('head_content')
-<section class="flex justify-center" >
+<section class="flex justify-start md:justify-center w-full" >
     <div
         class="flex flex-col w-full xl:w-[1040px] lg:w-[900px] xxs:px-6 md:px-16 sm:px-20 lg:px-0 xs:px-6 ss:px-12 xxx:px-4  py-5">
         @yield('content')

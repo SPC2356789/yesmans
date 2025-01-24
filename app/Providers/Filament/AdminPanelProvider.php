@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
 
         FilamentAsset::register([
             Css::make('media-select', __DIR__ . '/../../../resources/css/mediaSelect.css')->loadedOnRequest(),
+            Css::make('cus-curator', __DIR__ . '/../../../resources/css/cus-curator.css'),
         ]);
     }
 

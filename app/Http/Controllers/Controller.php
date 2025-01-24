@@ -2,18 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Media;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\Setting;
 use RalphJSmit\Laravel\SEO\SchemaCollection;
 use Illuminate\Support\Facades\Storage;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    protected array $Media;
+    protected Setting $Settings;
 
-    public function schema($items,$type='',$Slug=''): SchemaCollection
+    public function __construct()
+    {
+        $this->Media = Media::getData();//取照片
+
+        $this->Settings = new Setting();
+    }
+
+    /**
+     * schema統一整合
+     */
+    public function schema($items, $type = '', $Slug = ''): SchemaCollection
     {
         $schemaCollection = new SchemaCollection();
         // 初始化数据结构
@@ -26,16 +40,16 @@ class Controller extends BaseController
             $data['itemListElement'][] = [
                 "@type" => $type,
                 "position" => $index + 1,  // position 从 1 开始
-                "url" =>  url( $Slug."/".$item->category_slug ."/item/".$item->slug),
+                "url" => url($Slug . "/" . $item->category_slug . "/item/" . $item->slug),
                 "name" => $item['seo_title'],  // 假设 $item 中有 title 字段
                 "description" => $item['seo_description'],  // 假设 $item 中有 subtitle 字段
                 "datePublished" => $this->formatDate($item['published_at']),  // 使用格式化日期的方法
                 "image" => $this->Settings->CheckProtocol(Storage::url($item['featured_image'])),  // 假设 $item 中有 image_url 字段
-                "@id" =>url( $Slug."/".$item->category_slug ."/item/".$item->slug),
+                "@id" => url($Slug . "/" . $item->category_slug . "/item/" . $item->slug),
             ];
             // 将构建的 Schema 添加到 SchemaCollection 中
         }
-            $schemaCollection->add($data);
+        $schemaCollection->add($data);
         return $schemaCollection;  // 这里我们将 JSON 字符串转为数组再返
     }
 

@@ -16,20 +16,12 @@
     <div
         class=" flex md:flex-row flex-col gap-8  my-4 ">
         <!-- 左側篩選區 -->
-        <div class="flex flex-col md:w-1/5 w-full justify-start space-y-6 hidden md:block" name="navbar-l">
-            <!-- 導航藍 -->
-            <div name="navbar-l_theme">
-                <h1 class="text-xl font-bold text-gray-800 mb-2">文章分類</h1>
-                @foreach($Categories as $Ck=>$Cv)
-                    <a href="/blog/{{$Ck}}" class="{{($urlSlug===$Ck ? 'active' :'')}}">{{$Cv}}</a>
-                @endforeach
-            </div>
-        </div>
+            @include('Layouts.sidebar')
         <!-- 右側內容區 -->
         <div class="md:w-4/5 w-full flex-col items-center justify-between " name="info_data">
             <div class="flex flex-row justify-between items-center" name="data_h">
                 <div class=" md:hidden">
-                    @include('Layouts.select', ['Categories' => $Categories,'urlSlug'=>$urlSlug])
+                    @include('Layouts.select')
                 </div>
                 <nav aria-label="Breadcrumb" class="hidden md:block">
                     <ol class="flex space-x-2 text-sm items-center">
@@ -44,18 +36,19 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" name="search" id="blogSearch" data-key="{{$urlSlug}}"
                                class="block max-w-[100px] grow py-1.5 pl-1 pr-0.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                               autocomplete="off" value="{{$term}}" placeholder="文章搜尋">
+                               autocomplete="off" value="{{$term}}" placeholder="文章探索">
                     </div>
                 </div>
+
             </div>
             <!-- 活動卡片區域 -->
-            <div class="scale-x-105" id="search-results">
-                @include('Blog.blog_items', ['items' => $items])
+            <div class="" id="search-results">
+                @include('Layouts.item_card')
             </div>
         </div>
 
     </div>
     {{--    </section>--}}
 
-    @include('Blog.blog_hot', ['BlogItems' => $BlogItems])
+    @include('Blog.blog_hot')
 @endsection

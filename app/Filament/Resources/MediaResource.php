@@ -16,8 +16,11 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use function Awcodes\Curator\is_media_resizable;
+use Illuminate\Database\Eloquent\Model;
+use function Laravel\Prompts\alert;
 
 class MediaResource extends Resource
 {
@@ -89,6 +92,7 @@ class MediaResource extends Resource
 
     public static function form(Form $form): Form
     {
+
         return $form
             ->schema([
                 Forms\Components\Group::make()
@@ -108,6 +112,16 @@ class MediaResource extends Resource
                                             ->label('照片上傳')
                                             ->image()
                                             ->directory('media') // 指定儲存的目錄
+                                            ->preserveFilenames()
+                                            ->afterStateUpdated(function (?Model $record,) {
+                                                if (!empty($record->path)) {
+                                                    alert('s');
+                                                    Storage::disk('public')->delete($record->path);
+                                                }else{
+                                                    alert('l');
+                                                }
+
+                                            })
                                             ->imageEditor(),
 //                                        Forms\Components\ViewField::make('preview')
 //                                            ->view('curator::components.forms.preview')
@@ -262,7 +276,6 @@ class MediaResource extends Resource
     public static function getUploaderField(): Uploader
     {
         return Uploader::make('file')
-
             ->acceptedFileTypes(config('curator.accepted_file_types'))
             ->directory(config('curator.directory'))
             ->disk(config('curator.disk'))

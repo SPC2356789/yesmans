@@ -28,7 +28,7 @@ return [
     'glide' => [
         'server' => \Awcodes\Curator\Glide\DefaultServerFactory::class,
         'fallbacks' => [],
-        'route_path' => 'curator',
+        'route_path' => 'storage',
     ],
     'image_crop_aspect_ratio' => null,
     'image_resize_mode' => null,
@@ -39,6 +39,7 @@ return [
     'tenant_ownership_relationship_name' => 'tenant',
     'max_size' => 5000,
     'model' => \Awcodes\Curator\Models\Media::class,
+//    'model' => \App\Models\Media::class,
     'min_size' => 0,
     'path_generator' => null,
     'resources' => [

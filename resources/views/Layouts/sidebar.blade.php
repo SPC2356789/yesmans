@@ -1,0 +1,36 @@
+<!-- 左側篩選區 -->
+<div class="flex flex-col md:w-1/4 w-full justify-start space-y-6 " name="navbar-l">
+    <!-- 導航藍 -->
+
+    @if(isset($Categories,$urlSlug))
+        <div class="hidden md:flex md:flex-col gap-3" name="navbar-l_theme">
+            <h1 class="text-xl font-bold text-gray-800 mb-2">{{ $sidebarTitle ??'' }}</h1>
+            @foreach($Categories as $ck => $cv)
+                <a href="/{{$Slug}}/{{ $ck }}" class="{{ ($urlSlug === $ck ? 'active' : '') }}">{{ $cv }}</a>
+            @endforeach
+        </div>
+    @endif
+    <!-- 篩選器 -->
+    {{--                <div class="flex flex-col  px-3" name="span">--}}
+    @if(isset($tags))
+        <div class="flex flex-col gap-2" name="tags">
+            <h1 class="text-xl font-bold text-gray-800">篩選器</h1>
+            <div class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center justify-start ">
+                @foreach($tags as $tk => $tv)
+                    <button class="span_tag sm:text-sm" data-value="itry_tag_{{$tk}}">{{$tv}}</button>
+                @endforeach
+            </div>
+        </div>
+    @endif
+    @if(isset($months))
+        <div class="flex flex-col md:min-h-48 gap-2">
+            <label class="text-xl font-bold text-gray-800" for="trip_month">選擇月份</label>
+            <select id="trip_month" autocomplete="off" multiple>
+                @for ($si = 1; $si < 13; $si++)
+                    <option value="{{$si}}">{{$si}} 月</option>
+                @endfor
+            </select>
+        </div>
+    @endif
+</div>
+

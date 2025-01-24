@@ -1,0 +1,13 @@
+ul.curator-picker-grid li {
+    width: 24%;
+    height: auto;
+    gap: 1rem;
+}
+
+ul.curator-picker-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+ul.curator-picker-grid li button img{
+    height: auto;
+}

@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('mould_id'); // 關聯模型 ID
             $table->decimal('amount', 10); // 金額
-            $table->string('date'); // 日期
+            $table->date('date_start')->nullable(); // 日期
+            $table->date('date_end')->nullable(); // 日期
             $table->integer('quota'); // 名額
             $table->text('agreement_content')->nullable(); // 同意書規範
             $table->boolean('food')->default(false);//是否開啟飲食習慣

@@ -4,19 +4,18 @@ namespace App\Http\Controllers\About;
 
 use App\Http\Controllers\Controller;
 use App\Models\AboutMember;
-use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class AboutController extends Controller
 {
-    protected $Settings;
-    protected $Slug;
+    private AboutMember $Members;
+    private string $Slug;
 
     public function __construct()
     {
 
+        parent::__construct(); // 確保繼承 Controller 的初始化邏輯
         $this->Slug = 'about';
-        $this->Settings = new Setting();
         $this->Members = new AboutMember();
     }
 

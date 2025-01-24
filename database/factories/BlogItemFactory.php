@@ -42,7 +42,7 @@ class BlogItemFactory extends Factory
             'subtitle' => $subtitle, // 中文副標題
             'slug' => $slug, // 中文轉換成拼音後的 slug
             'category_id' => $category ? $category->id : null, // 關聯分類
-            'featured_image' => $this->faker->imageUrl(1024, 1024, 'nature', true, 'Blog'), // 隨機圖像
+            'featured_image' => rand(8, 18),
             'seo_title' => $this->faker->sentence(), // SEO 標題
             'seo_description' => $this->faker->paragraph(), // SEO 描述
             'content' => $this->generateChineseContent(1000), // 生成 1000 字的中文内容

@@ -11,7 +11,7 @@
                 </div>
 
                 <!-- 篩選器 -->
-                <div class="flex flex-col  px-3" name="span">
+                <div class="flex flex-col px-3" name="tags">
                     <h1 class="text-xl font-bold text-gray-800">篩選器</h1>
                     <div class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center justify-center md:justify-start ">
                         <button class="span_tag sm:text-sm">湖泊</button>

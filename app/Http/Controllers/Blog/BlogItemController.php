@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Blog;
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use App\Models\BlogItem;
-use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use JetBrains\PhpStorm\NoReturn;
@@ -14,7 +13,6 @@ use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class BlogItemController extends Controller
 {
-    protected Setting $Settings;
     protected string $Slug;
     private BlogItem $Items;
     private Categories $Categories;
@@ -23,8 +21,8 @@ class BlogItemController extends Controller
     public function __construct()
     {
 
+        parent::__construct(); // 確保繼承 Controller 的初始化邏輯
         $this->Slug = 'blog';
-        $this->Settings = new Setting();
         $this->Categories = new Categories();
         $this->Items = new BlogItem();
         $this->BlogHot = new BlogController();
@@ -38,7 +36,7 @@ class BlogItemController extends Controller
     public function index($key, $itemSlug)
     {
         $Slug = $this->Slug;
-
+        $Media=$this->Media;
         $items = json_decode($this->Items->getItem($itemSlug), true);
         $BlogItems= $this->blogHot();//熱門文章
         $Categories = $this->Categories->getData_mlt($items['category_id']);

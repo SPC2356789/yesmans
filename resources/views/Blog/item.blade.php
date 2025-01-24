@@ -20,14 +20,14 @@
                     <ol class="flex space-x-2 text-sm items-center">
 
                         <li>
-                            <a href="/" class="hover:text-[#64A19D]">首頁</a>
+                            <a href="/" class="hover:text-yes-major">首頁</a>
                         </li>
                         <li>
                             <span class="">></span>
                         </li>
                         <li aria-current="page" class="">
                             <a href="/blog/{{$Categories['slug']}}"
-                               class="hover:text-[#64A19D]">{{$Categories['name']}}</a>
+                               class="hover:text-yes-major">{{$Categories['name']}}</a>
                         </li>
                         <li>
                             <span class="">></span>
@@ -40,7 +40,7 @@
             </div>
 
             <div>
-                <img src="{{Storage::url($items['featured_image'])}}" alt="{{$items['title']}}" loading="lazy">
+                <img src="{{Storage::url($Media[$items['featured_image']])}}" alt="{{$items['title']}}" loading="lazy">
                 <div class="my-2 text-stone-600">發佈時間:{{$items['published_at']}}</div>
             </div>
 

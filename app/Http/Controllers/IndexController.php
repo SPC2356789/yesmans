@@ -9,21 +9,23 @@ use App\Models\IndexCarousel;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Blog\BlogController;
+use App\Http\Controllers\Itinerary\ItryController;
 class IndexController extends Controller
 {
-    protected Setting $Settings;
     protected string $Slug;
     private IndexCarousel $Carousel;
 
     private BlogController $BlogHot;
+    private ItryController $TripBoard;
 
     public function __construct()
     {
 
+        parent::__construct(); // 確保繼承 Controller 的初始化邏輯
         $this->Slug = 'index';
-        $this->Settings = new Setting();
         $this->Carousel = new IndexCarousel();
         $this->BlogHot = new BlogController();
+        $this->TripBoard = new ItryController();
     }
 
     /**
@@ -38,7 +40,7 @@ class IndexController extends Controller
 
         $Carousels = $this->Carousel->getData();
         $BlogItems= $this->blogHot();
-
+        $Media=$this->Media;
         $Slug = $this->Slug;
         $itinerary = [
             [
@@ -117,5 +119,12 @@ class IndexController extends Controller
     public function blogHot()
     {
      return   $this->BlogHot->cutData()['hot'];
+    }
+    /**
+     * 熱門文章
+     */
+    public function tripBoard()
+    {
+        return   $this->TripBoard->Category();
     }
 }

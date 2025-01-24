@@ -6,6 +6,8 @@ use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Clusters\Blogs;
 use App\Filament\Clusters\Blogs\Resources\BlogItemResource\Pages;
 use App\Filament\Clusters\Blogs\Resources\BlogItemResource\RelationManagers;
+use App\Forms\Components\MediaPicker;
+use App\Models\Media;
 use Filament\Tables\Filters\SelectFilter;
 use App\Models\BlogItem;
 use App\Models\Categories;
@@ -45,12 +47,14 @@ class BlogItemResource extends Resource
             ->schema([
 
                 Split::make([
-                    FileUpload::make('featured_image')
-                        ->label('首圖')
-                        ->image()
-                        ->directory('Blog/Items')
-                        ->helperText('只支持jpg與png前端編輯') // 輔助說明文字
-                        ->imageEditor(),
+                    MediaPicker::make('featured_image')
+                        ->label('選擇照片')
+//                        ->multiple()
+                        ->options(Media::getMedia())
+                        ->searchable()
+                        ->helperText('超過10張會拖效能')
+                        ->columnSpanFull()
+                        ->allowHtml(),
                 ]),
                 Split::make([
                     Section::make([

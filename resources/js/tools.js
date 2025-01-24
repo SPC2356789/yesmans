@@ -3,6 +3,17 @@ import TomSelect from "tom-select"; // 這會加載帶插件的完整版本
 import 'tom-select/dist/css/tom-select.css';
 
 export const Tool = {
+    loading: function () {
+        return `<div class="flex justify-center items-center  gap-1 " >
+    <div class="w-6 h-6 border-4 border-gray-300 border-t-yes-major rounded-full animate-spin"></div>
+    探索中
+</div>
+`
+    },
+    sanitizeInput: function (input) {
+        return input.replace(/[^a-zA-Z0-9\u4e00-\u9fa5\s]/g, ''); // 只允許字母、數字、中文字符和空白
+
+    },
 
     checkbox: function (Id) {
         const select = new TomSelect(Id, {
@@ -18,7 +29,8 @@ export const Tool = {
 
         // 設置初始選中的值（全選）
         select.setValue(allValues);
-    },
+    }
+    ,
     TomSelect: function (Id, optionsData) {
         // 初始化 TomSelect 实例，并填充选项
         const select = new TomSelect(Id, {
@@ -57,7 +69,8 @@ export const Tool = {
         // console.log(`选项的总数是: ${optionCount}`);
         // 默认选中 value 为 'TW' 的选项
         select.setValue('TWN');
-    },
+    }
+    ,
 
 
 }

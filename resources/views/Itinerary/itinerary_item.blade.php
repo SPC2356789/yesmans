@@ -1,22 +1,18 @@
-
 <div class="flex flex-wrap my-4 ">
     @for ($i = 0; $i < 12; $i++)
-      <button name="itinerary_item" href="" id=""
-           class="w-1/2 lg:w-1/3 2xl:w-1/3 p-3 transform transition-transform duration-300 hover:scale-105 hover:z-50 addHot group">
+        <button name="itinerary_item" href="" id=""
+                class="w-1/2 lg:w-1/3 2xl:w-1/3 p-3 transform transition-transform duration-300 hover:scale-105 hover:z-50 addHot group">
             <div class="bg-white bg-opacity-90 shadow-lg rounded-md overflow-hidden">
                 <!-- 保證圖片的比例為 1:1 -->
                 <div class="relative w-full" style="padding-top: 100%;">
-
-                    <div class="flex flex-row absolute top-0 right-0 gap-1 z-10 xsm:m-2 xxx:m-1">
-                        @for ($a = 0; $a < 2; $a++)
-                            <span
-                                class="xxx:px-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-white text-[#212121] text-xs flex items-center justify-center">
-        湖泊
-    </span>
-
-                        @endfor
-                    </div>
-
+                    @if(isset($tags))
+                        <div class="flex flex-row absolute top-0 right-0 gap-1 z-10 xsm:m-2 xxx:m-1">
+                            @for ($a = 0; $a < 2; $a++)
+                                <span
+                                    class="xxx:px-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-white text-[#212121] text-xs flex items-center justify-center">湖泊</span>
+                            @endfor
+                        </div>
+                    @endif
 
                     <!-- 圖片 -->
                     <img

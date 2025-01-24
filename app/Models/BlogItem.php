@@ -66,18 +66,20 @@ class BlogItem extends BaseModel
             ->orderBy('orderby', 'asc')
             ->leftJoin('categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
             ->select('blog_items.*', 'categories.slug as category_slug') // 選擇 blog_items 的所有欄位並加上 slug
+
             ;
 
     }
 
     public static function SelectDataImg(): array
     {
+        $Media = Media::getData();//取照片
         //抓有開啟的
         return self::selectRaw('*')
             ->where('is_published', 1)
             ->get()
-            ->mapWithKeys(function ($item) {
-                return [$item->id => "<span class='text-xs'>{$item->title}</span><img class='w-full' src='" . Storage::url($item->featured_image) . "'>"];
+            ->mapWithKeys(function ($item) use ($Media) {
+                return [$item->id => "<span class='text-xs'>{$item->title}</span><img class='w-full' src='" . Storage::url($Media[$item->featured_image]) . "'>"];
             })
             ->toArray();
     }

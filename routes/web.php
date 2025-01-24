@@ -20,17 +20,17 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/about', 'About\AboutController@index');
-    Route::get('/itinerary', function() {
-        return view('Itinerary.itinerary');
-    });
+    Route::get('/itinerary', 'Itinerary\ItryController@index') ;
+    Route::get('/itinerary/{key}', 'Itinerary\ItryController@index') ;
+    Route::get('/itinerary/{key}/trip/{item}', 'Itinerary\ItryController@index') ;
     Route::get('/t', function() {
         return view('t');
     });
+    Route::get('/blog', 'Blog\BlogController@index');
     Route::get('/blog/{key}', 'Blog\BlogController@index');
     Route::get('/blog/{key}/item/{item}', 'Blog\BlogItemController@index');
     Route::POST('/blog/active', 'Blog\BlogController@store');
     Route::PATCH('/blog/{key}', 'Blog\BlogController@search');
-    Route::get('/blog', 'Blog\BlogController@index');
 //    Route::get('/blog/Search/{key}', 'Blog\BlogController@Search');
     Route::fallback(function () {
         return response()->view('errors.404', [], 404);

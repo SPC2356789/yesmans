@@ -59,7 +59,7 @@ class TripResource extends Resource
                     ->allowHtml(),
                 Select::make('icon')
                     ->label('選擇標籤')
-                    ->options(Media::getMedia('icon',10))
+                    ->options(Media::getMedia('icon', 10))
                     ->searchable()
                     ->allowHtml(),
                 Forms\Components\select::make('tags')
@@ -123,7 +123,7 @@ class TripResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->numeric()
+                    ->money('TWD') // 顯示台幣格式
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_published')
                     ->boolean(),
@@ -162,6 +162,7 @@ class TripResource extends Resource
             //
         ];
     }
+
     protected static ?string $title = '行程模板';
 
     public static function getModelLabel(): string

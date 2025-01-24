@@ -17,6 +17,10 @@ export default {
                 'xsm': '550px', // 新增自定義的 400px 斷點
                 'lg992': '992px', // 新增 992px 斷點
             },
+            colors: {
+                'yes-major': '#64A19D',
+                'yes-minor': '#b87957',
+            },
             fontFamily: {
                 sans: ['Inter', 'Noto Sans TC', 'Microsoft JhengHei', 'Arial'],
             },

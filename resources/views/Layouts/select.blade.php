@@ -16,7 +16,7 @@
         </svg>
     </button>
     <div
-        class="h-56 overflow-y-scroll absolute left-0 z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"
+        class="max-h-56 overflow-y-scroll absolute left-0 z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"
         id="{{$menu_id??''}}" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
         @if(isset($li))
             <li class=""
@@ -25,7 +25,7 @@
         @endif
         @if(isset($Categories,$urlSlug))
             @foreach($Categories as $Ck => $Cv)
-                <a href="/blog/{{$Ck}}"
+                <a href="/{{$Slug}}/{{$Ck}}"
                    class="block px-4 py-2 text-sm text-gray-700 text-start w-full border-0 outline-none rounded-md {{ $urlSlug === $Ck ? 'active' : '' }}"
                    role="menuitem" tabindex="-1" data-value="{{$Ck}}">
                     {{$Cv}}
