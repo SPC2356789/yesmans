@@ -63,7 +63,7 @@ class TripResource extends Resource
                     ->searchable()
                     ->allowHtml(),
                 Forms\Components\select::make('tags')
-                    ->options(self::$category::getData(2, 2))// 從分類模型中獲取選項
+                    ->options(self::$category::getData(2, 2,"name,id"))// 從分類模型中獲取選項
                     ->multiple()
                     ->searchable() // 支持搜索
                     ->required(),

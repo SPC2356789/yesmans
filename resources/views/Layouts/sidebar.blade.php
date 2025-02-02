@@ -17,14 +17,14 @@
             <h1 class="text-xl font-bold text-gray-800">篩選器</h1>
             <div class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center justify-start ">
                 @foreach($tags as $tk => $tv)
-                    <button class="span_tag sm:text-sm" data-value="itry_tag_{{$tk}}">{{$tv}}</button>
+                    <button class="span_tag sm:text-sm" data-value="itry_tag_{{$tv['slug']}}">{{$tv['name']}}</button>
                 @endforeach
             </div>
         </div>
     @endif
     @if(isset($months))
         <div class="flex flex-col md:min-h-48 gap-2">
-            <label class="text-xl font-bold text-gray-800" for="trip_month">選擇月份</label>
+            <button class="text-start text-xl font-bold text-gray-800 cursor-pointer" for="trip_month">選擇月份<i class="fa-solid fa-circle-info mr-1 " ></i></button>
             <select id="trip_month" autocomplete="off" multiple>
                 @for ($si = 1; $si < 13; $si++)
                     <option value="{{$si}}">{{$si}} 月</option>

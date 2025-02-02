@@ -40,25 +40,30 @@ class ItryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $key = null,)
+    public function index(Request $request, $key = null,): \Illuminate\Http\Response
     {
         $Categories = $this->Category();//取分類
         $sidebarTitle = $this->sidebarTitle;//分類的標
         $term = $request->input('term') ?? null;
         $Slug = $this->Slug;
         $secondSlug = $this->secondSlug;
-        $apply=$this->apply;
-        $Media=$this->Media;
+        $apply = $this->apply;
+        $Media = $this->Media;
 
         $tags = $this->Tags();
+//        dd($tags);
         $months = true;//打開月份
         $MediaMlt = true;//此照片有無輪播
         $urlSlug = $key ?? 'recent';//設定即將成團為首項
 //        $this->test($key);
-        $items = $this->Trip->getData($key, $searchTerm ?? '')
-            ->paginate($this->Page)->onEachSide(1)
-        ;
-//        dd($Media);
+        $items = $this->Trip->getData($urlSlug, $searchTerm ?? '')
+            ->paginate($this->Page)->onEachSide(1);
+        if (isset($_GET['t'])) {
+            if ($_GET['t'] == 'a') {
+                dd($items);
+            }
+
+        }
 //        dd($items->toarray(),$tags);
 
         $AllNames = array_keys(get_defined_vars());
@@ -83,7 +88,7 @@ class ItryController extends Controller
 
     public function Tags(): array
     {
-        return $this->Categories->getData(2, 2, '*', 'id',);
+        return $this->Categories->getData(2, 2, '*', 'slug',);
     }
 
 

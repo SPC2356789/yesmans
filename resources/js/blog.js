@@ -4,10 +4,7 @@ import {Tool} from './tools';
 
 $(document).ready(function () {
 
-    //標籤行為
-    $('button.span_tag').click(function () {
-        $(this).toggleClass('active');
-    });
+
     // 熱門
     $('a.addHot').click(function () {
         const id = $(this).attr('id'); // 獲取元素的 id 屬性
@@ -50,5 +47,7 @@ $(document).ready(function () {
                 $('#search-results').html('<div>發生不可預期的錯誤，請聯絡管理員。</div>');
             });
     }
+
+
 });
 

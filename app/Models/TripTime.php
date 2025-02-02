@@ -20,7 +20,7 @@ class TripTime extends BaseModel
 
     public static function getData($cate = '*', $term = '')
     {
-        return TripTime::when($cate !== '*', function ($query, $term) use ($cate) {
+        return TripTime::when(!in_array($cate, ['*', 'recent', 'upcoming']), function ($query, $term) use ($cate) {
             // 根據 Categories 的 slug 查找對應的 Trip
             $query->whereHas('Trip', function ($query) use ($cate) {
                 // 假設 Trip 中的 category 字段是 category_id，對應 Categories 的 id
@@ -30,6 +30,10 @@ class TripTime extends BaseModel
                 });
             });
         })
+            ->when($cate === 'recent', function ($query) {
+                $query->whereDate('date_start', '>=', now()->subMonth()->toDateString() // 最近一個月
+                );
+            })
             ->when($term !== '', function ($query) use ($term) {
                 $query->where(function ($query) use ($term) {
                     $query->where('title', 'LIKE', '%' . $term . '%')
@@ -40,7 +44,7 @@ class TripTime extends BaseModel
 //            ->orderBy('orderby', 'asc')
 //            ->leftJoin('categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
 //            ->select('blog_items.*', 'categories.slug as category_slug') // 選擇 blog_items 的所有欄位並加上 slug
-            ->get()
+
             ->toarray()
             ;
 

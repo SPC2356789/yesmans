@@ -42,38 +42,51 @@ class Trip extends BaseModel
         'seo_description' // SEO 描述
     ];
 
-    public function category(): BelongsTo
+    public function categories(): BelongsTo
     {
-        return $this->belongsTo(Categories::class, 'category', 'id');
+        return $this->belongsTo(categories::class, 'category', 'id');
     }
-//    public function tags(): BelongsToMany
-//    {
-//        return $this->belongsToMany(Categories::class, 'trips', 'tags', 'id');
-//    }
 
     public function trip_times(): HasMany
     {
         return $this->hasMany(TripTime::class, 'mould_id', 'id'); // TripTime 表的 mould_id 對應 Trip 的 id
     }
-// 在 Trip 模型中新增 carousel 關聯
-//    public function carousel():BelongsToMany
-//    {
-//        return $this->belongsToMany(Media::class, 'trips', 'carousel', 'id'); // 加上別名;
-//    }
+
     public static function getData($cate = '*', $term = '')
     {
-        return Trip::when($cate !== '*', function ($query, $term) use ($cate) {
-            // 假設 Trip 中的 category 字段是 category_id，對應 Categories 的 id
-            $query->whereHas('category', function ($query) use ($cate) {
-                // 根據 slug 過濾 Categories
-                $query->where('slug', $cate);
-            });
-
-        })
+        return Trip::selectRaw('id, title,subtitle, category,carousel,tags')
+            ->with(['trip_times' => function ($query) use ($cate) {
+                $query
+                    ->select('id','mould_id', 'date_start', 'date_end', 'quota', 'applied_count')
+                    ->when($cate == 'recent', function ($query) {
+                        $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
+                    })
+                    ->when($cate == 'upcoming', function ($query) {
+                        // 只有當 $A = 1 時才加這個篩選條件
+                        $query->whereRaw('(quota - applied_count) <= 3');
+                    })
+                    ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
+//                    ->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的
+                    ->where('is_published', 1);
+            }])
+            ->with(['categories' => function ($query) {
+                $query->select('id', 'slug', 'name'); // 只取得需要的字段
+            }])
+            ->when(!in_array($cate, ['*', 'recent', 'upcoming']), function ($query) use ($cate) {
+                $query->whereHas('category', fn($query) => $query->where('slug', $cate));
+            })
+            ->when($cate === 'recent', function ($query) {
+                $query->whereHas('trip_times', fn($query) => $query->whereDate('date_start', '>=', now()->subMonth()->toDateString()) // 最近一個月
+                );
+            })
+            ->when($cate === 'upcoming', function ($query) {
+                $query->whereHas('trip_times', fn($query) => $query->whereRaw('(quota - applied_count) <= 3') // 剩餘名額小於等於 3
+                );
+            })
             ->whereHas('trip_times', function ($query) {
                 // 檢查是否有符合條件的 TripTime 資料
-                $query->whereDate('date_start', '>=', now()->toDateString())
-                    ->Where('is_published', 1);; // 只選擇今天或以後的日期
+                $query->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的日期
+                ->Where('is_published', 1);;
             })
             ->when($term !== '', function ($query) use ($term) {
                 $query->where(function ($query) use ($term) {
@@ -84,8 +97,8 @@ class Trip extends BaseModel
             ->where('is_published', 1)
 //            ->whereDate('date_start', '>=', now()->toDateString())// 選擇今天或以後的日期
 //            ->orderBy('orderby', 'asc')
-//            ->leftJoin('categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
-//            ->select('blog_items.*', 'categories.slug as category_slug') // 選擇 blog_items 的所有欄位並加上 slug
+//            ->leftJoin('categories', 'trips.category', '=', 'categories.id') // JOIN categories 表
+//            ->select('id','title', 'categories.slug as category_slug') // 選擇 blog_items 的所有欄位並加上 slug
 //            ->with(['carousel', 'tags']) // 這裡提前加載 carousel 和 tags 關聯
 //            ->get()
 //            ->toarray()

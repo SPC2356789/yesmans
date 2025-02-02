@@ -37,7 +37,7 @@ class BlogController extends Controller
      */
 
 
-    public function index(Request $request, $key = null,)
+    public function index(Request $request, $key = null,): \Illuminate\Http\Response
     {
         $cutData = $this->cutData();
         $hot = $cutData['hot'];
