@@ -54,10 +54,10 @@ class Trip extends BaseModel
 
     public static function getData($cate = '*', $term = '')
     {
-        return Trip::selectRaw('id, title,subtitle, category,carousel,tags')
+        return Trip::selectRaw('id, title,subtitle, category,carousel,tags,slug,icon')
             ->with(['trip_times' => function ($query) use ($cate) {
                 $query
-                    ->select('id','mould_id', 'date_start', 'date_end', 'quota', 'applied_count')
+                    ->select('uuid', 'mould_id', 'date_start', 'date_end', 'quota', 'applied_count')
                     ->when($cate == 'recent', function ($query) {
                         $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
                     })
@@ -73,7 +73,7 @@ class Trip extends BaseModel
                 $query->select('id', 'slug', 'name'); // 只取得需要的字段
             }])
             ->when(!in_array($cate, ['*', 'recent', 'upcoming']), function ($query) use ($cate) {
-                $query->whereHas('category', fn($query) => $query->where('slug', $cate));
+                $query->whereHas('categories', fn($query) => $query->where('slug', $cate));
             })
             ->when($cate === 'recent', function ($query) {
                 $query->whereHas('trip_times', fn($query) => $query->whereDate('date_start', '>=', now()->subMonth()->toDateString()) // 最近一個月
@@ -105,6 +105,54 @@ class Trip extends BaseModel
             ;
 
     }
+
+    public static function getTrip($trip, $term = '')
+    {
+//      dd($trip);
+        return self::selectRaw('*')
+            ->with(['trip_times' => function ($query) {
+                $query
+                    ->select('*')
+                    ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
+                    ->selectRaw('CONCAT(DATE_FORMAT(date_start, "%Y-%m-%d")," (",
+                                   CASE DAYOFWEEK(date_start)
+                                      WHEN 1 THEN "週日"
+                                     WHEN 2 THEN "週一"
+                                     WHEN 3 THEN "週二"
+                                     WHEN 4 THEN "週三"
+                                      WHEN 5 THEN "週四"
+                                      WHEN 6 THEN "週五"
+                                       WHEN 7 THEN "週六"
+                                   END,
+                                   ")",
+                                   CASE
+                                      WHEN DATE(date_start) = DATE(date_end) THEN " 單攻"
+                                       ELSE CONCAT(" to ",
+                                           DATE_FORMAT(date_end, "%Y-%m-%d"),
+                                           " (",
+                                         CASE DAYOFWEEK(date_end)
+                                               WHEN 1 THEN "週日"
+                                              WHEN 2 THEN "週一"
+                                             WHEN 3 THEN "週二"
+                                              WHEN 4 THEN "週三"
+                                              WHEN 5 THEN "週四"
+                                               WHEN 6 THEN "週五"
+                                               WHEN 7 THEN "週六"
+                                           END,
+                                            ")"
+                                        )
+                                    END
+                                ) as date')
+//                    ->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的
+                    ->where('is_published', 1);
+
+            }])
+            ->where('slug', $trip)
+            ->get()
+            ->first();
+
+    }
+
 
     public static function getData_form()
     {

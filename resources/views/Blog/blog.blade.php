@@ -43,7 +43,7 @@
             </div>
             <!-- 活動卡片區域 -->
             <div class="" id="search-results">
-                @include('Layouts.item_card')
+                @include('Layouts.item_card',['div'=>'a'])
             </div>
         </div>
 

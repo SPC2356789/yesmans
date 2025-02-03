@@ -13,7 +13,7 @@
     </style>
 @endsection
 @section('content')
-    <?php phpinfo() ?>
+
     <?php use Illuminate\Support\Facades\Storage; ?>
     <div class=" flex lg:flex-row flex-col gap-5 w-full justify-center ">
         <div class="flex flex-col  gap-6 w-full lg:w-1/2">

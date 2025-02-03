@@ -8,20 +8,25 @@ use App\Models\Categories;
 use App\Models\TripTime;
 use App\Models\Trip;
 use Illuminate\Http\Request;
+use JetBrains\PhpStorm\NoReturn;
 
 class ItryController extends Controller
 {
-    private Categories $Categories;
+    protected Categories $Categories;
     protected string $Slug;
     private string $sidebarTitle;
-    private TripTime $TripTime;
-    private Trip $Trip;
+    protected TripTime $TripTime;
+    protected Trip $Trip;
     private int $Page;
-    private string $secondSlug;
+    protected string $secondSlug;
     /**
      * @var true
      */
     private bool $apply;
+    /**
+     * @var string
+     */
+    private string $urlSlug;
 
 
     public function __construct()
@@ -35,13 +40,16 @@ class ItryController extends Controller
         $this->sidebarTitle = "行程分類";
         $this->Page = 12;//一頁幾個
         $this->apply = true;//開啟報名
+        $this->urlSlug = 'recent';//開啟報名
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $key = null,): \Illuminate\Http\Response
+    public function index(Request $request): \Illuminate\Http\Response
     {
+        $key = $request->route('key');
+
         $Categories = $this->Category();//取分類
         $sidebarTitle = $this->sidebarTitle;//分類的標
         $term = $request->input('term') ?? null;
@@ -51,26 +59,20 @@ class ItryController extends Controller
         $Media = $this->Media;
 
         $tags = $this->Tags();
-//        dd($tags);
+
         $months = true;//打開月份
         $MediaMlt = true;//此照片有無輪播
-        $urlSlug = $key ?? 'recent';//設定即將成團為首項
-//        $this->test($key);
-        $items = $this->Trip->getData($urlSlug, $searchTerm ?? '')
-            ->paginate($this->Page)->onEachSide(1);
+        $urlSlug = is_null($key) ? $this->urlSlug : $key;
+        $items = $this->getItems($urlSlug)->paginate($this->Page)->onEachSide(1);
         if (isset($_GET['t'])) {
             if ($_GET['t'] == 'a') {
                 dd($items);
             }
 
         }
-//        dd($items->toarray(),$tags);
-
         $AllNames = array_keys(get_defined_vars());
         return response()
             ->view("Itinerary/" . $Slug, compact($AllNames));
-
-
     }
 
     private function test($cate,)
@@ -78,6 +80,34 @@ class ItryController extends Controller
         $items = $this->Trip->getData($cate, $searchTerm ?? '');
 
         return $items;
+    }
+
+
+    public function search(Request $request, $k): string
+    {
+        $Media = $this->Media;
+        $MediaMlt = $this->MediaMlt;//此照片有無輪播
+        $secondSlug = $this->secondSlug;
+        $key = $request->input('key') ?? $k;;
+        $term = $request->input('term') ?? null;
+        session(['term' => $term]);//儲存查詢
+        $keyUrl = ($key !== 'all' && $key !== null) ? $key : '*';
+        $items = $this->Trip->getData($keyUrl, $term ?? session('term'))->paginate($this->Page)->onEachSide(1);;
+        $Slug = $this->Slug;
+        $current_page = $items->currentPage();
+        $last_page = $items->lastPage();
+//        return $items;
+        $searchTerm = session('term', '*');
+
+        $AllNames = array_keys(get_defined_vars());
+        return view('Layouts.item_card', compact($AllNames))->render();
+
+    }
+
+    public function getItems($cate)
+    {
+        return $this->Trip->getData($cate, $searchTerm ?? '')
+            ;
     }
 
     public function Category(): array

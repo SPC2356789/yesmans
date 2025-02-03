@@ -9,7 +9,6 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\Setting;
 use RalphJSmit\Laravel\SEO\SchemaCollection;
 use Illuminate\Support\Facades\Storage;
-
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;

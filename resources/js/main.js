@@ -58,15 +58,16 @@ function ABCopy(a, b) {
 
 }
 
-function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"]', submenuitem = '[role="menuitem"]') {
+function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"]', subMenuitem = '[role="menuitem"]') {
     // 點擊按鈕時，切換該按鈕所在父元素的菜單顯示/隱藏
+    $(document).on('click', selector, function (event) {
+        event.stopPropagation(); // 防止事件冒泡到 document，導致立即關閉
 
-    $(document).on('click', selector, function () {
-        const $button = $(this);  // 當前點擊的按鈕
-        const $menu = $button.next(submenu);  // 獲取該按鈕的菜單
+        const $button = $(this);
+        const $menu = $button.next(submenu);
 
         // 隱藏其他菜單
-        $(submenu).not($menu).addClass('hidden');  // 隱藏其他菜單
+        $(submenu).not($menu).addClass('hidden');
 
         // 切換當前菜單的顯示/隱藏
         $menu.toggleClass('hidden');
@@ -75,32 +76,38 @@ function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"
         const expanded = $button.attr('aria-expanded') === 'true' ? 'false' : 'true';
         $button.attr('aria-expanded', expanded);
 
-
         // 如果有選中的項目，給它添加 active 樣式
         const selectedText = $button.attr('data-select');
-        $menu.find(submenuitem).each(function () {
+        $menu.find(subMenuitem).each(function () {
             if ($(this).text().trim() === selectedText) {
-                $menu.find(submenuitem).removeClass('active');
-                $(this).addClass('active'); // 添加 active 樣式
+                $menu.find(subMenuitem).removeClass('active');
+                $(this).addClass('active');
             }
         });
     });
 
-// 如果菜單項被點擊，隱藏該菜單
+    // 如果菜單項被點擊，隱藏該菜單
+    $(document).on('click', subMenuitem, function () {
+        const $menu = $(this).closest(submenu);
 
-    $(document).on('click', submenuitem, function () {
-        const $menu = $(this).closest('[role="menu"]');  // 獲取該菜單
+        $menu.addClass('hidden');
+        const sortText = $(this).text().trim();
+        $menu.prev(selector).attr('data-select', sortText)
+            .find('span')
+            .text(sortText);
 
-        $menu.addClass('hidden');  // 隱藏該菜單
-        const sortText = $(this).text().trim(); // 使用 text() 來獲取選擇的排序項目的文字
-        $menu.prev('[aria-haspopup="true"]').attr('data-select', sortText)  // 更新 data-select 屬性
-            .find('span')  // 找到 <span> 標籤
-            .text(sortText);  // 更新按鈕的顯示文字
+        $menu.prev(selector).attr('aria-expanded', 'false');
+    });
 
-        $menu.prev('[aria-haspopup="true"]').attr('aria-expanded', 'false');  // 更新 aria-expanded 屬性   });
-
+    // 點擊框框外時隱藏所有選單
+    $(document).on('click', function (event) {
+        if (!$(event.target).closest(selector).length && !$(event.target).closest(submenu).length) {
+            $(submenu).addClass('hidden');
+            $(selector).attr('aria-expanded', 'false');
+        }
     });
 }
+
 
 function Loading() {
     startTime = Date.now();

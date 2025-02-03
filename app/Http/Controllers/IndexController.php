@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use App\Models\TripTime;
 use App\Models\BlogItem;
 use App\Models\IndexCarousel;
 use Illuminate\Support\Facades\Http;
@@ -17,15 +18,19 @@ class IndexController extends Controller
 
     private BlogController $BlogHot;
     private ItryController $TripBoard;
+    private string $jsPage;
+    private TripTime $TripTime;
 
     public function __construct()
     {
 
         parent::__construct(); // 確保繼承 Controller 的初始化邏輯
         $this->Slug = 'index';
+        $this->jsPage = 'home';
         $this->Carousel = new IndexCarousel();
         $this->BlogHot = new BlogController();
         $this->TripBoard = new ItryController();
+        $this->TripTime = new TripTime();
     }
 
     /**
@@ -42,6 +47,10 @@ class IndexController extends Controller
         $BlogItems= $this->blogHot();
         $Media=$this->Media;
         $Slug = $this->Slug;
+        $jsPage = $this->jsPage;
+        $tripTab=$this->tripBoard();
+        $tripData=$this->TripTime->getData('recent')->take(6);
+
         $itinerary = [
             [
                 'id' => 'all-tab',
@@ -107,7 +116,16 @@ class IndexController extends Controller
 
 
         $AllNames = array_keys(get_defined_vars());
+        if (isset($_GET['t'])) {
+            if ($_GET['t'] == 'a') {
+                dd($tripData
+                    ->get()
+//                    ->first()  // 只取出第一项
+                    ->toArray()
+                );
+            }
 
+        }
         return response()
             ->view($this->Slug, compact($AllNames))
 

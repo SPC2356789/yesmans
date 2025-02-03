@@ -9,19 +9,37 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import {Tool} from './tools';
+import tripCountry from '../lib/trip_country.json';
+import axios from 'axios';
 
 $(document).ready(function () {
-
-    getCountry()//國籍選擇
+    swiper()
+    getCountry()//初始化國籍選擇
     applyAgree()//同意書
 
     $(document).on('click', '#setCountry', function () {
         if (!$('#setCountry').hasClass('specific-class')) {
-            console.log('NO')
+            // console.log('NO')
             getCountry(); // 國籍選擇
         } else {
             console.log('有元素不執行')
         }
+    });
+    $(document).on('click', 'li[name="trip_times"]', function () {
+        let $this = $(this);  // 儲存 $(this) 在變數中
+        let tripTimeValue = $this.data('value');  // Get the value of the clicked item
+
+        axios.post('/update-trip-time', {
+            trip_time: tripTimeValue,
+        })
+            .then(function (response) {
+                console.log('Session updated successfully:', response.data);
+                Tool.toggleUrlParameter($this, 'trip_time', '', null, false, true);  // 'tag' 是你要更新的 URL 參數
+            })
+            .catch(function (error) {
+                console.error('Failed to update session:', error);
+            });
+
     });
     $(document).on('click', 'div[name="add_number"]', function () {
         const cloneItem = $('[name="apply_trip"]').last();
@@ -60,6 +78,10 @@ $(document).ready(function () {
 
     // Tool.TomSelect('#setCountry');  // 样式化并传递国家列表数据
 
+
+});
+
+function swiper() {
     // 輪播
     const swiper = new Swiper(".btm_trip", {
         loop: true,
@@ -92,9 +114,7 @@ $(document).ready(function () {
         },
         modules: [Navigation, FreeMode, Thumbs],  // 引入模組
     });
-
-
-});
+}
 
 function applyAgree() {
     const $agreementContainer = $('.agree-ctn');
@@ -131,40 +151,33 @@ function applyAgree() {
 }
 
 function getCountry() {
-    // 使用 RESTCountries API 获取所有国家数据
-    // $.getJSON('./js/trip_Lib.json', function(data) {
-    //     // $('#jsonContent').html(JSON.stringify(data, null, 2));
-    // console.log(1)
-    // })
-    fetch('./js/trip_Lib.json')
-        .then(response => response.json())
-        .then(data => {
-            // 定义要优先显示的国家 ISO 代码
-            const preferredCountries = ['TW', 'HK', 'CN', 'MY', 'SG', 'JP', 'KR', 'ID', 'VN', 'TH'];
+    try {
+        const countryList = tripCountry.map(country => {
+            let nativeCommonName = '';
+            if (country.name.nativeName) {
+                const firstNative = Object.values(country.name.nativeName)[0];
+                nativeCommonName = firstNative.common;
+            }
+            let labelText = '';
+            if (country.translations && country.translations.zho && country.translations.zho.common) {
+                labelText = country.translations.zho.common;
+            } else if (country.name.nativeName && country.name.nativeName.zho) {
+                labelText = country.name.nativeName.zho.common;
+            } else {
+                labelText = country.name.common; // 如果找不到翻译，就用英文名称
+            }
 
-            const countryList = data.map(country => {
-                let nativeCommonName = '';
-                if (country.name.nativeName) {
-                    const firstNative = Object.values(country.name.nativeName)[0];
-                    nativeCommonName = firstNative.common;
-                }
-                const labelText = (country.translations && country.translations.zho && typeof country.translations.zho.common !== null)
-                    ? country.translations.zho.common
-                    : country.name.nativeName.zho.common;
-                return {
-                    value: country.cca3,
-                    // label: nativeCommonName + '(' + country.cca3 + ')' || country.name.common + '(' + country.cca3 + ')'
-                    label: labelText + '(' + country.name.common + ')',
-                    imageUrl: country.flags.png
-                };
-            });
-            // console.log(data)
-
-            Tool.TomSelect('#setCountry', countryList);  // 样式化并传递国家列表数据
-
-        })
-        .catch(error => {
-            console.error('Error fetching country data:', error);
+            return {
+                value: country.cca3,
+                label: labelText + ' (' + country.name.common + ')',
+                imageUrl: country.flags.png
+            };
         });
 
+        // 调用工具函数更新 UI
+        Tool.TomSelect('#setCountry', countryList);
+
+    } catch (error) {
+        console.error('Error processing country data:', error);
+    }
 }

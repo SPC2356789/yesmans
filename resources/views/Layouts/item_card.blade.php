@@ -1,12 +1,16 @@
 <div class="w-full h-8 my-2" id="loading-icon">
 
 </div>
-<div class="flex flex-wrap mb-4 gap-0.5 ss:gap-1 md:gap-4 justify-start">
-    @if(isset($items))
+@if(isset($items))
+    @php
+        $justifyClass = count($items) > 2 ? 'justify-between' : 'justify-start';
+    @endphp
+    <div class="flex flex-wrap mb-4 gap-0.5 ss:gap-1 md:gap-4 {{ $justifyClass }}">
+
 
         @if($items && $items->isNotEmpty())
             @foreach($items as $item)
-                <button href="/{{$Slug}}/{{$item->categories->slug}}/{{$secondSlug}}/{{$item->slug}}"
+                <{{$div}} href="/{{$Slug}}/{{$item->categories->slug}}/{{$secondSlug}}/{{$item->slug}}"
                         id="{{$Slug}}_{{$item->id}}"
                         class="w-[47%] lg:w-[31%]   addHot group trip_btn_apply"
                         data-time="{{json_encode($item['trip_times'])}}">
@@ -29,9 +33,9 @@
                             @endif
                             @if(isset($MediaMlt))
                                 <img
-                                    src="{{Storage::url(($MediaMlt?$Media[$item->carousel[0]]:$Media[$item->featured_image]) ??'poc1.jpg')}}"
+                                    src="{{Storage::url(($MediaMlt?$Media[$item->carousel[0]]:$Media[$item->featured_image]) ??'')}}"
                                     class="absolute top-0 left-0 w-full h-full object-cover rounded-t-md object-contain "
-                                    alt="Image">
+                                    alt="Image" loading="lazy">
                             @endif
                             @if(isset($apply) && $apply)
 
@@ -48,7 +52,7 @@
                             <span class="text-sm sm:text-base lg:text-sm">{{$item->subtitle}}</span>
                         </div>
                     </div>
-                </button>
+                </{{$div}}>
 
             @endforeach
         @else
@@ -59,8 +63,8 @@
         <div class="px-1.5 w-full flex justify-center">
             {{ $items->appends(array('term' => $term))->links('pagination::tailwind') }}
         </div>
-    @endif
-</div>
+    </div>
+@endif
 
 
 

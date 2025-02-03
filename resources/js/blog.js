@@ -17,19 +17,16 @@ $(document).ready(function () {
     });
 
     //關鍵字搜尋
-    const blogSearch = $('#blogSearch')
-    const key = blogSearch.data('key')
+    const Search = $('#blogSearch')
+    const key = Search.data('key')
     let debounceTimer;
-    blogSearch.change('input', function () {
+    Search.change('input', function () {
         // console.log();  // 确保能在控制台看到更新的值
         clearTimeout(debounceTimer);
-
         $('#loading-icon').html(
             Tool.loading(),//等待圖示
         );
-
         blogItem(key, $(this).val());
-
     });
 
     function blogItem(key, searchTerm) {
@@ -40,7 +37,7 @@ $(document).ready(function () {
             .then(response => {
                 setTimeout(() => {
                     $('#search-results').html(response.data);
-                }, 1000); // 延遲 1000 毫秒（1秒）
+                }, 500); // 延遲 1000 毫秒（1秒）
             })
             .catch(error => {
                 // console.error('搜尋時發生錯誤：', error);

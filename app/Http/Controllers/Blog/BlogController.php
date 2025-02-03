@@ -19,17 +19,22 @@ class BlogController extends Controller
     private int $Page;
     private string $sidebarTitle;
     private string $secondSlug;
+    /**
+     * @var false
+     */
+    private bool $MediaMlt;
 
     public function __construct()
     {
 
         parent::__construct(); // 確保繼承 Controller 的初始化邏輯
-        $this->sidebarTitle="文章分類";
+        $this->sidebarTitle = "文章分類";
         $this->Slug = 'blog';
         $this->secondSlug = 'item';
         $this->Categories = new Categories();
         $this->Items = new BlogItem();
         $this->Page = 12;//一頁幾個
+        $this->MediaMlt = false;//一頁幾個
     }
 
     /**
@@ -37,22 +42,23 @@ class BlogController extends Controller
      */
 
 
-    public function index(Request $request, $key = null,): \Illuminate\Http\Response
+    public function index(Request $request,): \Illuminate\Http\Response
     {
+        $key = $request->route('key');
         $cutData = $this->cutData();
         $hot = $cutData['hot'];
-        $Media=$this->Media;
-        $MediaMlt = false;//此照片有無輪播
+        $Media = $this->Media;
+        $MediaMlt = $this->MediaMlt;//此照片有無輪播
         $term = $request->input('term') ?? null;
 //        session('Term', '*');
         $searchTerm = $term;
         $Slug = $this->Slug;
         $secondSlug = $this->secondSlug;
-        $sidebarTitle=$this->sidebarTitle;//分類的標
-        $BlogItems= $this->cutData()['hot'];//熱門文章
+        $sidebarTitle = $this->sidebarTitle;//分類的標
+        $BlogItems = $this->cutData()['hot'];//熱門文章
         $urlSlug = $key ?? 'all';
         $keyUrl = ($key !== 'all' && $key !== null) ? $key : '*';
-        $items= $this->Items->getData($keyUrl, $searchTerm ?? '')->paginate($this->Page)->onEachSide(1);//取資料
+        $items = $this->Items->getData($keyUrl, $searchTerm ?? '')->paginate($this->Page)->onEachSide(1);//取資料
         $Categories = $this->Category();//取分類
         $SEOData = $this->SEOdata($items);
 //        dd($this->Slug, $SEOData);
@@ -72,17 +78,19 @@ class BlogController extends Controller
 
     public function search(Request $request, $k): string
     {
-
+        $Media = $this->Media;
+        $MediaMlt = $this->MediaMlt;//此照片有無輪播
+        $secondSlug = $this->secondSlug;
         $key = $request->input('key') ?? $k;;
         $term = $request->input('term') ?? null;
         session(['term' => $term]);//儲存查詢
         $keyUrl = ($key !== 'all' && $key !== null) ? $key : '*';
-        $items = $this->Items->getData($keyUrl, $term ?? session('Term'))->paginate($this->Page)->onEachSide(1);;
+        $items = $this->Items->getData($keyUrl, $term ?? session('term'))->paginate($this->Page)->onEachSide(1);;
         $Slug = $this->Slug;
         $current_page = $items->currentPage();
         $last_page = $items->lastPage();
 //        return $items;
-        $searchTerm = session('Term', '*');
+        $searchTerm = session('term', '*');
 
         $AllNames = array_keys(get_defined_vars());
         return view('Layouts.item_card', compact($AllNames))->render();
