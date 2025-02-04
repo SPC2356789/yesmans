@@ -11,15 +11,17 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Blog\BlogController;
 use App\Http\Controllers\Itinerary\ItryController;
+
 class IndexController extends Controller
 {
     protected string $Slug;
     private IndexCarousel $Carousel;
 
     private BlogController $BlogHot;
-    private ItryController $TripBoard;
+
     private string $jsPage;
     private TripTime $TripTime;
+    private ItryController $Trip;
 
     public function __construct()
     {
@@ -29,7 +31,7 @@ class IndexController extends Controller
         $this->jsPage = 'home';
         $this->Carousel = new IndexCarousel();
         $this->BlogHot = new BlogController();
-        $this->TripBoard = new ItryController();
+        $this->Trip = new ItryController();
         $this->TripTime = new TripTime();
     }
 
@@ -44,13 +46,19 @@ class IndexController extends Controller
         $SEOData = $this->Settings->SEOdata($this->Slug);
 
         $Carousels = $this->Carousel->getData();
-        $BlogItems= $this->blogHot();
-        $Media=$this->Media;
+        $BlogItems = $this->blogHot();
+        $Media = $this->Media;
+        $Tags = $this->Trip->Tags();
+
         $Slug = $this->Slug;
         $jsPage = $this->jsPage;
-        $tripTab=$this->tripBoard();
-        $tripData=$this->TripTime->getData('recent')->take(6);
+        $tripTab = $this->tripBoard();
+//        $tripData=$this->TripTime->getData('recent')->take(6);
+        $tripData = [];
 
+        foreach (array_keys($tripTab) as $tab) {
+            $tripData[$tab] = $this->TripTime->getData($tab)->take(6)->get()->keyBy('uuid')->toArray();
+        }
         $itinerary = [
             [
                 'id' => 'all-tab',
@@ -118,31 +126,35 @@ class IndexController extends Controller
         $AllNames = array_keys(get_defined_vars());
         if (isset($_GET['t'])) {
             if ($_GET['t'] == 'a') {
+
                 dd($tripData
-                    ->get()
-//                    ->first()  // 只取出第一项
-                    ->toArray()
+
+//                    ->toArray()
                 );
+//                dd($tripTab
+//
+//                );
+
             }
 
         }
         return response()
-            ->view($this->Slug, compact($AllNames))
-
-        ;
+            ->view($this->Slug, compact($AllNames));
     }
+
     /**
      * 熱門文章
      */
     public function blogHot()
     {
-     return   $this->BlogHot->cutData()['hot'];
+        return $this->BlogHot->cutData()['hot'];
     }
+
     /**
      * 熱門文章
      */
     public function tripBoard()
     {
-        return   $this->TripBoard->Category();
+        return $this->Trip->Category();
     }
 }

@@ -10,11 +10,12 @@ export default {
     theme: {
         extend: {
             screens: {
-                'xxx':'1px',
+                'xxx': '1px',
                 'xxs': '370px', // 新增自定義的 400px 斷點
                 'xs': '419px', // 新增自定義的 400px 斷點
                 'ss': '519px', // 新增自定義的 400px 斷點
                 'xsm': '550px', // 新增自定義的 400px 斷點
+                'md965': '965px', // 新增自定義的 400px 斷點
                 'lg992': '992px', // 新增 992px 斷點
             },
             colors: {

@@ -31,33 +31,34 @@ class TripTime extends BaseModel
 
     public static function getData($cate = '*', $term = '')
     {
-        return TripTime::selectRaw('uuid, mould_id')
+        return TripTime::selectRaw('uuid, mould_id,quota,applied_count')
             ->with(['Trip' => function ($query) {
-                $query->select('id','slug','title','subtitle','icon','slug','carousel','tags','is_published'); // 只取得需要的字段
+                $query->select('id', 'slug', 'title', 'subtitle', 'icon', 'slug', 'carousel', 'tags', 'is_published'); // 只取得需要的字段
             }])
             ->when(!in_array($cate, ['*', 'recent', 'upcoming']), function ($query, $term) use ($cate) {
                 // 根據 Categories 的 slug 查找對應的 Trip
                 $query->whereHas('Trip', function ($query) use ($cate) {
                     // 假設 Trip 中的 category 字段是 category_id，對應 Categories 的 id
-                    $query->whereHas('category', function ($query) use ($cate) {
+                    $query->whereHas('categories', function ($query) use ($cate) {
                         // 根據 slug 過濾 Categories
                         $query->where('slug', $cate);
                     });
                 });
             })
-            ->when($cate === 'recent', function ($query) {
-                $query->whereDate('date_start', '>=', now()->subMonth()->toDateString() // 最近一個月
-                );
+            ->when($cate == 'recent', function ($query) {
+                $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
             })
-            ->when($term !== '', function ($query) use ($term) {
-                $query->where(function ($query) use ($term) {
-                    $query->where('title', 'LIKE', '%' . $term . '%')
-                        ->orWhere('content', 'LIKE', '%' . $term . '%');
-                });
+            ->when($cate == 'upcoming', function ($query) {
+                $query->orderByRaw('(quota - applied_count) ASC');
+//                $query->whereRaw('(quota - applied_count) <= 3');
             })
-            ->whereDate('date_start', '>=', now()->toDateString())// 選擇今天或以後的日期
-            ->orderBy('date_start', 'asc')
+            ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
             ->orderBy('mould_id', 'asc')
+//                    ->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的
+            ->where('is_published', 1)
+//            ->whereDate('date_start', '>=', now()->toDateString())// 選擇今天或以後的日期
+//            ->orderBy('date_start', 'asc')
+
             ->selectRaw('CONCAT(DATE_FORMAT(date_start, "%Y-%m-%d")," (",
                                    CASE DAYOFWEEK(date_start)
                                       WHEN 1 THEN "週日"
@@ -86,12 +87,7 @@ class TripTime extends BaseModel
                                             ")"
                                         )
                                     END
-                                ) as date')
-//            ->leftJoin('categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
-//            ->select('blog_items.*', 'categories.slug as category_slug') // 選擇 blog_items 的所有欄位並加上 slug
-
-//            ->toarray()
-            ;
+                                ) as date');
 
     }
 
