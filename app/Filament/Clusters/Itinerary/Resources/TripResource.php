@@ -111,7 +111,7 @@ class TripResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('category')
+                Tables\Columns\TextColumn::make('categories.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),

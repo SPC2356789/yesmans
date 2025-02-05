@@ -78,6 +78,7 @@ class BlogController extends Controller
 
     public function search(Request $request, $k): string
     {
+        $div = 'a';//因共用結構所以要寫
         $Media = $this->Media;
         $MediaMlt = $this->MediaMlt;//此照片有無輪播
         $secondSlug = $this->secondSlug;

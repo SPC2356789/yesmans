@@ -29,7 +29,7 @@ class TripTime extends BaseModel
         return $this->belongsTo(Trip::class, 'mould_id', 'id');
     }
 
-    public static function getData($cate = '*', $term = '')
+    public static function getData($cate = '*')
     {
         return TripTime::selectRaw('uuid, mould_id,quota,applied_count')
             ->with(['Trip' => function ($query) {
@@ -59,7 +59,13 @@ class TripTime extends BaseModel
 //            ->whereDate('date_start', '>=', now()->toDateString())// 選擇今天或以後的日期
 //            ->orderBy('date_start', 'asc')
 
-            ->selectRaw('CONCAT(DATE_FORMAT(date_start, "%Y-%m-%d")," (",
+            ->selectRaw(self::getDateLogic());
+
+    }
+
+    public static function getDateLogic(): string
+    {
+        return 'CONCAT(DATE_FORMAT(date_start, "%Y-%m-%d")," (",
                                    CASE DAYOFWEEK(date_start)
                                       WHEN 1 THEN "週日"
                                      WHEN 2 THEN "週一"
@@ -87,8 +93,7 @@ class TripTime extends BaseModel
                                             ")"
                                         )
                                     END
-                                ) as date');
-
+                                ) as date';
     }
 
     protected static function booted()

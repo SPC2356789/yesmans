@@ -1,5 +1,7 @@
 import $ from "jquery";
 import Swal from 'sweetalert2'
+import {Tool} from "./tools";
+
 let startTime;
 
 $(document).ready(function () {
@@ -14,6 +16,20 @@ $(document).ready(function () {
     cus_select() //調用選擇器行為
     ABCopy()
     Loading()
+
+    //關鍵字搜尋
+    let debounceTimer;
+    $('#Search').change('input', function () {
+        let url = new URL(window.location.href);
+        let params = url.searchParams;
+        let tag = params.get("tag");
+        let tagArray = tag ? tag.split("+") : [];
+        clearTimeout(debounceTimer);
+
+        $('[name="loadingIcon"]').toggleClass('hidden');
+
+        Tool.search(tagArray)
+    });
 });
 
 function getOrder() {
@@ -36,27 +52,31 @@ function getOrder() {
     <i class="fa fa-thumbs-down"></i>
   `,
         cancelButtonAriaLabel: "Thumbs down"
-    });
+    }).then(r => '');
 }
 
-function ABCopy(a, b) {
+function ABCopy() {
     const A = document.getElementById('mainNav');
     const B = document.getElementById('B');
 
     // 使用 ResizeObserver 監聽 A 元素大小變化
     const resizeObserver = new ResizeObserver(() => {
-        B.style.width = `${A.offsetWidth}px`;
-        B.style.height = `${A.offsetHeight}px`;
+        requestAnimationFrame(() => {
+            B.style.width = `${A.offsetWidth}px`;
+            B.style.height = `${A.offsetHeight}px`;
+        });
     });
 
     // 觀察 A 元素
     resizeObserver.observe(A);
 
     // 初始化 B 的大小
-    B.style.width = `${A.offsetWidth}px`;
-    B.style.height = `${A.offsetHeight}px`;
-
+    requestAnimationFrame(() => {
+        B.style.width = `${A.offsetWidth}px`;
+        B.style.height = `${A.offsetHeight}px`;
+    });
 }
+
 
 function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"]', subMenuitem = '[role="menuitem"]') {
     // 點擊按鈕時，切換該按鈕所在父元素的菜單顯示/隱藏

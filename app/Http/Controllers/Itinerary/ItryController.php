@@ -27,6 +27,10 @@ class ItryController extends Controller
      * @var string
      */
     private string $urlSlug;
+    /**
+     * @var true
+     */
+    private bool $MediaMlt;
 
 
     public function __construct()
@@ -41,6 +45,7 @@ class ItryController extends Controller
         $this->Page = 12;//一頁幾個
         $this->apply = true;//開啟報名
         $this->urlSlug = 'recent';//開啟報名
+        $this->MediaMlt = true;
     }
 
     /**
@@ -49,21 +54,21 @@ class ItryController extends Controller
     public function index(Request $request): \Illuminate\Http\Response
     {
         $key = $request->route('key');
-
-        $Categories = $this->Category();//取分類
+        $months = true;//打開月份
         $sidebarTitle = $this->sidebarTitle;//分類的標
         $term = $request->input('term') ?? null;
         $Slug = $this->Slug;
         $secondSlug = $this->secondSlug;
         $apply = $this->apply;
         $Media = $this->Media;
-
-        $tags = $this->Tags();
-
-        $months = true;//打開月份
-        $MediaMlt = true;//此照片有無輪播
         $urlSlug = is_null($key) ? $this->urlSlug : $key;
-        $items = $this->getItems($urlSlug)->paginate($this->Page)->onEachSide(1);
+        $Categories = $this->Category()->pluck('name', 'slug');//取分類
+        $Categories_slug = $this->Category()->keyBy('slug')->toArray();
+        $cat = $Categories_slug[$urlSlug]['id'];//把slug翻譯成id
+//        $Categories_Array = is_array($Categories_id) ? array_values(array_filter(array_map(fn($t) => $Categories[$t]['id'] ?? null, $urlSlug))) : [];
+        $tags = $this->Tags()->keyBy('id')->toArray();
+        $MediaMlt = $this->MediaMlt;//此照片有無輪播
+        $items = $this->getItems($cat)->paginate($this->Page)->onEachSide(1);
         if (isset($_GET['t'])) {
             if ($_GET['t'] == 'a') {
                 dd($items);
@@ -83,16 +88,27 @@ class ItryController extends Controller
     }
 
 
-    public function search(Request $request, $k): string
+    public function search(Request $request,): string
     {
         $Media = $this->Media;
+        $div = 'button';//因共用結構所以要寫
         $MediaMlt = $this->MediaMlt;//此照片有無輪播
         $secondSlug = $this->secondSlug;
-        $key = $request->input('key') ?? $k;;
+        $key = $request->input('key');;
         $term = $request->input('term') ?? null;
-        session(['term' => $term]);//儲存查詢
-        $keyUrl = ($key !== 'all' && $key !== null) ? $key : '*';
-        $items = $this->Trip->getData($keyUrl, $term ?? session('term'))->paginate($this->Page)->onEachSide(1);;
+        $tag = $request->input('tag') ?? null;
+        $month = $request->input('month') ?? null;
+        $tags = $this->Tags()->keyBy('id')->toArray();
+        $Categories_slug = $this->Category()->keyBy('slug')->toArray();
+        $cat = $Categories_slug[$key]['id'];//把slug翻譯成id
+        $tag_slug = $this->Tags()->keyBy('slug')->toArray();
+        // 检查 $tag_slug 是否为空，若为空则返回空数组
+        $tagArray = is_array($tag) ? array_values(array_filter(array_map(fn($t) => $tag_slug[$t]['id'] ?? null, $tag))) : [];
+
+        session(['term' => $term, 'tag' => $tagArray, 'month' => $month]);//儲存查詢
+//        dd($tagArray);
+        $items = $this->Trip->getData($cat, $term ?? session('term'), session('tag') ?? '')->paginate($this->Page)->onEachSide(1);;
+//        dd($items->toArray());
         $Slug = $this->Slug;
         $current_page = $items->currentPage();
         $last_page = $items->lastPage();
@@ -106,19 +122,19 @@ class ItryController extends Controller
 
     public function getItems($cate)
     {
-        return $this->Trip->getData($cate, $searchTerm ?? '')
-            ;
+        return $this->Trip->getData($cate, $searchTerm ?? '');
     }
 
-    public function Category(): array
+    public function Category()
     {
-        $Categories = $this->Categories->getData(2, 1, '*', 'slug');
-        return array_merge(['recent' => "近期活動", 'upcoming' => '即將成團'], $Categories);
+        return $this->Categories->getData(2, 1, '*',);
+//        return array_merge(['recent' => "近期活動", 'upcoming' => '即將成團'], $Categories);
+
     }
 
-    public function Tags(): array
+    public function Tags()
     {
-        return $this->Categories->getData(2, 2, '*', 'slug',);
+        return $this->Categories->getData(2, 2, '*',);
     }
 
 

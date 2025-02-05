@@ -28,28 +28,31 @@
         </div>
     </div>
     @if($stories)
-        @foreach($stories['story'] as $storyK=> $story)
-            @if($story['data']['status'])
-                <div
-                    class="flex flex-col {{ $storyK % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse' }} justify-center items-center  fade-in animation"
-                    style="background-color: {{$story['data']['C_bg'] ?? '#000000'}}"
-                >
-                    <div class="w-full md:w-1/2  mx-auto relative">
-                        <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
-                        <img class="w-full h-auto" src="{{ Storage::url($story['data']['image']) }}" alt="..."/>
-                    </div>
+        <div>
+
+            @foreach($stories['story'] as $storyK=> $story)
+                @if($story['data']['status'])
                     <div
-                        class="xxx:h-[200px] xxx:px-5 xxs:h-[240px] md:h-full   xxs:px-10 w-full md:w-1/2 flex flex-col justify-center  items-center text-center ">
-                        <h4 class=""
-                            style="color: {{$story['data']['C_title'] ?? '#ffffff'}};">{{$story['data']['title'] ?? ''}}</h4>
-                        <p class="mb-0 opacity-50"
-                           style="color: {{$story['data']['C_content'] ?? '#ffffff'}} "> {{$story['data']['content'] ?? ''}}</p>
+                        class="flex flex-col {{ $storyK % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse' }} justify-center items-center  fade-in animation"
+                        style="background-color: {{$story['data']['C_bg'] ?? '#000000'}}"
+                    >
+                        <div class="w-full md:w-1/2  mx-auto relative">
+                            <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
+                            <img class="w-full h-auto" src="{{ Storage::url($story['data']['image']) }}" alt="..."/>
+                        </div>
+                        <div
+                            class="xxx:h-[200px] xxx:px-5 xxs:h-[240px] md:h-full   xxs:px-10 w-full md:w-1/2 flex flex-col justify-center  items-center text-center ">
+                            <h4 class=""
+                                style="color: {{$story['data']['C_title'] ?? '#ffffff'}};">{{$story['data']['title'] ?? ''}}</h4>
+                            <p class="mb-0 opacity-50"
+                               style="color: {{$story['data']['C_content'] ?? '#ffffff'}} "> {{$story['data']['content'] ?? ''}}</p>
+                        </div>
+
                     </div>
+                @endif
+            @endforeach
 
-                </div>
-            @endif
-        @endforeach
-
+        </div>
     @endif
     <div class="mt-16">
         <h2 class="text-center mb-6 text-2xl font-bold">嚮導-領隊介紹</h2>

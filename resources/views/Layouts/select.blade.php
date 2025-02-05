@@ -22,7 +22,7 @@
         </svg>
     </button>
     <div
-        class="max-h-56 overflow-y-scroll absolute left-0 z-10 mt-2 text-start w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"
+        class="max-h-48 overflow-y-scroll absolute left-0 z-10 mt-2 text-start w-auto min-w-max origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden"
         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
 
         @if(isset($select,$default))

@@ -52,49 +52,77 @@ class Trip extends BaseModel
         return $this->hasMany(TripTime::class, 'mould_id', 'id'); // TripTime 表的 mould_id 對應 Trip 的 id
     }
 
-    public static function getData($cate = '*', $term = '')
+    /**
+     * 999為recent，998為upcoming
+     */
+
+    public static function getData($cate = '', $term = '', $tags = '', $month = '')
     {
         return Trip::selectRaw('id, title,subtitle, category,carousel,tags,slug,icon')
             ->with(['trip_times' => function ($query) use ($cate) {
                 $query
                     ->select('uuid', 'mould_id', 'date_start', 'date_end', 'quota', 'applied_count')
-                    ->when($cate == 'recent', function ($query) {
+                    ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
+//                    ->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的
+                    ->when($cate == 999, function ($query) {
                         $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
                     })
-                    ->when($cate == 'upcoming', function ($query) {
+                    ->when($cate == 998, function ($query) {
                         // 只有當 $A = 1 時才加這個篩選條件
                         $query->whereRaw('(quota - applied_count) <= 3');
                     })
-                    ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
-//                    ->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的
+                    ->selectRaw(TripTime::getDateLogic())
                     ->where('is_published', 1);
             }])
             ->with(['categories' => function ($query) {
                 $query->select('id', 'slug', 'name'); // 只取得需要的字段
             }])
-            ->when(!in_array($cate, ['*', 'recent', 'upcoming']), function ($query) use ($cate) {
-                $query->whereHas('categories', fn($query) => $query->where('slug', $cate));
-            })
-            ->when($cate === 'recent', function ($query) {
+//            ->when(!in_array($cate, ['*', '999', '998']), function ($query) use ($cate) {
+//                $query->whereHas('categories', fn($query) => $query->where('id', $cate));
+//            })
+            ->when($cate === 999, function ($query) {
                 $query->whereHas('trip_times', fn($query) => $query->whereDate('date_start', '>=', now()->subMonth()->toDateString()) // 最近一個月
                 );
             })
-            ->when($cate === 'upcoming', function ($query) {
+            ->when($cate === 998, function ($query) {
                 $query->whereHas('trip_times', fn($query) => $query->whereRaw('(quota - applied_count) <= 3') // 剩餘名額小於等於 3
                 );
             })
-            ->whereHas('trip_times', function ($query) {
+            ->whereHas('trip_times', function ($query) use ($cate) {
                 // 檢查是否有符合條件的 TripTime 資料
-                $query->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的日期
-                ->Where('is_published', 1);;
+                $query
+                    ->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的日期
+                    ->when($cate == 999, function ($query) {
+                        $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
+                    })
+                    ->when($cate == 998, function ($query) {
+                        // 只有當 $A = 1 時才加這個篩選條件
+                        $query->whereRaw('(quota - applied_count) <= 3');
+                    })
+                    ->Where('is_published', 1)//                    ->selectRaw(TripTime::getDateLogic())
+                ;
             })
-            ->when($term !== '', function ($query) use ($term) {
-                $query->where(function ($query) use ($term) {
+            ->when($term !== '', function ($query) use ($term, $tags) {
+                $query->where(function ($query) use ($term, $tags) {
                     $query->where('title', 'LIKE', '%' . $term . '%')
                         ->orWhere('subtitle', 'LIKE', '%' . $term . '%');
                 });
             })
+            ->when($tags !== '', function ($query) use ($tags) {
+
+                foreach ($tags as $index => $tag) {
+
+                    $query->whereRaw("JSON_CONTAINS(tags, ?)", ['"' . $tag . '"']);
+
+                }
+
+            })
+            ->when(
+                !in_array($cate, [998, 999]),
+                fn($query) => $query->where('category', $cate),
+            )
             ->where('is_published', 1)
+
 //            ->whereDate('date_start', '>=', now()->toDateString())// 選擇今天或以後的日期
 //            ->orderBy('orderby', 'asc')
 //            ->leftJoin('categories', 'trips.category', '=', 'categories.id') // JOIN categories 表
@@ -114,35 +142,7 @@ class Trip extends BaseModel
                 $query
                     ->select('*')
                     ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
-                    ->selectRaw('CONCAT(DATE_FORMAT(date_start, "%Y-%m-%d")," (",
-                                   CASE DAYOFWEEK(date_start)
-                                      WHEN 1 THEN "週日"
-                                     WHEN 2 THEN "週一"
-                                     WHEN 3 THEN "週二"
-                                     WHEN 4 THEN "週三"
-                                      WHEN 5 THEN "週四"
-                                      WHEN 6 THEN "週五"
-                                       WHEN 7 THEN "週六"
-                                   END,
-                                   ")",
-                                   CASE
-                                      WHEN DATE(date_start) = DATE(date_end) THEN " 單攻"
-                                       ELSE CONCAT(" to ",
-                                           DATE_FORMAT(date_end, "%Y-%m-%d"),
-                                           " (",
-                                         CASE DAYOFWEEK(date_end)
-                                               WHEN 1 THEN "週日"
-                                              WHEN 2 THEN "週一"
-                                             WHEN 3 THEN "週二"
-                                              WHEN 4 THEN "週三"
-                                              WHEN 5 THEN "週四"
-                                               WHEN 6 THEN "週五"
-                                               WHEN 7 THEN "週六"
-                                           END,
-                                            ")"
-                                        )
-                                    END
-                                ) as date')
+                    ->selectRaw(TripTime::getDateLogic())
 //                    ->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的
                     ->where('is_published', 1);
 

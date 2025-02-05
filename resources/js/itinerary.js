@@ -6,65 +6,51 @@ import axios from "axios";
 $(document).ready(function () {
     Tool.checkbox('#trip_month');
     updateActiveState('tag', '+',)
-    $('button.span_tag').click(function () {
-        Tool.toggleUrlParameter($(this), 'tag', '+', 'itry_tag_',);  // 'tag' 是你要更新的 URL 參數
-        updateActiveState('tag', '+',)
-    });
 
-    $('.trip_btn_apply').click(function () {
+    $('button.span_tag').click(function () {
+        Tool.toggleUrlParameter($(this), 'tag', '+', '',);  // 'tag' 是你要更新的 URL 參數
+        updateActiveState('tag', '+',)
+
+        tag()
+    });
+    $(document).on('click', '.trip_btn_apply', function () {
         const timeContent = $(this).data('time');
         const timeHref = $(this).attr('href');
         let links = '';
         $.each(timeContent, function (index, value) {
-            const startDate = new Date(value.date_start).toLocaleDateString();
-            const endDate = new Date(value.date_end).toLocaleDateString();
-
             // 創建每個日期範圍的連結
-            links += `<a href="${timeHref}?trip_time=${value.uuid}" class="text-start" data-mould="${value.mould_id}" >${startDate} - ${endDate}</a>`;
+            links += `<a href="${timeHref}?trip_time=${value.uuid}" class="flex flex-col gap-0.5 " data-mould="${value.mould_id}" ><span>${value.date}</span><span>名額:${value.quota} 已報名:${value.applied_count} </span></a>`;
             // 你可以在這裡做一些處理，比如生成 HTML 或者其他操作
         });
-        let time = `<div class="flex flex-col w-full">` + links + `</div>`;
-        console.log(timeContent)
+        let time = `<div class="flexflex-col w-full text-start gap-2.5 xxx:text-xs ss:text-base xs:text-sm md:text-lg">` + links + `</div>`;
+        // console.log(timeContent)
         // 顯示 SweetAlert
         Swal.fire({
             // title: "選擇未來一個月的月份，包含當月",
             // icon: "info",
-            html: time // 在這裡將 data-tip 放進提示框的文本內容
-
+            html: time, // 在這裡將 data-tip 放進提示框的文本內容
+            confirmButtonText: "探索其他行程", // 按鈕文字
+            customClass: {
+                confirmButton: "trip_card_Swal_confirm" // 設定自訂 CSS 類別
+            }
+            // customClass: {
+            //     confirmButton: "bg-transparent text-yes-major border-2 border-black hover:border-yes-major hover:bg-yes-major hover:text-white !important"
+            // }
         });
     });
 
-    //關鍵字搜尋
-    const Search = $('#Search')
-    const key = Search.data('key')
-    let debounceTimer;
-    Search.change('input', function () {
-        // console.log();  // 确保能在控制台看到更新的值
-        clearTimeout(debounceTimer);
-        $('#loading-icon').html(
-            Tool.loading(),//等待圖示
-        );
-        Search(key, $(this).val());
-    });
 
 });
 
 
-function Search(key, searchTerm) {
-    axios.patch('/itinerary/' + key, {
-        term: Tool.sanitizeInput(searchTerm),
-        key: key
-    })
-        .then(response => {
-            setTimeout(() => {
-                $('#search-results').html(response.data);
-            }, 500); // 延遲 1000 毫秒（1秒）
-        })
-        .catch(error => {
-            // console.error('搜尋時發生錯誤：', error);
-            $('#search-results').html('<div>發生不可預期的錯誤，請聯絡管理員。</div>');
-        });
+function tag() {
+    let url = new URL(window.location.href);
+    let params = url.searchParams;
+    let tag = params.get("tag");
+    let tagArray = tag ? tag.split("+") : [];
+    Tool.search(tagArray)
 }
+
 function updateActiveState(param, delimiter, isMultiple = true) {
     let url = new URL(window.location.href);
     let params = url.searchParams;

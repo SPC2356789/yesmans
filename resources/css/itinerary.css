@@ -1,38 +1,52 @@
 /* 改變選項和複選框的外觀 */
 .tom-select .checkbox-options input[type="checkbox"] {
-    @apply w-5 h-5 bg-gray-200 border-2 border-gray-400 rounded-md;  /* Tailwind 風格複選框 */
+    @apply w-5 h-5 bg-gray-200 border-2 border-gray-400 rounded-md;
+    /* Tailwind 風格複選框 */
 }
 
 /* 改變選中狀態的複選框顏色 */
 .tom-select .checkbox-options input[type="checkbox"]:checked {
-    @apply bg-green-500 border-green-500;  /* 選中時改為綠色 */
+    @apply bg-green-500 border-green-500;
+    /* 選中時改為綠色 */
 }
 
 /* 當鼠標懸停在選項上時，背景顏色變更 */
 .tom-select .option[data-selectable]:hover {
-    @apply bg-gray-100;  /* 使用灰色背景顏色 */
+    @apply bg-gray-100;
+    /* 使用灰色背景顏色 */
 }
 
 /* 改變選中的項目顯示 */
 .tom-select .item {
-    @apply bg-green-500 text-white px-3 py-1 rounded-md;  /* 選中的項目使用綠色背景 */
+    @apply bg-green-500 text-white px-3 py-1 rounded-md;
+    /* 選中的項目使用綠色背景 */
 }
 
 /* 改變已選的複選框的顯示 */
 .tom-select .item .checkbox-options input[type="checkbox"] {
-    @apply hidden;  /* 隱藏複選框，顯示圖標或其他自定義樣式 */
+    @apply hidden;
+    /* 隱藏複選框，顯示圖標或其他自定義樣式 */
 }
 
 
 .btm_trip .swiper-slide {
-    @apply w-[25%] h-full relative; /* 使 swiper-slide 有定位 */
+    @apply w-[25%] h-full relative;
+    /* 使 swiper-slide 有定位 */
 }
 
 .btm_trip .swiper-slide::before {
     content: "";
-    @apply absolute inset-0 bg-black opacity-70 z-10; /* 黑色遮罩，透明度 70% */
+    @apply absolute inset-0 bg-black opacity-70 z-10;
+    /* 黑色遮罩，透明度 70% */
 }
-.btm_trip .swiper-slide-thumb-active::before{
+
+.btm_trip .swiper-slide-thumb-active::before {
     @apply opacity-0
 }
 
+.trip_card_Swal_confirm {
+    @apply  bg-neutral-50 hover:bg-yes-major hover:text-cyan-50 text-yes-major;
+
+    border: 1px solid #64a19d;
+
+}

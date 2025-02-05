@@ -104,11 +104,11 @@
 
                                                 </div>
                                                 <div class="w-1/5 flex flex-col align-end h-full">
-                                                    <button type="button "
-                                                            class="w-11/12 xxx:px-1 xxx:py-2 sm:p-2 md965:p-1  rounded-full bg-[#55958d] text-[#f7dbab] hover:text-[#467771] hover:bg-[#f8b551] xxx:text-xs xxs:text-sm xs:text-base sm:text-lg md965:text-base lg:text-base ">
+                                                    <a href="/itinerary/{{$tabK}}/trip/{{$tripTime['trip']['slug']}}?trip_time={{$dataUUid}}"
+                                                            class="w-11/12 xxx:px-1 xxx:py-2 sm:p-2 md965:p-1 text-center  rounded-full bg-[#55958d] text-[#f7dbab] hover:text-[#467771] hover:bg-[#f8b551] xxx:text-xs xxs:text-sm xs:text-base sm:text-lg md965:text-base lg:text-base ">
                                                         報名中
 
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div

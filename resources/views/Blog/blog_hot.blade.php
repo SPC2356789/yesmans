@@ -1,17 +1,17 @@
-<section class="flex items-center flex-col  scale-105">
+<section class="flex items-center flex-col ">
     <ol class="flex space-x-2 text-sm items-center my-12">
         <li aria-current="page" class="text-2xl">
             <div>精選文章</div>
         </li>
     </ol>
 {{--    <div class="flex flex-wrap justify-center  w-full xl:w-[1090px] lg:w-[960px] md:px-24 sm:px-16 lg:px-4 xsm:px-8 xs:px-4 xxx:px-4">--}}
-    <div class="flex flex-wrap justify-center  w-full">
+    <div class="flex flex-wrap justify-between w-full gap-2 ">
         @if($BlogItems && count($BlogItems) == 4)
             @foreach($BlogItems as $BlogItem)
                 <a href="/blog/{{$BlogItem->category_slug . '/item/' . $BlogItem->slug}}"
                    id="blog_{{$BlogItem->id}}"
-                   class="w-1/2 lg:w-1/4 lg:p-3 xxx:p-2 xsm:p-4 transform transition-transform duration-300 hover:scale-105 hover:z-50 addHot">
-                    <div class="bg-white bg-opacity-90 shadow-lg rounded-md overflow-hidden">
+                   class="w-[47%] lg:w-[23%]  ">
+                    <div class="bg-white bg-opacity-90 shadow-lg rounded-md overflow-hidden  transform transition-transform duration-300 hover:scale-105 hover:z-50">
                         <!-- 保證圖片的比例為 1:1 -->
                         <div class="relative w-full" style="padding-top: 100%;">
                             <img

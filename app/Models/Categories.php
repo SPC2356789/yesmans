@@ -16,24 +16,27 @@ class Categories extends BaseModel
 
     public static function getData($area = 1, $type = 1, $mlt = "*", $key = 'id')
     {
-        return match (true) {
-            $area && $type == 2 && $mlt == "*" => self::selectRaw($mlt)
-                ->where('type', $type)
-                ->where('area', $area)
-                ->where('status', 1)
-                ->orderBy('orderby', 'asc')
-                ->get()
-                ->mapWithKeys(fn($item) => [$item->id => $item]) // 讓 id 成為 key，整筆資料為 value
-                ->toArray(),
-            default => self::selectRaw($mlt)
-                ->where('type', $type)
-                ->where('area', $area)
-                ->where('status', 1)
-                ->orderBy('orderby', 'asc')
-                ->get()
-                ->pluck('name', $key) // 使用 pluck 获取键值对
-                ->toArray(),
-        };
+        switch (true) {
+            case $area && $type == 2 && $mlt == "*":
+            case $area == 2 && $type == 1 && $mlt == "*":
+                return self::selectRaw($mlt)
+                    ->where('type', $type)
+                    ->where('area', $area)
+                    ->where('status', 1)
+                    ->orderBy('orderby', 'asc')
+                    ->get();
+
+            default:
+                return self::selectRaw($mlt)
+                    ->where('type', $type)
+                    ->where('area', $area)
+                    ->where('status', 1)
+                    ->orderBy('orderby', 'asc')
+                    ->get()
+                    ->pluck('name', $key)
+                    ->toArray();
+        }
+
 
     }
 

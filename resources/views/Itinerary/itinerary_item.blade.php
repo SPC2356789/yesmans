@@ -13,7 +13,7 @@
     </style>
 @endsection
 @section('content')
-{{session('trip_time')}}
+測試資料{{session('trip_time')}}
     <div class=" flex lg:flex-row flex-col gap-5 w-full justify-center ">
         <div class="flex flex-col  gap-6 w-full lg:w-1/2">
             <div class="swiper top_trip w-full  mx-auto aspect-square flex items-center">

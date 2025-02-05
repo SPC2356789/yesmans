@@ -1,19 +1,42 @@
 import $ from "jquery";
 import TomSelect from "tom-select"; // 這會加載帶插件的完整版本
 import 'tom-select/dist/css/tom-select.css';
+import axios from "axios";
 
 export const Tool = {
-    loading: function () {
-        return `<div class="flex justify-center items-center  gap-1 " >
-    <div class="w-6 h-6 border-4 border-gray-300 border-t-yes-major rounded-full animate-spin"></div>
-    探索中
-</div>
-`
-    },
-    sanitizeInput: function (input) {
-        return input.replace(/[^a-zA-Z0-9\u4e00-\u9fa5\s]/g, ''); // 只允許字母、數字、中文字符和空白
+    search:
+        function (tag, month) {
+            const page = $('#page-top').data('page')
+            const obj = $('#Search')
+            const key = obj.data('key')
+            let searchTerm = obj.val()
 
-    },
+            axios.patch('/' + page + '/' + key, {
+                term: Tool.sanitizeInput(searchTerm),
+                key: key ?? '',
+                tag: tag ?? '',
+                month: month ?? '',
+            })
+                .then(response => {
+                    setTimeout(() => {
+                        $('#search-results').html(response.data);
+                    }, 500); // 延遲 1000 毫秒（1秒）
+                })
+                .catch(error => {
+                    // console.error('搜尋時發生錯誤：', error);
+                    $('#search-results').html('<div>發生不可預期的錯誤，請聯絡管理員。</div>');
+                });
+
+
+        },
+    sanitizeInput:
+
+        function (input) {
+            return input.replace(/[^a-zA-Z0-9\u4e00-\u9fa5\s]/g, ''); // 只允許字母、數字、中文字符和空白
+
+        }
+
+    ,
     toggleUrlParameter: function (obj, param, delimiter = '', replace, isMultiple = true, isReload = false) {
         // 切換元素的 active 類
         obj.toggleClass('active');
@@ -60,7 +83,8 @@ export const Tool = {
         if (isReload) {
             window.location.reload();  // 刷新頁面
         }
-    },
+    }
+    ,
     checkbox: function (Id) {
         const select = new TomSelect(Id, {
             plugins: ['checkbox_options'], // 啟用 checkbox_options 插件

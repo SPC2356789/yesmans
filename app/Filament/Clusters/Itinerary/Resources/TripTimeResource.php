@@ -71,6 +71,8 @@ class TripTimeResource extends Resource
                 Forms\Components\TextInput::make('quota')
                     ->required()
                     ->numeric(),
+                Forms\Components\TextInput::make('applied_count')
+                    ->numeric(),
                 Forms\Components\Textarea::make('agreement_content')
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('food')
@@ -110,6 +112,10 @@ class TripTimeResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('quota')
                     ->label('名額')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('applied_count')
+                    ->label('已報名人數')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('food')

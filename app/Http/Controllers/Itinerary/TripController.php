@@ -20,18 +20,18 @@ class TripController extends ItryController
      */
     public function index(Request $request): \Illuminate\Http\Response
     {
-        $jsPage=$this->jsPage;
+        $jsPage = $this->jsPage;
         $Slug = $this->Slug;
         $secondSlug = $this->secondSlug;
         $Media = $this->Media;
         $trip = $request->route('trip');
 
-        $items = $this->Trip->getTrip($trip, $searchTerm ?? '');
-
+        $items = $this->Trip->getTrip($trip);
+//        dd($items->toArray());
         $tripTime_uuid = request()->query('trip_time') ?? session('trip_time'); // 取得 'trip_time' 參數
         session(['trip_time' => $tripTime_uuid ?? '']);
 
-        $selectedTripTime = $items->trip_times->select('uuid','date')->keyBy('uuid');
+        $selectedTripTime = $items->trip_times->select('uuid', 'date')->keyBy('uuid');
 
         $trip_times = $items->trip_times->keyBy('uuid')->get(session('trip_time'))?->toArray();
 //        dd($trip_times);

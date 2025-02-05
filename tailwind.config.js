@@ -5,7 +5,9 @@ export default {
     content: [
         './resources/**/*.blade.php', // 对于 Laravel Blade 文件
         './resources/views/*.blade.php', // 对于 Laravel Blade 文件
+        './resources/views/**/*.blade.php', // 对于 Laravel Blade 文件
         './vendor/filament/**/*.blade.php',
+        './resources/js/*.js', // js會輸出內容，防止沒吃到
     ],
     theme: {
         extend: {

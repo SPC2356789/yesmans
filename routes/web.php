@@ -23,7 +23,8 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function
     Route::get('/itinerary', 'Itinerary\ItryController@index') ;
     Route::get('/itinerary/{key}', 'Itinerary\ItryController@index') ->where(['key' => '[a-zA-Z0-9_-]+']); ;
     Route::get('/itinerary/{key}/trip/{trip}', 'Itinerary\TripController@index')  ->where(['key' => '[a-zA-Z0-9_-]+', 'trip' => '[a-zA-Z0-9_-]+']);;
-    Route::patch('/itinerary/{key}', 'Blog\ItryController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
+    Route::patch('/itinerary/{key}', 'Itinerary\ItryController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
+    Route::patch('/itinerary/{key}', 'Itinerary\ItryController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
     Route::post('/update-trip-time', 'Itinerary\TripController@update');
     Route::get('/ttt', function() {
         return view('t');
