@@ -178,8 +178,11 @@
         </div>
 
         <div class="mt-6 flex items-center justify-end gap-x-6">
-
-            <button type="submit"
+            <div id="fillTestData" type="button"
+                    class="rounded-md bg-yes-major px-3 py-2 text-sm font-semibold  hover:text-yes-major text-neutral-50 shadow-sm hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yes-major">
+                測試
+            </div>
+            <button type="button" id="submitTestForm"
                     class="rounded-md bg-yes-major px-3 py-2 text-sm font-semibold  hover:text-yes-major text-neutral-50 shadow-sm hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yes-major">
                 報名
             </button>

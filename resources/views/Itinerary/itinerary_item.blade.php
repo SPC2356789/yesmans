@@ -13,7 +13,7 @@
     </style>
 @endsection
 @section('content')
-測試資料{{session('trip_time')}}
+   {{session('trip_time')}}
     <div class=" flex lg:flex-row flex-col gap-5 w-full justify-center ">
         <div class="flex flex-col  gap-6 w-full lg:w-1/2">
             <div class="swiper top_trip w-full  mx-auto aspect-square flex items-center">
@@ -52,29 +52,41 @@
             <div class="w-full flex flex-col gap-4 ">
 
                 <div class="flex flex-col gap-2">
-                    <h1 class="text-2xl">報名日期</h1>
+                    <h1 class="xxx:text-xl md:text-2xl">報名日期</h1>
                     <div class="w-auto">
                         @include('Layouts.select', ['li'=>true,'select' => $selectedTripTime->toArray(),'default'=>$tripTime_uuid,'name'=>'trip_times','mltArray_index'=>'date'])
                     </div>
                 </div>
-                <div class="flex flex-row gap-2 items-center">
-                    <h1 class="text-2xl">報名費用</h1>
-                    <div class="w-auto">
-                        {{ $trip_times['amount']}}
+                <div class="flex flex-row justify-between w-full">
+                    <div class="flex flex-row gap-2 items-center w-2/3">
+                        <h1 class="xxx:text-xl md:text-2xl">行程名額</h1>
+                        <div class="w-auto">
+                            {{ $trip_times['quota']}}
+                        </div>
+                    </div>
+                    <div class="flex flex-row gap-2 items-center w-1/3">
+                        <h1 class="xxx:text-xl md:text-2xl">已報名</h1>
+                        <div class="w-auto">
+                            {{ $trip_times['quota']}}
+                        </div>
                     </div>
                 </div>
-                <div class="flex flex-row gap-2 items-center">
-                    <h1 class="text-2xl">行程名額</h1>
-                    <div class="w-auto">
-                        {{ $trip_times['quota']}}
+                <div class="flex justify-between">
+                    <div class="flex flex-row gap-2 items-center w-2/3">
+                        <h1 class="xxx:text-xl md:text-2xl">報名費用</h1>
+                        <div class="w-auto">
+                            {{ $trip_times['amount']}}
+                        </div>
                     </div>
-                </div>
-                <button
+                    <button
                         name="signupBtn"
-                        class="w-[200px] text-center xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white">
-                    <span class="w-auto ">我要報名</span>
-                    <i class="fas fa-chevron-right w-1/12"> </i>
-                </button>
+                        class=" w-1/3 text-center xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white">
+                        <span class="w-auto ">我要報名</span>
+                        <i class="fas fa-chevron-right w-1/12"> </i>
+                    </button>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -93,14 +105,14 @@
     </div>
 
     <button class="flex flex-initial" type="button" name="agree_btn">
-        <input type="checkbox" id="agreeCheckbox" disabled/>
+        <input type="checkbox" id="agreeCheckbox" disabled />
         <div class="checkbox"></div>
         <label class="cursor-pointer hover:text-[#ff9a63]" name="CheckLabel" for="agreeCheckbox">我同意條款<span
-                    class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
+                class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
     </button>
 
     <div class="hidden" id="trip_from">
-        @include('t_from')
+        @include('Itinerary.tripFrom')
     </div>
 
 @endsection

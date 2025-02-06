@@ -197,27 +197,112 @@ body {
     gap: 20px;
 }
 
-/*select {*/
-/*    box-sizing: border-box;*/
-/*    margin: 0;*/
-/*    min-width: 0;*/
-/*    display: block;*/
-/*    width: 100%;*/
-/*    padding: 8px 16px;*/
-/*    -webkit-appearance: none;*/
-/*    -moz-appearance: none;*/
-/*    -ms-appearance: none;*/
-/*    appearance: none;*/
-/*    border: 1px solid;*/
-/*    border-radius: 4px;*/
-/*    color: inherit;*/
-/*    !*font-family: "Century Gothic", "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;*!*/
-/*    font-size: 0.875rem;*/
-/*    outline: 0;*/
-/*    line-height: 1rem;*/
-/*    box-shadow: inset 4px 4px 4px -2px rgba(202, 202, 202, 0.25);*/
-/*    -webkit-transition: all .25s ease-in-out;*/
-/*    transition: all .25s ease-in-out;*/
-/*}*/
+
+/*標籤樣式*/
+span.span_tag {
+    @apply bg-[#bccbc8]
+}
+
+.span_tag {
+    @apply xxx:px-1 xxx:py-0.5 xxs:p-1 ss:px-1.5 xxx:rounded-xl ss:rounded-3xl bg-[#bccbc8] text-[#212121] text-xs  flex items-center justify-center
+}
+
+button.span_tag {
+    @apply hover:bg-yes-major
+}
+
+button.span_tag.active {
+    @apply bg-yes-major
+}
+
+
+/*標準化選擇器樣式*/
+.relative[name="select"] [role="menu"] [role="menuitem"] {
+    @apply hover:bg-[#f7dbab]
+}
+
+.relative[name="select"] [role="menu"] [role="menuitem"].active {
+    @apply text-yes-major
+}
+[role="menuitem"]{
+    @apply block px-4 py-2 text-sm text-gray-700 text-start w-full border-0 outline-none rounded-md
+}
+/*TOMSELECT樣式 修正國旗與國民換行*/
+.ts-control > * {
+    display: flex!important;
+}
+/*    左側版導航欄*/
+div[name="navbar-l_theme"] {
+    @apply md:flex md:flex-col gap-3
+}
+
+div[name="navbar-l_theme"] a {
+    @apply text-base text-[#5b5b5c] m-0 hover:text-yes-major
+    /*background-color: #5b5b5c;*/
+}
+
+div[name="navbar-l_theme"] a.active {
+    @apply text-xl text-yes-major;
+
+}
+
+/*全域搜尋*/
+div .relative[name="select"] [role="menu"] button.active.global_sort {
+    @apply text-[#FBFCFDFF]
+}
+
+div .relative[name="select"] [role="menu"] button.global_sort {
+    @apply bg-[#508f88]  block p-2 text-sm text-[#B4C6C5FF] hover:text-[#FBFCFDFF] hover:bg-[#508f88] text-start w-full border-0  outline-none
+}
+
+/*改寫原生checkbox樣式*/
+input[type="checkbox"] {
+    position: absolute;
+    left: -9999px;
+    /* 隱藏框框 */
+}
+label[name="CheckLabel"].active{
+    @apply text-[#ff9a63]
+}
+.ts-dropdown-content .option {
+    padding-left: 30px; /* 控制複選框的內距 */
+    z-index: 999;
+}
+
+input[type="checkbox"]  {
+    margin-right: 10px; /* 控制複選框與文字之間的間距 */
+}
+
+.ts-dropdown-content .option.selected {
+    background-color: #ffffff; /* 已選中的選項背景色 */
+    color: #000000; /* 綠色勾勾 */
+}
+
+.ts-dropdown-content .option.active {
+    background-color: #f7dbab; /* 當前選中的選項背景色 */
+
+}
+.ts-dropdown-content .option.selected::before ,.checkbox.active::before {
+    content: '\2713'; /* Unicode 字符 '✓' */
+    color: #50817e; /* 綠色勾勾 */
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+/* 自定义框框 */
+.ts-dropdown-content .option::before ,.checkbox::before {
+    content: '\25FB'; /* 未选中时显示框框 */
+    margin-right: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.tailwind_radio{
+    @apply relative size-4 appearance-none rounded-full border border-gray-300 bg-neutral-50  before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-[#EE9900] checked:bg-[#EE9900] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden
+}
+/*提取顏色用*/
+.a123456 {
+    background-color: #fbfcfd;
+}
+
 
 

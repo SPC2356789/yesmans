@@ -8,7 +8,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
-import {Tool} from './tools';
+import {Tool} from './core/tools';
 import tripCountry from '../lib/trip_country.json';
 import axios from 'axios';
 
@@ -16,6 +16,13 @@ $(document).ready(function () {
     swiper()
     getCountry()//初始化國籍選擇
     applyAgree()//同意書
+
+    $(document).on('click', '#fillTestData', function () {
+        fillFormData()
+    });
+    $(document).on('click', '#submitTestForm', function () {
+
+    });
 
     $(document).on('click', '#setCountry', function () {
         if (!$('#setCountry').hasClass('specific-class')) {
@@ -56,14 +63,23 @@ $(document).ready(function () {
         // 更新表單內的序號顯示
         clonedForm.find('[name="apply_title"]').text('序號' + newNumber);
         clonedForm.find('[name="remove_number"]').removeClass('hidden');
-        // 修改克隆表單中的所有 ID 屬性，並更新對應的 label 的 for 屬性
-        clonedForm.find('[id]').each(function () {
+        // 修改克隆表單中的所有 ID 跟name 屬性，並更新對應的 label 的 for 屬性
+        clonedForm.find('[id], [name]').each(function () {
             const originalId = $(this).attr('id');
-            const newId = originalId + '_' + newNumber; // 使用當前時間戳來保證唯一性
-            $(this).attr('id', newId);
-            // 同時更新對應的 label 的 for 屬性
-            clonedForm.find('label[for="' + originalId + '"]').attr('for', newId);
+            if (originalId) {
+                const newId = originalId + '_' + newNumber;
+                $(this).attr('id', newId);
+                // 更新 label 的 for 屬性
+                clonedForm.find('label[for="' + originalId + '"]').attr('for', newId);
+            }
+
+            const originalName = $(this).attr('name');
+            if (originalName) {
+                const newName = originalName + '_' + newNumber;
+                $(this).attr('name', newName);
+            }
         });
+
         // 清空表單中的輸入欄位內容
         clonedForm.find('input').val('');
         clonedForm.find('select').prop('selectedIndex', 0); // 重設下拉選單
@@ -80,13 +96,39 @@ $(document).ready(function () {
 
 
 });
+function fillFormData() {
+    $('[name="all-name"]').val("測試用戶");
+    $('[name="gender"][value="male"]').prop("checked", true);
+    $('[name="birthday"]').val("1990-01-01");
+    $('[name="setCountry"]').val("TW");
+    $('[name="id-card"]').val("A123456789");
+    $('[name="street-address"]').val("台北市測試路123號");
+    $('[name="email"]').val("test@example.com");
+    $('[name="phone"]').val("0912345678");
+    $('[name="emergency_contact"]').val("緊急聯絡人");
+    $('[name="emergency_contact_phone"]').val("0987654321");
+    $('[name="media_LINE"]').val("test_line");
+    $('[name="media_IG"]').val("test_ig");
+    $('[name="medical_history"]').val("無");
+    $('[name="mountain_experience"]').val("每週爬山");
+    $('[name="diet"][value="non-vegetarian"]').prop("checked", true);
+}
+
+
+function submitForm() {
+    $("form").submit();
+}
+
 
 function swiper() {
     // 輪播
     const swiper = new Swiper(".btm_trip", {
         loop: true,
+        slidesPerView: 3,
         spaceBetween: 10,
-        slidesPerView: 4,
+        pagination: {
+            clickable: true,
+        },
         breakpoints: {
             640: {
                 slidesPerView: 3, // 小螢幕顯示一個滑塊
@@ -134,8 +176,13 @@ function applyAgree() {
     $(document).on('change', '#agreeCheckbox', function () {
 
         $tripFrom.toggleClass('hidden');  // 勾選 checkbox
-        console.log(1);
+        $tripFrom.removeClass('hidden');  // 勾選 checkbox
+        // console.log(1);
     });
+
+    // $tripFrom.toggleClass('hidden');  // 勾選 checkbox
+    // $tripFrom.removeClass('hidden');  // 勾選 checkbox
+
     // 聚焦行為IOS不支持
     // $('[name="signupBtn"]').on('click', function () {
     //     $agreementButton.focus();

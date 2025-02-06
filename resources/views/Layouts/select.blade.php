@@ -2,7 +2,7 @@
 <div class="relative inline-block text-left w-full" name="select" id="{{$select_id??''}}">
 
     <button type="button" data-select="All"
-            class="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            class="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white px-3 py-2 xxx:text-xs sm:text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             id="menu-button" aria-expanded="true" aria-haspopup="true">
         @if(isset($select,$default))
             @if(is_array($select[$default]))

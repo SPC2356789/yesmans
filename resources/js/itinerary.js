@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import {Tool} from './tools';
+import {Tool} from './core/tools';
 import Swal from 'sweetalert2'
-import axios from "axios";
+
 
 $(document).ready(function () {
     Tool.checkbox('#trip_month');

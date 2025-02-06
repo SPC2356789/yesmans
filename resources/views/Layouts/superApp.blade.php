@@ -7,12 +7,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('metaInfo')
     @yield('tLink')
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/js/app.js','resources/css/app.css'])
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{{asset("vendor/cookie-consent/css/cookie-consent.css")}}">
 
 </head>
 
-<body id="page-top" class="@yield('bg') flex flex-col justify-between" data-page="{{$jsPage??$Slug}}">
+<body id="page-top" class="@yield('bg') flex flex-col justify-between" data-page="{{($jsPage??($Slug??''))}}">
 @if (config('services.GTM.enabled'))
     <!-- Google Tag Manager (noscript) -->
     <noscript>
@@ -135,6 +136,7 @@
         @yield('content')
     </div>
 </section>
+
 <section class="bg-white">
     <div class="pt-16 lg:px-5">
         <div class="flex gap-3 justify-center">

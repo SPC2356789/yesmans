@@ -22,6 +22,8 @@
         "overtrue/pinyin": "^5.3",
         "ralphjsmit/laravel-filament-seo": "^1.4",
         "solution-forest/filament-access-management": "^2.2",
+        "spatie/laravel-cookie-consent": "^3.2",
+        "statikbe/laravel-cookie-consent": "^1.8",
         "z3d0x/filament-logger": "^0.7.2"
     },
     "require-dev": {

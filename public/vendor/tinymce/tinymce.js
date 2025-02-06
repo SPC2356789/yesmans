@@ -2767,7 +2767,7 @@
       phrasingContent = 'a abbr b bdo br button cite code del dfn em embed i iframe img input ins kbd ' + 'label map noscript object q s samp script select small span strong sub sup ' + 'textarea u var #text #comment';
       if (type !== 'html4') {
         const transparentContent = 'a ins del canvas map';
-        blockContent += ' article aside details dialog figure main header footer hgroup section nav ' + transparentContent;
+        blockContent += ' article aside details dialog figure core header footer hgroup section nav ' + transparentContent;
         phrasingContent += ' audio canvas command data datalist mark meter output picture ' + 'progress time wbr video ruby bdi keygen svg';
       }
       if (type !== 'html5-strict') {
@@ -2953,7 +2953,7 @@
           phrasingContent,
           'option'
         ].join(' '));
-        add('article section nav aside main header footer', '', flowContent);
+        add('article section nav aside core header footer', '', flowContent);
         add('hgroup', '', 'h1 h2 h3 h4 h5 h6');
         add('figure', '', [
           flowContent,
@@ -3230,7 +3230,7 @@
       const nonEmptyElementsMap = createLookupTable('non_empty_elements', nonEmptyOrMoveCaretBeforeOnEnter + ' pre svg textarea summary', voidElementsMap);
       const moveCaretBeforeOnEnterElementsMap = createLookupTable('move_caret_before_on_enter_elements', nonEmptyOrMoveCaretBeforeOnEnter + ' table', voidElementsMap);
       const headings = 'h1 h2 h3 h4 h5 h6';
-      const textBlockElementsMap = createLookupTable('text_block_elements', headings + ' p div address pre form ' + 'blockquote center dir fieldset header footer article section hgroup aside main nav figure');
+      const textBlockElementsMap = createLookupTable('text_block_elements', headings + ' p div address pre form ' + 'blockquote center dir fieldset header footer article section hgroup aside core nav figure');
       const blockElementsMap = createLookupTable('block_elements', 'hr table tbody thead tfoot ' + 'th tr td li ol ul caption dl dt dd noscript menu isindex option ' + 'datalist select optgroup figcaption details summary html body multicol listing', textBlockElementsMap);
       const textInlineElementsMap = createLookupTable('text_inline_elements', 'span strong b em i font s strike u var cite ' + 'dfn code mark q sup sub samp');
       const transparentElementsMap = createLookupTable('transparent_elements', 'a ins del canvas map');

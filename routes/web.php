@@ -17,20 +17,20 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function () {
+Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers',    'middleware' => ['cookie-consent']], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/about', 'About\AboutController@index');
-    Route::get('/itinerary', 'Itinerary\ItryController@index') ;
-    Route::get('/itinerary/{key}', 'Itinerary\ItryController@index') ->where(['key' => '[a-zA-Z0-9_-]+']); ;
-    Route::get('/itinerary/{key}/trip/{trip}', 'Itinerary\TripController@index')  ->where(['key' => '[a-zA-Z0-9_-]+', 'trip' => '[a-zA-Z0-9_-]+']);;
+    Route::get('/itinerary', 'Itinerary\ItryController@index');
+    Route::get('/itinerary/{key}', 'Itinerary\ItryController@index')->where(['key' => '[a-zA-Z0-9_-]+']);;
+    Route::get('/itinerary/{key}/trip/{trip}', 'Itinerary\TripController@index')->where(['key' => '[a-zA-Z0-9_-]+', 'trip' => '[a-zA-Z0-9_-]+']);;
     Route::patch('/itinerary/{key}', 'Itinerary\ItryController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
     Route::patch('/itinerary/{key}', 'Itinerary\ItryController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
     Route::post('/update-trip-time', 'Itinerary\TripController@update');
-    Route::get('/ttt', function() {
+    Route::get('/ttt', function () {
         return view('t');
     });
     Route::get('/blog', 'Blog\BlogController@index');
-    Route::get('/blog/{key}', 'Blog\BlogController@index') ->where(['key' => '[a-zA-Z0-9_-]+']);
+    Route::get('/blog/{key}', 'Blog\BlogController@index')->where(['key' => '[a-zA-Z0-9_-]+']);
     Route::get('/blog/{key}/item/{item}', 'Blog\BlogItemController@index')->where(['key' => '[a-zA-Z0-9_-]+', 'trip' => '[a-zA-Z0-9_-]+']);
     Route::post('/blog/active', 'Blog\BlogController@store');
     Route::patch('/blog/{key}', 'Blog\BlogController@search')->where(['key' => '[a-zA-Z0-9_-]+']);

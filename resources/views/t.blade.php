@@ -67,8 +67,8 @@
                     </div>
                 </div>
                 <button
-                    name="signupBtn"
-                    class="w-[200px] text-center xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white">
+                        name="signupBtn"
+                        class="w-[200px] text-center xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white">
                     <span class="w-auto ">我要報名</span>
                     <i class="fas fa-chevron-right w-1/12"> </i>
                 </button>
@@ -172,11 +172,11 @@
         <input type="checkbox" id="agreeCheckbox" disabled/>
         <div class="checkbox"></div>
         <label class="cursor-pointer hover:text-[#ff9a63]" name="CheckLabel" for="agreeCheckbox">我同意條款<span
-                class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
+                    class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
     </button>
 
     <div class="hidden" id="trip_from">
-        @include('t_from')
+        @include('Itinerary.t_from')
     </div>
 
 @endsection
