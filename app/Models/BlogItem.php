@@ -67,7 +67,7 @@ class BlogItem extends BaseModel
             })
             ->where('is_published', 1)//抓有發布的文章
             ->orderBy('orderby', 'asc')
-            ->leftJoin('Categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
+            ->leftJoin('categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
             ->select('blog_items.*', 'categories.slug as category_slug') // 選擇 blog_items 的所有欄位並加上 slug
 
             ;
