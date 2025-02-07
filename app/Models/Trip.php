@@ -44,7 +44,7 @@ class Trip extends BaseModel
 
     public function categories(): BelongsTo
     {
-        return $this->belongsTo(categories::class, 'category', 'id');
+        return $this->belongsTo(Categories::class, 'category', 'id');
     }
 //    public function trip_times(): BelongsTo
 //    {

@@ -36,7 +36,7 @@ class BlogItem extends BaseModel
     ];
 
 
-    public function Categories(): BelongsTo
+    public function categories(): BelongsTo
     {
         return $this->belongsTo(Categories::class, 'category_id', 'id');
     }
@@ -54,7 +54,7 @@ class BlogItem extends BaseModel
 
         return BlogItem::when($cate !== 'all', function ($query, $term) use ($cate) {
             // 根據 Categories 的 slug 查找對應的 BlogItem
-            $query->whereHas('Categories', function ($query) use ($cate) {
+            $query->whereHas('categories', function ($query) use ($cate) {
                 $query->where('slug', $cate); // 使用傳入的 $cate 來過濾 slug
             });
         })
