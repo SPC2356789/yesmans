@@ -54,7 +54,7 @@
                 <div class="flex flex-col gap-2">
                     <h1 class="xxx:text-xl md:text-2xl">報名日期</h1>
                     <div class="w-auto">
-                        @include('Layouts.select', ['li'=>true,'select' => $selectedTripTime->toArray(),'default'=>$tripTime_uuid,'name'=>'trip_times','mltArray_index'=>'date'])
+                        @include('Layouts.select', ['li'=>true,'select' => $selectedTripTime->toArray(),'default'=>$uuid_default,'name'=>'trip_times','mltArray_index'=>'date'])
                     </div>
                 </div>
                 <div class="flex flex-row justify-between w-full">

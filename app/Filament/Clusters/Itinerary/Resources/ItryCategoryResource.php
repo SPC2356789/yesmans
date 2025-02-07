@@ -55,7 +55,11 @@ class ItryCategoryResource extends Resource
         return $table
             ->reorderable('orderby')
             ->defaultSort('orderby', 'asc')
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('area', 2)->where('type', 1)) //area 文章1 行程2 type 分類1 標籤2
+            ->modifyQueryUsing(fn(Builder $query) => $query
+                ->where('area', 2)
+                ->where('type', 1)//area 文章1 行程2 type 分類1 標籤2
+                ->where('orderby', '>', 0) //排除固定項，我把固定項的orderby設為負的
+            )
             ->columns([
                 TextColumn::make('name')
                     ->searchable()

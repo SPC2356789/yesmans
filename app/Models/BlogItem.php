@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Categories;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\BaseModel;
+
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
@@ -41,30 +40,34 @@ class BlogItem extends BaseModel
     {
         return $this->belongsTo(Categories::class, 'category_id', 'id');
     }
-
-    public function category(): BelongsTo
+    public function media(): BelongsTo
     {
-        return $this->belongsTo(Categories::class, 'category_id');
+        return $this->belongsTo(Media::class, 'featured_image', 'id');
     }
+//    public function category(): BelongsTo
+//    {
+//        return $this->belongsTo(Categories::class, 'category_id', 'id');
+//    }
 
     public static function getData($cate = '*', $term = '')
     {
 
-        return BlogItem::when($cate !== '*', function ($query, $term) use ($cate) {
+        return BlogItem::when($cate !== 'all', function ($query, $term) use ($cate) {
             // 根據 Categories 的 slug 查找對應的 BlogItem
-            $query->whereHas('category', function ($query) use ($cate) {
+            $query->whereHas('Categories', function ($query) use ($cate) {
                 $query->where('slug', $cate); // 使用傳入的 $cate 來過濾 slug
             });
         })
             ->when($term !== '', function ($query) use ($term) {
                 $query->where(function ($query) use ($term) {
                     $query->where('title', 'LIKE', '%' . $term . '%')
+                        ->orWhere('subtitle', 'LIKE', '%' . $term . '%')
                         ->orWhere('content', 'LIKE', '%' . $term . '%');
                 });
             })
             ->where('is_published', 1)//抓有發布的文章
             ->orderBy('orderby', 'asc')
-            ->leftJoin('categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
+            ->leftJoin('Categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
             ->select('blog_items.*', 'categories.slug as category_slug') // 選擇 blog_items 的所有欄位並加上 slug
 
             ;

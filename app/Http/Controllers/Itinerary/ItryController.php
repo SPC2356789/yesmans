@@ -44,7 +44,7 @@ class ItryController extends Controller
         $this->sidebarTitle = "行程分類";
         $this->Page = 12;//一頁幾個
         $this->apply = true;//開啟報名
-        $this->urlSlug = 'recent';//開啟報名
+        $this->urlSlug = 'recent';//初始化網址
         $this->MediaMlt = true;
     }
 
@@ -61,13 +61,14 @@ class ItryController extends Controller
         $secondSlug = $this->secondSlug;
         $apply = $this->apply;
         $Media = $this->Media;
-        $urlSlug = is_null($key) ? $this->urlSlug : $key;
-        $Categories = $this->Category()->pluck('name', 'slug');//取分類
+        $MediaMlt = $this->MediaMlt;//此照片有無輪播
+        $urlSlug = $key ?? $this->urlSlug;
+        $Categories = $this->Category($urlSlug)->pluck('name', 'slug');//取分類
         $Categories_slug = $this->Category()->keyBy('slug')->toArray();
         $cat = $Categories_slug[$urlSlug]['id'];//把slug翻譯成id
+
 //        $Categories_Array = is_array($Categories_id) ? array_values(array_filter(array_map(fn($t) => $Categories[$t]['id'] ?? null, $urlSlug))) : [];
         $tags = $this->Tags()->keyBy('id')->toArray();
-        $MediaMlt = $this->MediaMlt;//此照片有無輪播
         $items = $this->getItems($cat)->paginate($this->Page)->onEachSide(1);
         if (isset($_GET['t'])) {
             if ($_GET['t'] == 'a') {
@@ -105,15 +106,15 @@ class ItryController extends Controller
         // 检查 $tag_slug 是否为空，若为空则返回空数组
         $tagArray = is_array($tag) ? array_values(array_filter(array_map(fn($t) => $tag_slug[$t]['id'] ?? null, $tag))) : [];
 
-        session(['term' => $term, 'tag' => $tagArray, 'month' => $month]);//儲存查詢
+        session(['trip_term' => $term, 'tag' => $tagArray, 'month' => $month]);//儲存查詢
 //        dd($tagArray);
-        $items = $this->Trip->getData($cat, $term ?? session('term'), session('tag') ?? '')->paginate($this->Page)->onEachSide(1);;
+        $items = $this->Trip->getData($cat, $term ?? session('trip_term'), session('tag') ?? '')->paginate($this->Page)->onEachSide(1);;
 //        dd($items->toArray());
         $Slug = $this->Slug;
         $current_page = $items->currentPage();
         $last_page = $items->lastPage();
 //        return $items;
-        $searchTerm = session('term', '*');
+        $searchTerm = session('trip_term', '*');
 
         $AllNames = array_keys(get_defined_vars());
         return view('Layouts.item_card', compact($AllNames))->render();
@@ -122,12 +123,15 @@ class ItryController extends Controller
 
     public function getItems($cate)
     {
+
         return $this->Trip->getData($cate, $searchTerm ?? '');
     }
 
-    public function Category()
+    public function Category($chkUrl = null)
     {
-        return $this->Categories->getData(2, 1, '*',);
+
+
+        return $this->Categories->getData(2, 1, '*', 'id', $chkUrl);
 //        return array_merge(['recent' => "近期活動", 'upcoming' => '即將成團'], $Categories);
 
     }

@@ -158,5 +158,4 @@
 
     </div>
     @include('Blog.blog_hot', ['BlogItems' => $BlogItems])
-    @include('cookie-consent::index')
 @endsection

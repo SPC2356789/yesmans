@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers',    'middleware' => ['cookie-consent']], function () {
+Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/about', 'About\AboutController@index');
     Route::get('/itinerary', 'Itinerary\ItryController@index');
@@ -36,6 +36,14 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers',    'middl
     Route::patch('/blog/{key}', 'Blog\BlogController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
 //    Route::get('/blog/Search/{key}', 'Blog\BlogController@Search');
     Route::fallback(function () {
+        return response()->view('errors.404', [], 404);
+
+    });
+});
+
+// routes/web.php
+Route::group(['middleware' => ['cookie-consent']], function () {
+    Route::get('/ta', function () {
         return response()->view('errors.404', [], 404);
     });
 });

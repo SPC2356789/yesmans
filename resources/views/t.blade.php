@@ -176,7 +176,7 @@
     </button>
 
     <div class="hidden" id="trip_from">
-        @include('Itinerary.t_from')
+{{--        @include('Itinerary.t_from')--}}
     </div>
 
 @endsection

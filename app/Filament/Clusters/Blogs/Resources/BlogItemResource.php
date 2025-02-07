@@ -52,7 +52,7 @@ class BlogItemResource extends Resource
 //                        ->multiple()
                         ->options(Media::getMedia())
                         ->searchable()
-                        ->helperText('超過10張會拖效能')
+//                        ->helperText('超過10張會拖效能')
                         ->columnSpanFull()
                         ->allowHtml(),
                 ]),
@@ -69,7 +69,7 @@ class BlogItemResource extends Resource
                             ->maxLength(8), // 最大長度
                         Select::make('category_id')
                             ->label('文章分類')
-                            ->options(self::$category::getData(1, 1))// 從分類模型中獲取選項
+                            ->options(self::$category::getData(1, 1)->pluck('name', 'id')->toArray())// 從分類模型中獲取選項
                             ->searchable() // 支持搜索
                             ->required(),
 //                        TextInput::make('slug')
@@ -157,7 +157,7 @@ class BlogItemResource extends Resource
                     ->label('排序')
                     ->toggleable()
                 ,
-                Tables\Columns\ImageColumn::make('featured_image')
+                Tables\Columns\ImageColumn::make('media.path')
                     ->label('首圖'),
                 Tables\Columns\TextColumn::make('title')
                     ->label('主標題')
@@ -182,7 +182,7 @@ class BlogItemResource extends Resource
 
                 SelectFilter::make('category_id')
                     ->label('文章分類')
-                    ->options(self::$category::getData(1, 1)),// 根據 'name' 排序)// 從分類模型中獲取選項
+                    ->options(self::$category::getData(1, 1)->where('orderby', '>', 0)->pluck('name', 'id')->toArray()),// 根據 'name' 排序)// 從分類模型中獲取選項
                 Filter::make('is_published')
                     ->label('發布狀態')
                     ->query(fn(Builder $query): Builder => $query->where('is_published', true))

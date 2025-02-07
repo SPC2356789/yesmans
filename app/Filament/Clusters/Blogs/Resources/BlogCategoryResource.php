@@ -39,7 +39,6 @@ class BlogCategoryResource extends Resource
                     ->label('文章分類'),
                 TextInput::make('slug')
                     ->label('分類代號')
-
                     ->required()
                     ->rule(
                         Rule::unique('categories', 'slug')
@@ -74,7 +73,12 @@ class BlogCategoryResource extends Resource
         return $table
             ->reorderable('orderby')
             ->defaultSort('orderby', 'asc')
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('area', 1)->where('type', 1)) //area 文章1 行程2 type 分類1 標籤2
+            ->modifyQueryUsing(fn(Builder $query) => $query
+                ->where('area', 1)//area 文章1 行程2 type 分類1 標籤2
+                ->where('type', 1)
+                ->where('orderby', '>', 0) //排除固定項，我把固定項的orderby設為負的
+            )
+
             ->columns([
                 TextColumn::make('name')
                     ->searchable()

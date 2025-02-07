@@ -14,28 +14,28 @@ class Categories extends BaseModel
     protected $dates = ['deleted_at']; // 必須加這行才有軟刪除
     protected $fillable = ['name', 'slug', 'type', 'area', 'seo_title', 'seo_description', 'seo_image'];
 
-    public static function getData($area = 1, $type = 1, $mlt = "*", $key = 'id')
+    public static function getData($area = 1, $type = 1, $mlt = "*", $key = 'id', $chkUrl = null)
     {
-        switch (true) {
-            case $area && $type == 2 && $mlt == "*":
-            case $area == 2 && $type == 1 && $mlt == "*":
-                return self::selectRaw($mlt)
-                    ->where('type', $type)
-                    ->where('area', $area)
-                    ->where('status', 1)
-                    ->orderBy('orderby', 'asc')
-                    ->get();
+        ;
 
-            default:
-                return self::selectRaw($mlt)
-                    ->where('type', $type)
-                    ->where('area', $area)
-                    ->where('status', 1)
-                    ->orderBy('orderby', 'asc')
-                    ->get()
-                    ->pluck('name', $key)
-                    ->toArray();
+        $query = self::selectRaw($mlt)
+            ->where('type', $type)
+            ->where('area', $area)
+            ->where('status', 1)
+            ->orderBy('orderby', 'asc');
+
+        // 檢查是否存在，但不影響原始查詢
+        if ($chkUrl !== null) {
+            $checkQuery = clone $query; // 複製查詢
+            if (!$checkQuery->where('slug', $chkUrl)->exists()) {
+                abort(404, 'Not Found');
+            }
         }
+        return $query->get();
+        return match (true) {
+            $area && $type == 2 && $mlt == "*", $area == 2 && $type == 1 && $mlt == "*" => $query->get(),
+            default => $query->get()->pluck('name', $key)->toArray(),
+        };
 
 
     }

@@ -70,4 +70,5 @@ class Kernel extends HttpKernel
         'cookie-consent' => \Statikbe\CookieConsent\CookieConsentMiddleware::class,
     ];
 
+
 }

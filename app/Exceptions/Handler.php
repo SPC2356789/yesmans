@@ -2,9 +2,11 @@
 
 namespace App\Exceptions;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -45,16 +47,57 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
     /**
      * 404自訂義
      */
     public function render($request, Throwable $exception)
     {
+
+        // 404 - Not Found
         if ($exception instanceof NotFoundHttpException) {
-            // 404 错误的默认处理
-            return response()->view('errors.404', [], 404);
+            return $this->status(404);
+        }
+        if (!config('app.debug')) {
+
+            // 401 - Unauthorized
+            if ($exception instanceof UnauthorizedHttpException) {
+                return $this->status(401);
+            }
+
+            // 403 - Forbidden
+            if ($exception instanceof AccessDeniedHttpException) {
+                return $this->status(403);
+            }
+
+            // 其他 HTTP 錯誤（例如 405, 406, 408 等）
+            if ($exception instanceof HttpException) {
+                return $this->status($exception->getStatusCode());
+            }
+
+            // 500 - Internal Server Error（應放在最後，避免攔截其他異常）
+            if ($exception instanceof \Exception) {
+                return $this->status(500);
+            }
+        }
+        return parent::render($request, $exception);
+    }
+
+    /**
+     * 根據 HTTP 狀態碼返回錯誤頁面
+     */
+    private function status(int $statusCode)
+    {
+        // 如果不是開發模式，則顯示對應的錯誤頁面
+        $errorView = "errors.{$statusCode}";
+
+        // 確保錯誤視圖存在，避免錯誤
+        if (view()->exists($errorView)) {
+            return response()->view($errorView, [], $statusCode);
         }
 
-        return parent::render($request, $exception);
+        // 預設顯示 500 錯誤頁面
+        return response()->view('errors.500', [], 500);
+
     }
 }

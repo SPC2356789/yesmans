@@ -23,6 +23,7 @@ class BlogController extends Controller
      * @var false
      */
     private bool $MediaMlt;
+    private string $urlSlug;
 
     public function __construct()
     {
@@ -34,6 +35,7 @@ class BlogController extends Controller
         $this->Categories = new Categories();
         $this->Items = new BlogItem();
         $this->Page = 12;//一頁幾個
+        $this->urlSlug = 'all';//初始化網址
         $this->MediaMlt = false;//一頁幾個
     }
 
@@ -56,10 +58,10 @@ class BlogController extends Controller
         $secondSlug = $this->secondSlug;
         $sidebarTitle = $this->sidebarTitle;//分類的標
         $BlogItems = $this->cutData()['hot'];//熱門文章
-        $urlSlug = $key ?? 'all';
-        $keyUrl = ($key !== 'all' && $key !== null) ? $key : '*';
-        $items = $this->Items->getData($keyUrl, $searchTerm ?? '')->paginate($this->Page)->onEachSide(1);//取資料
-        $Categories = $this->Category();//取分類
+        $urlSlug = $key ?? $this->urlSlug;
+//        $keyUrl = ($key !== 'all' && $key !== null) ? $key : '*';
+        $items = $this->Items->getData($urlSlug, $searchTerm ?? '')->paginate($this->Page)->onEachSide(1);//取資料
+        $Categories = $this->Category($urlSlug);//取分類
         $SEOData = $this->SEOdata($items);
 //        dd($this->Slug, $SEOData);
         $AllNames = array_keys(get_defined_vars());
@@ -70,10 +72,9 @@ class BlogController extends Controller
 
     }
 
-    public function Category(): array
+    public function Category($cat=null): array
     {
-        $Categories = $this->Categories->getData(1, 1, '*', 'slug');
-        return array_merge(['all' => "所有文章"], $Categories);
+        return $this->Categories->getData(1, 1, '*', 'slug',$cat)->pluck('name', 'slug')->toArray();
     }
 
     public function search(Request $request, $k): string
@@ -84,14 +85,14 @@ class BlogController extends Controller
         $secondSlug = $this->secondSlug;
         $key = $request->input('key') ?? $k;;
         $term = $request->input('term') ?? null;
-        session(['term' => $term]);//儲存查詢
-        $keyUrl = ($key !== 'all' && $key !== null) ? $key : '*';
-        $items = $this->Items->getData($keyUrl, $term ?? session('term'))->paginate($this->Page)->onEachSide(1);;
+        session(['blog_term' => $term]);//儲存查詢
+        $urlSlug = $key ?? $this->urlSlug;
+        $items = $this->Items->getData($urlSlug, $term ?? session('blog_term'))->paginate($this->Page)->onEachSide(1);;
         $Slug = $this->Slug;
         $current_page = $items->currentPage();
         $last_page = $items->lastPage();
 //        return $items;
-        $searchTerm = session('term', '*');
+        $searchTerm = session('blog_term', '*');
 
         $AllNames = array_keys(get_defined_vars());
         return view('Layouts.item_card', compact($AllNames))->render();

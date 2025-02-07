@@ -30,7 +30,7 @@
             @foreach($select as $sk => $sv)
                 @if(isset($li))
                     <li class="block px-4 py-2 text-sm text-gray-700 border-0 outline-none rounded-md cursor-pointer {{ $default === $sk ? 'active' : '' }}"
-                        role="menuitem" tabindex="-1" data-value="{{$sk}}" name="{{$name??''}}">{{$sv['date']}}
+                        role="menuitem" tabindex="-1" data-value="{{$sk}}" name="{{$name??''}}">{{$sv}}
                     </li>
                 @else
                     <a href="/{{$Slug}}/{{$sk}}"

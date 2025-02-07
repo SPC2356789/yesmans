@@ -26,19 +26,28 @@ class TripController extends ItryController
         $Media = $this->Media;
         $trip = $request->route('trip');
 
-        $items = $this->Trip->getTrip($trip);
-//        dd($items->toArray());
-        $tripTime_uuid = request()->query('trip_time') ?? session('trip_time'); // 取得 'trip_time' 參數
+        $tripTime_uuid = request()->query('trip_time') ?? (empty(session('trip_time')) ? null : session('trip_time')); // 取得 'trip_time' 參數
+
+        $items = $this->Trip->getTrip($trip, $tripTime_uuid);
         session(['trip_time' => $tripTime_uuid ?? '']);
-
-        $selectedTripTime = $items->trip_times->select('uuid', 'date')->keyBy('uuid');
-
-        $trip_times = $items->trip_times->keyBy('uuid')->get(session('trip_time'))?->toArray();
+        $selectedTripTime = $items->trip_times->pluck('date', 'uuid');
+        $uuid_default = $tripTime_uuid ?? $selectedTripTime->keys()->first(); //如果找不到uuid就預設第一個
+        $trip_times = $items->trip_times->keyBy('uuid')->get($uuid_default)->toArray();
 //        dd($trip_times);
+//        dd($selectedTripTime);
+//        dd($selectedTripTime);
+
+        // 檢查是否存在，但不影響原始查詢
+//        if ($trip_times !== null) {
+//            $checkQuery = clone $trip_times; // 複製查詢
+//            if (!$checkQuery->exists()) {
+//                abort(404, 'Not Found');
+//            }
+//        }
         $AllNames = array_keys(get_defined_vars());
         if (isset($_GET['t'])) {
             if ($_GET['t'] == 'a') {
-                dd($items
+                dd($AllNames
 //                    ->get()
 //                    ->first()  // 只取出第一项
 //                    ->toArray()

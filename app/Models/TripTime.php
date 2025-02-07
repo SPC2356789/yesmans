@@ -28,7 +28,9 @@ class TripTime extends BaseModel
     {
         return $this->belongsTo(Trip::class, 'mould_id', 'id');
     }
-
+    /**
+     * 這裡$cate以slug識別，與trip用slug不同
+     */
     public static function getData($cate = '*')
     {
         return TripTime::selectRaw('uuid, mould_id,quota,applied_count')

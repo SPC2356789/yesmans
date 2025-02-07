@@ -10,7 +10,6 @@
     @vite(['resources/js/app.js','resources/css/app.css'])
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{asset("vendor/cookie-consent/css/cookie-consent.css")}}">
-
 </head>
 
 <body id="page-top" class="@yield('bg') flex flex-col justify-between" data-page="{{($jsPage??($Slug??''))}}">

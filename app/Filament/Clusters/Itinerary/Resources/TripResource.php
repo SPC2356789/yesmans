@@ -38,7 +38,7 @@ class TripResource extends Resource
             ->schema([
                 Select::make('category')
                     ->label('行程分類')
-                    ->options(self::$category::getData(2, 1))// 從分類模型中獲取選項
+                    ->options(self::$category::getData(2, 1)->where('orderby', '>', 0)->pluck('name', 'id'))// 從分類模型中獲取選項
                     ->searchable() // 支持搜索
                     ->required(),
                 Forms\Components\TextInput::make('slug')

@@ -21,7 +21,7 @@
         <div class="md:w-4/5 w-full flex-col items-center justify-between " name="info_data">
             <div class="flex flex-row justify-between items-center" name="data_h">
                 <div class=" md:hidden">
-                    @include('Layouts.select')
+                    @include('Layouts.select',['select'=>$Categories,'default'=>$urlSlug])
                 </div>
                 <nav aria-label="Breadcrumb" class="hidden md:block">
                     <ol class="flex space-x-2 text-sm items-center">

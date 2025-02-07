@@ -31,7 +31,7 @@ class Media extends BaseModel
             })
             ->toArray();
     }
-    protected static function booted()
+    protected static function booted(): void
     {
         static::deleting(function ($model) {
             // 刪除舊的檔案
