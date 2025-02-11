@@ -9,6 +9,9 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\Setting;
 use RalphJSmit\Laravel\SEO\SchemaCollection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
@@ -21,6 +24,23 @@ class Controller extends BaseController
         $this->Media = Media::getData();//取照片
 
         $this->Settings = new Setting();
+    }
+
+
+    public function verifyCaptcha(Request $request): string|\Illuminate\Http\RedirectResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'captcha' => 'required|captcha',
+        ], [
+            'captcha.required' => '請輸入驗證碼',
+            'captcha.captcha' => '驗證碼錯誤，請重新輸入',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        return '驗證成功！';
     }
 
     /**

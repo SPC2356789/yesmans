@@ -208,7 +208,7 @@ span.span_tag {
 }
 
 button.span_tag {
-    @apply hover:bg-yes-major
+    /*@apply hover:bg-yes-major*/
 }
 
 button.span_tag.active {

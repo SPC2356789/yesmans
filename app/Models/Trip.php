@@ -60,7 +60,7 @@ class Trip extends BaseModel
      * with trip_times 為資料關聯 when是資料顯示
      */
 
-    public static function getData($cate = '', $term = '', $tags = '', $month = '')
+    public static function getData($cate = '', $term = '', $tags = '')
     {
         return Trip::selectRaw('id, title,subtitle, category,carousel,tags,slug,icon')
             ->with(['trip_times' => function ($query) use ($cate) {
@@ -113,7 +113,7 @@ class Trip extends BaseModel
             })
             ->when($tags !== '', function ($query) use ($tags) {
 
-                foreach ($tags as $index => $tag) {
+                foreach ($tags as $tag) {
 
                     $query->whereRaw("JSON_CONTAINS(tags, ?)", ['"' . $tag . '"']);
 

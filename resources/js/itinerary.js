@@ -4,12 +4,12 @@ import Swal from 'sweetalert2'
 
 
 $(document).ready(function () {
-    Tool.checkbox('#trip_month');
-    updateActiveState('tag', '+',)
+    // Tool.checkbox('#trip_month');//月份功能關閉
+    updateActiveState('tag', ',',)
 
     $('button.span_tag').click(function () {
-        Tool.toggleUrlParameter($(this), 'tag', '+', '',);  // 'tag' 是你要更新的 URL 參數
-        updateActiveState('tag', '+',)
+        Tool.toggleUrlParameter($(this), 'tag', ',', '',);  // 'tag' 是你要更新的 URL 參數
+        updateActiveState('tag', ',',)
 
         tag()
     });
@@ -47,7 +47,7 @@ function tag() {
     let url = new URL(window.location.href);
     let params = url.searchParams;
     let tag = params.get("tag");
-    let tagArray = tag ? tag.split("+") : [];
+    let tagArray = tag ? tag.split(",") : [];
     Tool.search(tagArray)
 }
 
@@ -58,7 +58,7 @@ function updateActiveState(param, delimiter, isMultiple = true) {
     // 遍歷所有相關的元素，更新它們的 active 類
     $('.span_tag[data-value]').each(function () {
         let obj = $(this);
-        let value = obj.data('value').replace('itry_tag_', '');  // 假設是 `itry_tag_` 開頭的數據
+        let value = obj.data('value');  // 假設是 `itry_tag_` 開頭的數據
 
         // 判斷元素的 data-value 是否在 values 中
         if (values.includes(value.toString())) {

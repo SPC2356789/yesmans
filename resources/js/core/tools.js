@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const Tool = {
     search:
-        function (tag, month) {
+        function (tag) {
             const page = $('#page-top').data('page')
             const obj = $('#Search')
             const key = obj.data('key')
@@ -15,7 +15,6 @@ export const Tool = {
                 term: Tool.sanitizeInput(searchTerm),
                 key: key ?? '',
                 tag: tag ?? '',
-                month: month ?? '',
             })
                 .then(response => {
                     setTimeout(() => {
@@ -78,6 +77,7 @@ export const Tool = {
                 params.delete(param);  // 如果沒有值了，就移除參數
             }
         }
+        params.delete('page');//只要更新就移除page
         window.history.pushState({}, '', url.toString());
         // 如果 isReload 為 true，刷新頁面
         if (isReload) {
@@ -101,9 +101,8 @@ export const Tool = {
         select.setValue(allValues);
     }
     ,
-    TomSelect: function (Id, optionsData) {
-        // 初始化 TomSelect 实例，并填充选项
-        const select = new TomSelect(Id, {
+    TomSelect: function ( optionsData) {
+        let settings = {
             maxOptions: 300,
             options: optionsData,  // 使用传入的国家列表数据
             create: false,  // 禁用用户创建新选项
@@ -131,13 +130,23 @@ export const Tool = {
                     return `<div class="flex flex-row items-center w-full"><img  class="w-6 mr-2" src="${imageUrl}" alt="${data.label}" loading="lazy"/>${data.label}</div>`;
                 }
             }
+        };
+        document.querySelectorAll('.country').forEach((el)=>{
+        // $('.country').each(function() {
+
+            new TomSelect(el,settings);
+            // 等待初始化完成後再設置值
+            // setTimeout(() => {
+            //     select.setValue('TUR');
+            // }, 100);
         });
+        // 初始化 TomSelect 实例，并填充选项
+
         // console.log(optionsData);
         // const optionCount = optionsData.length;
         //
         // console.log(`选项的总数是: ${optionCount}`);
         // 默认选中 value 为 'TW' 的选项
-        select.setValue('TWN');
     }
     ,
 

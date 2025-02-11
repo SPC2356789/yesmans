@@ -44,59 +44,67 @@ class BlogController extends Controller
      */
 
 
-    public function index(Request $request,): \Illuminate\Http\Response
+    public function index(Request $request): \Illuminate\Http\Response
     {
         $key = $request->route('key');
-        $cutData = $this->cutData();
-        $hot = $cutData['hot'];
-        $Media = $this->Media;
-        $MediaMlt = $this->MediaMlt;//此照片有無輪播
         $term = $request->input('term') ?? null;
-//        session('Term', '*');
-        $searchTerm = $term;
-        $Slug = $this->Slug;
-        $secondSlug = $this->secondSlug;
-        $sidebarTitle = $this->sidebarTitle;//分類的標
-        $BlogItems = $this->cutData()['hot'];//熱門文章
         $urlSlug = $key ?? $this->urlSlug;
-//        $keyUrl = ($key !== 'all' && $key !== null) ? $key : '*';
-        $items = $this->Items->getData($urlSlug, $searchTerm ?? '')->paginate($this->Page)->onEachSide(1);//取資料
-        $Categories = $this->Category($urlSlug);//取分類
-        $SEOData = $this->SEOdata($items);
-//        dd($this->Slug, $SEOData);
-        $AllNames = array_keys(get_defined_vars());
 
+        // 取得共用資料
+        $commonData = $this->getCommonData($urlSlug, $term);
+        extract($commonData);
+
+        $AllNames = array_merge(array_keys(get_defined_vars()), array_keys($commonData)); //結合所有
         return response()
-            ->view("Blog/" . $this->Slug, compact($AllNames));
-
-
-    }
-
-    public function Category($cat=null): array
-    {
-        return $this->Categories->getData(1, 1, '*', 'slug',$cat)->pluck('name', 'slug')->toArray();
+            ->view("Blog/" . $this->Slug, compact(array_merge($AllNames)));
     }
 
     public function search(Request $request, $k): string
     {
-        $div = 'a';//因共用結構所以要寫
-        $Media = $this->Media;
-        $MediaMlt = $this->MediaMlt;//此照片有無輪播
-        $secondSlug = $this->secondSlug;
-        $key = $request->input('key') ?? $k;;
+        $key = $request->input('key') ?? $k;
         $term = $request->input('term') ?? null;
-        session(['blog_term' => $term]);//儲存查詢
+        session(['blog_term' => $term]); // 儲存查詢條件
         $urlSlug = $key ?? $this->urlSlug;
-        $items = $this->Items->getData($urlSlug, $term ?? session('blog_term'))->paginate($this->Page)->onEachSide(1);;
-        $Slug = $this->Slug;
-        $current_page = $items->currentPage();
-        $last_page = $items->lastPage();
-//        return $items;
-        $searchTerm = session('blog_term', '*');
 
-        $AllNames = array_keys(get_defined_vars());
+        // 取得共用資料
+        $commonData = $this->getCommonData($urlSlug, $term);
+        extract($commonData);
+        $AllNames = array_merge(array_keys(get_defined_vars()), array_keys($commonData)); //結合所有
         return view('Layouts.item_card', compact($AllNames))->render();
+    }
 
+    private function getCommonData($urlSlug, $term): array
+    {
+        return [
+            'cutData' => $this->cutData(),
+            'hot' => $this->cutData()['hot'],
+            'Media' => $this->Media,
+            'MediaMlt' => $this->MediaMlt, // 此照片有無輪播
+            'Slug' => $this->Slug,
+            'secondSlug' => $this->secondSlug,
+            'sidebarTitle' => $this->sidebarTitle, // 分類標題
+            'BlogItems' => $this->cutData()['hot'], // 熱門文章
+            'items' => $this->getItems($urlSlug, $term),
+            'Categories' => $this->Category($urlSlug),
+            'SEOData' => $this->SEOdata($this->getItems($urlSlug, $term)),
+            'params' => ['term' => $term], // 換頁參數
+            'searchTerm' => session('blog_term', '*'),
+        ];
+    }
+
+    private function getItems($urlSlug, $term)
+    {
+        return $this->Items->getData($urlSlug, $term ?? session('blog_term'))
+            ->paginate($this->Page)
+            ->onEachSide(1);
+    }
+
+    /**
+     * 查詢分類
+     */
+    public function Category($cat = null): array
+    {
+        return $this->Categories->getData(1, 1, '*', 'slug', $cat)->pluck('name', 'slug')->toArray();
     }
 
     /**

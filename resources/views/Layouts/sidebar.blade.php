@@ -3,15 +3,15 @@
     <!-- 導航藍 -->
     {{--    月份--}}
     @if(isset($months))
-        <div class="flex flex-col {{--md:min-h-46--}} gap-2">
-            <button class="text-start text-xl font-bold text-gray-800 cursor-pointer" for="trip_month">選擇月份<i
-                    class="fa-solid fa-circle-info mr-1 "></i></button>
-            <select id="trip_month" autocomplete="off" multiple>
-                @for ($si = 1; $si < 13; $si++)
-                    <option value="{{$si}}">{{$si}} 月</option>
-                @endfor
-            </select>
-        </div>
+{{--        <div class="flex flex-col --}}{{--md:min-h-46--}}{{-- gap-2">--}}
+{{--            <button class="text-start text-xl font-bold text-gray-800 cursor-pointer" for="trip_month">選擇月份<i--}}
+{{--                    class="fa-solid fa-circle-info mr-1 "></i></button>--}}
+{{--            <select id="trip_month" autocomplete="off" multiple>--}}
+{{--                @for ($si = 1; $si < 13; $si++)--}}
+{{--                    <option value="{{$si}}">{{$si}} 月</option>--}}
+{{--                @endfor--}}
+{{--            </select>--}}
+{{--        </div>--}}
     @endif
     <!-- 篩選器 -->
     {{--                <div class="flex flex-col  px-3" name="span">--}}

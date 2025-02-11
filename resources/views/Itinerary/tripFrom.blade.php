@@ -15,9 +15,9 @@
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                     <div class="sm:col-span-3">
-                        <label for="all-name" class="block text-sm/6 font-medium text-gray-900">全名</label>
+                        <label for="name" class="block text-sm/6 font-medium text-gray-900">全名</label>
                         <div class="mt-2">
-                            <input type="text" name="all-name" id="all-name" autocomplete="name"
+                            <input type="text" name="name" id="name" autocomplete="name"
                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6">
                         </div>
                     </div>
@@ -46,23 +46,25 @@
                         </div>
                     </div>
                     <div class="sm:col-span-2">
-                        <span class="block text-sm/6 font-medium text-gray-900">國籍</span>
-                        <div class="mt-2 grid grid-cols-1">
-                            {{--                                @include('Layouts.select', ['select_id' => "country-s",'menu_id' => "country-m",'placeholder'=> "請選擇國家"])--}}
-                            <select id="setCountry">
-                                <option selected disabled>請選擇國籍</option>
-                            </select>
-                        </div>
+                        <select class="js-country" id="country" name="country">
+                        </select>
                     </div>
                     <div class="sm:col-span-3">
                         <label for="id-card"
-                               class="block text-sm/6 font-medium text-gray-900">身分證/護照/居留證</label>
+                               class="block text-sm/6 font-medium text-gray-900">身分證/居留證</label>
                         <div class="mt-2">
                             <input id="id-card" name="id-card" type="text" autocomplete="off"
                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6">
                         </div>
                     </div>
-
+                    <div class="sm:col-span-3">
+                        <label for="id-card"
+                               class="block text-sm/6 font-medium text-gray-900">護照</label>
+                        <div class="mt-2">
+                            <input id="id-card" name="PassPort" type="text" autocomplete="off"
+                                   class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6">
+                        </div>
+                    </div>
                     <div class="col-span-full">
                         <label for="street-address" class="block text-sm/6 font-medium text-gray-900">居住地址</label>
                         <div class="mt-2">
@@ -161,8 +163,9 @@
                                     <label for="diet-vegetarian">素食</label>
                                 </div>
                                 <div>
-                                    <input id="diet-non-vegetarian" name="diet" type="radio" class="tailwind_radio"checked>
-                                    <label for="diet-non-vegetarian" >葷食</label>
+                                    <input id="diet-non-vegetarian" name="diet" type="radio" class="tailwind_radio"
+                                           checked>
+                                    <label for="diet-non-vegetarian">葷食</label>
                                 </div>
                             </div>
                         </div>
@@ -176,16 +179,22 @@
             name="add_number">
             <i class="fa-solid fa-user-plus"></i>
         </div>
-
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-            <div id="fillTestData" type="button"
-                    class="rounded-md bg-yes-major px-3 py-2 text-sm font-semibold  hover:text-yes-major text-neutral-50 shadow-sm hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yes-major">
-                測試
+        <div class="flex justify-between">
+            <div class="w-44">
+                {{--            <img src="{{ captcha_src() }}" onclick="this.src='/captcha?'+Math.random()" alt="驗證碼">--}}
+                {{--            <input type="text" name="captcha" placeholder="輸入驗證碼">--}}
             </div>
-            <button type="button" id="submitTestForm"
-                    class="rounded-md bg-yes-major px-3 py-2 text-sm font-semibold  hover:text-yes-major text-neutral-50 shadow-sm hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yes-major">
-                報名
-            </button>
+            <div class="mt-6 flex items-center justify-end gap-x-6">
+
+                <div id="fillTestData" type="button"
+                     class="rounded-md bg-yes-major px-3 py-2 text-sm font-semibold  hover:text-yes-major text-neutral-50 shadow-sm hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yes-major">
+                    測試
+                </div>
+                <button type="button" id="submitTestForm"
+                        class="rounded-md bg-yes-major px-3 py-2 text-sm font-semibold  hover:text-yes-major text-neutral-50 shadow-sm hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yes-major">
+                    報名
+                </button>
+            </div>
         </div>
 
     </div>

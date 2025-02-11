@@ -16,7 +16,7 @@
    {{session('trip_time')}}
     <div class=" flex lg:flex-row flex-col gap-5 w-full justify-center ">
         <div class="flex flex-col  gap-6 w-full lg:w-1/2">
-            <div class="swiper top_trip w-full  mx-auto aspect-square flex items-center">
+            <div class="swiper top_trip w-full  mx-auto aspect-square flex items-center ">
                 <div class="swiper-wrapper">
 
                     @foreach( $items->carousel as $carouselItem)
@@ -52,20 +52,20 @@
             <div class="w-full flex flex-col gap-4 ">
 
                 <div class="flex flex-col gap-2">
-                    <h1 class="xxx:text-xl md:text-2xl">報名日期</h1>
+                    <h1 class="xxx:text-lg md:text-xl">報名日期</h1>
                     <div class="w-auto">
                         @include('Layouts.select', ['li'=>true,'select' => $selectedTripTime->toArray(),'default'=>$uuid_default,'name'=>'trip_times','mltArray_index'=>'date'])
                     </div>
                 </div>
                 <div class="flex flex-row justify-between w-full">
                     <div class="flex flex-row gap-2 items-center w-2/3">
-                        <h1 class="xxx:text-xl md:text-2xl">行程名額</h1>
+                        <h1 class="xxx:text-lg md:text-xl">行程名額</h1>
                         <div class="w-auto">
                             {{ $trip_times['quota']}}
                         </div>
                     </div>
                     <div class="flex flex-row gap-2 items-center w-1/3">
-                        <h1 class="xxx:text-xl md:text-2xl">已報名</h1>
+                        <h1 class="xxx:text-lg md:text-xl">已報名</h1>
                         <div class="w-auto">
                             {{ $trip_times['quota']}}
                         </div>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="flex justify-between">
                     <div class="flex flex-row gap-2 items-center w-2/3">
-                        <h1 class="xxx:text-xl md:text-2xl">報名費用</h1>
+                        <h1 class="xxx:text-lg md:text-xl">報名費用</h1>
                         <div class="w-auto">
                             {{ $trip_times['amount']}}
                         </div>
@@ -90,7 +90,7 @@
             </div>
         </div>
     </div>
-    <div class="my-2">
+    <div class="my-5 sm:my-3">
         {!!  $items->content !!}
     </div>
     {{--    同意書--}}
@@ -111,8 +111,9 @@
                 class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
     </button>
 
-    <div class="hidden" id="trip_from">
-        @include('Itinerary.tripFrom')
-    </div>
+
+        <div class="hidden" id="trip_from" ></div>
+{{--        @include('Itinerary.tripFrom')--}}
+
 
 @endsection

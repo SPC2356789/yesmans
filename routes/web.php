@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use Mews\Captcha\Captcha;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,12 +41,16 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function
     });
 });
 
-// routes/web.php
-Route::group(['middleware' => ['cookie-consent']], function () {
-    Route::get('/ta', function () {
-        return response()->view('errors.404', [], 404);
-    });
+
+Route::get('/captcha', function () {
+    return captcha();
 });
+//// routes/web.php
+//Route::group(['middleware' => ['cookie-consent']], function () {
+//    Route::get('/ta', function () {
+//        return response()->view('errors.404', [], 404);
+//    });
+//});
 //Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers', 'middleware' => 'ngrok.header'], function () {
 //    Route::get('/', function () use ($request) {
 //        return app(IndexController::class)->index($request);

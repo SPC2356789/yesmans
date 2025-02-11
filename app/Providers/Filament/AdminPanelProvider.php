@@ -24,6 +24,8 @@ use SolutionForest\FilamentAccessManagement\FilamentAccessManagementPanel;
 
 use Filament\Navigation\MenuItem;
 use Filament\Support\Assets\Css;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Setting;
 //env
 use Outerweb\FilamentSettings\Filament\Plugins\FilamentSettingsPlugin;
 
@@ -32,6 +34,14 @@ use Outerweb\FilamentSettings\Filament\Plugins\FilamentSettingsPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
+    private Setting $Settings;
+
+    public function __construct()
+    {
+
+        $this->Settings = new Setting();
+    }
+
     public function boot(): void
     {
 
@@ -48,6 +58,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->authGuard('web')
+            ->favicon(Storage::url($this->Settings->getElseOrGeneral()['favicon']))
             ->profile(isSimple: false)
             ->login()
             ->sidebarWidth('13rem')

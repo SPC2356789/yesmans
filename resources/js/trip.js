@@ -12,17 +12,40 @@ import {Tool} from './core/tools';
 import tripCountry from '../lib/trip_country.json';
 import axios from 'axios';
 
+import { createApp } from 'vue';
+import FormClone from '../views/Itinerary/FormClone.vue';
+
+// 創建 Vue 實例並註冊全局方法
+const app = createApp(FormClone);
+
+// 定義全局方法，這樣所有組件可以訪問
+app.config.globalProperties.$getCountry = getCountry;
+
+// 挂载应用（只需掛載一次）
+app.mount('#trip_from');
+import Choices from 'choices.js';
+
+import "choices.js/public/assets/styles/choices.css";
+
 $(document).ready(function () {
+
     swiper()
     getCountry()//初始化國籍選擇
+    // test();
     applyAgree()//同意書
-
+    // window.Alpine = Alpine;
+    // Alpine.start();
     $(document).on('click', '#fillTestData', function () {
         fillFormData()
+        console.log('輸入成功')
     });
     $(document).on('click', '#submitTestForm', function () {
 
     });
+
+    function applyData() {
+
+    }
 
     $(document).on('click', '#setCountry', function () {
         if (!$('#setCountry').hasClass('specific-class')) {
@@ -48,44 +71,10 @@ $(document).ready(function () {
             });
 
     });
+
     $(document).on('click', 'div[name="add_number"]', function () {
-        const cloneItem = $('[name="apply_trip"]').last();
-        // 克隆報名資訊表單
-        const clonedForm = cloneItem.clone();
+        cloneItem()//克隆表單
 
-        // 獲取最後一個表單的 data-number 值並加 1
-        const currentNumber = parseInt(cloneItem.data('number'));
-        const newNumber = currentNumber + 1;
-
-        // 設定新的 data-number 值
-        clonedForm.attr('data-number', newNumber);
-
-        // 更新表單內的序號顯示
-        clonedForm.find('[name="apply_title"]').text('序號' + newNumber);
-        clonedForm.find('[name="remove_number"]').removeClass('hidden');
-        // 修改克隆表單中的所有 ID 跟name 屬性，並更新對應的 label 的 for 屬性
-        clonedForm.find('[id], [name]').each(function () {
-            const originalId = $(this).attr('id');
-            if (originalId) {
-                const newId = originalId + '_' + newNumber;
-                $(this).attr('id', newId);
-                // 更新 label 的 for 屬性
-                clonedForm.find('label[for="' + originalId + '"]').attr('for', newId);
-            }
-
-            const originalName = $(this).attr('name');
-            if (originalName) {
-                const newName = originalName + '_' + newNumber;
-                $(this).attr('name', newName);
-            }
-        });
-
-        // 清空表單中的輸入欄位內容
-        clonedForm.find('input').val('');
-        clonedForm.find('select').prop('selectedIndex', 0); // 重設下拉選單
-        //
-        // // 將克隆的表單加到頁面中
-        cloneItem.after(clonedForm);
     });
     $(document).on('click', '[name="remove_number"]', function () {
         $(this).closest('[name="apply_trip"]').remove();
@@ -96,11 +85,12 @@ $(document).ready(function () {
 
 
 });
+
 function fillFormData() {
     $('[name="all-name"]').val("測試用戶");
     $('[name="gender"][value="male"]').prop("checked", true);
     $('[name="birthday"]').val("1990-01-01");
-    $('[name="setCountry"]').val("TW");
+    $('[name="country"]').val("TW");
     $('[name="id-card"]').val("A123456789");
     $('[name="street-address"]').val("台北市測試路123號");
     $('[name="email"]').val("test@example.com");
@@ -158,6 +148,90 @@ function swiper() {
     });
 }
 
+function cloneItem() {
+    const cloneItem = $('[name="apply_trip"]').last();
+    // 克隆報名資訊表單
+    const clonedForm = cloneItem.clone();
+
+    // 獲取最後一個表單的 data-number 值並加 1
+    const currentNumber = parseInt(cloneItem.data('number'));
+    const newNumber = currentNumber + 1;
+
+    // 設定新的 data-number 值
+    clonedForm.attr('data-number', newNumber);
+
+    // 更新表單內的序號顯示
+    clonedForm.find('[name="apply_title"]').text('序號' + newNumber);
+    clonedForm.find('[name="remove_number"]').removeClass('hidden');
+
+    // 修改克隆表單中的所有 ID 跟name 屬性，並更新對應的 label 的 for 屬性
+    clonedForm.find('[id]').each(function () {
+        const originalId = $(this).attr('id');
+        if (originalId) {
+            const newId = originalId + '_' + newNumber;
+            // const newdropdown = originaldropdown + '_' + newNumber;
+            $(this).attr('id', newId);
+
+            // clonedForm.find('#dropdown-states').attr('id', 'dropdown-states');
+            // 更新 label 的 for 屬性
+            clonedForm.find('label[for="' + originalId + '"]').attr('for', newId);
+
+        }
+        const originalDropdown = $(this).attr('data-dropdown-toggle');
+        if (originalDropdown) {
+            const newId = originalId + '_' + newNumber;
+            const newDropdown = originalDropdown + '_' + newNumber;
+            $(this).attr('data-dropdown-toggle', newDropdown);
+            $(this).attr('id', newId);
+
+            // 也同步修改對應的 dropdown 元素的 ID
+            // clonedForm.find(`#${originalDropdown}`).attr('id', newDropdown);
+        }
+        // const originalName = $(this).attr('name');
+        // if (originalName) {
+        //     const newName = originalName + '_' + newNumber;
+        //     $(this).attr('name', newName);
+        // }
+    });
+
+    // 清空表單中的輸入欄位內容
+    clonedForm.find('input').val('');
+    clonedForm.find('select').prop('selectedIndex', 0); // 重設下拉選單
+    //
+    // // 將克隆的表單加到頁面中
+    cloneItem.after(clonedForm);
+    // getCountry()
+};
+
+function test() {
+    const $tripFrom = $('#trip_from');
+    const $agreementButton = $('[name="agree_btn"]');
+    cloneItem()//克隆表單
+    fillFormData()
+    $tripFrom.toggleClass('hidden');  // 勾選 checkbox
+    $tripFrom.removeClass('hidden');  // 勾選 checkbox
+    $agreementButton[0].scrollIntoView({behavior: 'smooth', block: 'start'});
+
+
+    const dataCollection = {}; // 存放所有 data-number 對應的資料
+    const obj = $('[name="apply_trip"]');
+    obj.each(function (index, element) {
+        const number = $(element).data('number');  // 取得每個元素的 data-number
+        $(this).find('fieldset [name]').each(function () {
+            const name = $(this).attr('name');
+            const value = $(this).val();
+
+            // dataCollection[number][name] = value;
+
+            console.log(`第幾位 ${number} Name: ${name}, Value: ${value}`);
+        });
+
+    });
+    console.log(dataCollection);  // 可以打印出索引和值
+    // console.log(number)
+
+}
+
 function applyAgree() {
     const $agreementContainer = $('.agree-ctn');
     const $agreementButton = $('[name="agree_btn"]');
@@ -176,19 +250,18 @@ function applyAgree() {
     $(document).on('change', '#agreeCheckbox', function () {
 
         $tripFrom.toggleClass('hidden');  // 勾選 checkbox
-        $tripFrom.removeClass('hidden');  // 勾選 checkbox
+        // $tripFrom.removeClass('hidden');  // 勾選 checkbox
         // console.log(1);
     });
 
-    // $tripFrom.toggleClass('hidden');  // 勾選 checkbox
-    // $tripFrom.removeClass('hidden');  // 勾選 checkbox
 
     // 聚焦行為IOS不支持
     // $('[name="signupBtn"]').on('click', function () {
     //     $agreementButton.focus();
     // });
+    //我要報名滾動到
     $(document).on('click', '[name="signupBtn"]', function () {
-        $agreementButton[0].scrollIntoView({behavior: 'smooth', block: 'start'});  // 滾動到圖片
+        $agreementButton[0].scrollIntoView({behavior: 'smooth', block: 'start'});
     });
     $(document).on('click', '[name="agree_btn"]', function () {
         $('#agreeCheckbox').change();  // 勾選 checkbox 並觸發 change 事件
@@ -216,13 +289,36 @@ function getCountry() {
 
             return {
                 value: country.cca3,
-                label: labelText + ' (' + country.name.common + ')',
-                imageUrl: country.flags.png
+                label: `    <div class="flex flex-row items-center w-full">
+        <img class="w-6 mr-2" src="${country.flags.png}" alt="${labelText}" loading="lazy" />
+        <div class="flex flex-col">
+            <span>
+                ${labelText}
+            </span>
+            <span>
+                ${country.name.common}
+            </span>
+        </div>
+
+    </div>`
             };
         });
-
-        // 调用工具函数更新 UI
-        Tool.TomSelect('#setCountry', countryList);
+        // $('.js-country').each(function (index, element) {
+        //     // 清除可能存在的舊 Choices 實例
+        //     if (element.choices) {
+        //         element.choices.destroy(); // 銷毀現有的 Choices 實例
+        //     }
+        //
+        //     // 創建新的 Choices 實例
+        //     const choices = new Choices($(element)[0], {
+        //         choices: countryList,
+        //         allowHTML: true, // 允許在標籤中使用 HTML
+        //     });
+        //
+        //     // 設置選中的選項
+        //     choices.setChoiceByValue('TWN'); // 預設選擇 'TWN'
+        // });
+        return countryList;
 
     } catch (error) {
         console.error('Error processing country data:', error);

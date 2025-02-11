@@ -26,7 +26,7 @@ class ItryController extends Controller
     /**
      * @var string
      */
-    private string $urlSlug;
+    protected string $urlSlug;
     /**
      * @var true
      */
@@ -42,7 +42,7 @@ class ItryController extends Controller
         $this->Trip = new Trip();
         $this->Categories = new Categories();
         $this->sidebarTitle = "行程分類";
-        $this->Page = 12;//一頁幾個
+        $this->Page = 4;//一頁幾個
         $this->apply = true;//開啟報名
         $this->urlSlug = 'recent';//初始化網址
         $this->MediaMlt = true;
@@ -54,77 +54,78 @@ class ItryController extends Controller
     public function index(Request $request): \Illuminate\Http\Response
     {
         $key = $request->route('key');
-        $months = true;//打開月份
-        $sidebarTitle = $this->sidebarTitle;//分類的標
         $term = $request->input('term') ?? null;
-        $Slug = $this->Slug;
-        $secondSlug = $this->secondSlug;
-        $apply = $this->apply;
-        $Media = $this->Media;
-        $MediaMlt = $this->MediaMlt;//此照片有無輪播
+        $tag = $request->input('tag') ? explode(',', $request->input('tag')) : null;
         $urlSlug = $key ?? $this->urlSlug;
-        $Categories = $this->Category($urlSlug)->pluck('name', 'slug');//取分類
-        $Categories_slug = $this->Category()->keyBy('slug')->toArray();
-        $cat = $Categories_slug[$urlSlug]['id'];//把slug翻譯成id
+        // 取得共用資料
+        $commonData = $this->getCommonData($urlSlug, $term, $tag);
+        extract($commonData);
 
-//        $Categories_Array = is_array($Categories_id) ? array_values(array_filter(array_map(fn($t) => $Categories[$t]['id'] ?? null, $urlSlug))) : [];
-        $tags = $this->Tags()->keyBy('id')->toArray();
-        $items = $this->getItems($cat)->paginate($this->Page)->onEachSide(1);
-        if (isset($_GET['t'])) {
-            if ($_GET['t'] == 'a') {
-                dd($items);
-            }
-
+        // 建立網址參數
+        $params = ['term' => $term];
+        if (!empty($tag)) {
+            $params['tag'] = implode(',', (array)$tag);
         }
-        $AllNames = array_keys(get_defined_vars());
+
+        if (request()->get('t') === 'a') {
+            dd($cat, $term, $tagArray, $items);
+        }
+        $AllNames = array_merge(array_keys(get_defined_vars()), array_keys($commonData)); //結合所有
+//       dd($Slug);
         return response()
             ->view("Itinerary/" . $Slug, compact($AllNames));
     }
 
-    private function test($cate,)
+    public function search(Request $request): string
     {
-        $items = $this->Trip->getData($cate, $searchTerm ?? '');
-
-        return $items;
-    }
-
-
-    public function search(Request $request,): string
-    {
-        $Media = $this->Media;
-        $div = 'button';//因共用結構所以要寫
-        $MediaMlt = $this->MediaMlt;//此照片有無輪播
-        $secondSlug = $this->secondSlug;
-        $key = $request->input('key');;
+        $key = $request->input('key');
         $term = $request->input('term') ?? null;
         $tag = $request->input('tag') ?? null;
-        $month = $request->input('month') ?? null;
-        $tags = $this->Tags()->keyBy('id')->toArray();
-        $Categories_slug = $this->Category()->keyBy('slug')->toArray();
-        $cat = $Categories_slug[$key]['id'];//把slug翻譯成id
-        $tag_slug = $this->Tags()->keyBy('slug')->toArray();
-        // 检查 $tag_slug 是否为空，若为空则返回空数组
-        $tagArray = is_array($tag) ? array_values(array_filter(array_map(fn($t) => $tag_slug[$t]['id'] ?? null, $tag))) : [];
-
-        session(['trip_term' => $term, 'tag' => $tagArray, 'month' => $month]);//儲存查詢
-//        dd($tagArray);
-        $items = $this->Trip->getData($cat, $term ?? session('trip_term'), session('tag') ?? '')->paginate($this->Page)->onEachSide(1);;
-//        dd($items->toArray());
-        $Slug = $this->Slug;
-        $current_page = $items->currentPage();
-        $last_page = $items->lastPage();
-//        return $items;
-        $searchTerm = session('trip_term', '*');
-
-        $AllNames = array_keys(get_defined_vars());
+        $urlSlug = $key ?? $this->urlSlug;
+        $params = ['term' => $term];
+        if (!empty($tag)) {
+            $params['tag'] = implode(',', (array)$tag);
+        }
+        // 取得共用資料
+        $commonData = $this->getCommonData($urlSlug, $term, $tag);
+        extract($commonData);
+        $AllNames = array_merge(array_keys(get_defined_vars()), array_keys($commonData)); //結合所有
         return view('Layouts.item_card', compact($AllNames))->render();
-
     }
 
-    public function getItems($cate)
+    private function getCommonData($key, $term, $tag): array
+    {
+        $tags = $this->Tags()->keyBy('id')->toArray();
+        $tag_slug = $this->Tags()->keyBy('slug')->toArray();
+        // 轉換 `tag` slug 成 `id`
+        $tagArray = is_array($tag)
+            ? array_values(array_filter(array_map(fn($t) => $tag_slug[$t]['id'] ?? null, $tag)))
+            : ($tag ? [$tag] : []);
+
+        $Categories_slug = $this->Category()->keyBy('slug')->toArray();
+        $cat = $Categories_slug[$key]['id'] ?? null; // 把 slug 轉換成 id
+
+        return [
+            'months' => true,
+            'sidebarTitle' => $this->sidebarTitle,
+            'Slug' => $this->Slug,
+            'secondSlug' => $this->secondSlug,
+            'apply' => $this->apply,
+            'Media' => $this->Media,
+            'MediaMlt' => $this->MediaMlt,
+            'Categories' => $this->Category($key)->pluck('name', 'slug'),
+            'tags' => $tags,
+            'tagArray' => $tagArray,
+            'cat' => $cat,
+            'items' => $this->getItems($cat, $term, $tagArray)->paginate($this->Page)->onEachSide(1),
+        ];
+    }
+
+
+    public function getItems($cat, $term, $tagArray)
     {
 
-        return $this->Trip->getData($cate, $searchTerm ?? '');
+        return $this->Trip->getData($cat, $term, $tagArray);
     }
 
     public function Category($chkUrl = null)

@@ -5,25 +5,17 @@
     </div>
 </div>
 @if(isset($items))
-    @php
-        $justifyClass = match (count($items)) {
-           1 => 'justify-center',  // 1 個時置中
-           2 => 'justify-between md965:justify-start',   // 2 個時靠左
-           default => 'justify-between md965:justify-end', // 其他情況分散對齊
-       };
-    @endphp
-    <div class="flex flex-wrap  mb-4 gap-x-0.5 gap-y-5 ss:gap-x-1 sm:gap-x-4 {{$justifyClass}}">
-
-
+{{--    {{print_r($tag) }}--}}
+    <div class="grid grid-cols-2 md965:grid-cols-3 gap-x-2.5 xsm:gap-x-3 md:gap-x-4 gap-y-5 xsm:gap-y-6 md:gap-y-10">
         @if($items && $items->isNotEmpty())
             @foreach($items as $item)
                 <{{$div??'a'}} href="/{{$Slug}}/{{$item->categories->slug}}/{{$secondSlug}}/{{$item->slug}}"
                 id="{{$Slug}}_{{$item->id}}"
-                class="  w-[47%] md965:w-[31%]   group trip_btn_apply"
+                class=" group trip_btn_apply"
                 data-time="{{json_encode($item['trip_times'])}}">
 
                 <div
-                    class="bg-white bg-opacity-90 shadow-lg rounded-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:z-50">
+                    class="bg-white bg-opacity-90 shadow-lg  rounded-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:z-50">
                     <!-- 保證圖片的比例為 1:1 -->
                     <div class="relative w-full" style="padding-top: 100%;">
                         @if(isset($tags))
@@ -68,7 +60,7 @@
     </div>
 @endif
 <div class="px-1.5 w-full flex justify-center">
-    {{ $items->appends(array('term' => $term))->links('pagination::tailwind') }}
+    {{ $items->appends($params)->links('pagination::tailwind') }}
 </div>
 </div>
 @endif
