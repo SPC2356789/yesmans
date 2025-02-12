@@ -34,13 +34,13 @@ class TripTime extends BaseModel
     public static function getData($cate = '*')
     {
         return TripTime::selectRaw('uuid, mould_id,quota,applied_count')
-            ->with(['Trip' => function ($query) {
+            ->with(['Order' => function ($query) {
                 $query->select('id', 'slug', 'title', 'subtitle', 'icon', 'slug', 'carousel', 'tags', 'is_published'); // 只取得需要的字段
             }])
             ->when(!in_array($cate, ['*', 'recent', 'upcoming']), function ($query, $term) use ($cate) {
-                // 根據 Categories 的 slug 查找對應的 Trip
-                $query->whereHas('Trip', function ($query) use ($cate) {
-                    // 假設 Trip 中的 category 字段是 category_id，對應 Categories 的 id
+                // 根據 Categories 的 slug 查找對應的 Order
+                $query->whereHas('Order', function ($query) use ($cate) {
+                    // 假設 Order 中的 category 字段是 category_id，對應 Categories 的 id
                     $query->whereHas('categories', function ($query) use ($cate) {
                         // 根據 slug 過濾 Categories
                         $query->where('slug', $cate);

@@ -52,7 +52,7 @@ class Trip extends BaseModel
 //    }
     public function trip_times(): HasMany
     {
-        return $this->hasMany(TripTime::class, 'mould_id', 'id'); // TripTime 表的 mould_id 對應 Trip 的 id
+        return $this->hasMany(TripTime::class, 'mould_id', 'id'); // TripTime 表的 mould_id 對應 Order 的 id
     }
 
     /**

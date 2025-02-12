@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Itinerary;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use function Laravel\Prompts\alert;
+use App\Models\TripApply;
+use App\Models\TripOrder;
 
 class TripController extends ItryController
 {
@@ -62,10 +65,74 @@ class TripController extends ItryController
     /**
      * Show the form for creating a new resource.
      */
-    public
-    function create()
+    public function create(Request $request)
     {
-        //
+
+        try {
+            // 驗證驗證碼
+            $rules = ['captcha' => 'required|captcha_api:' . request('key') . ',math'];
+            $validator = validator()->make(request()->all(), $rules);
+
+            if ($validator->fails()) {
+                // 驗證碼錯誤，返回錯誤訊息
+                return response()->json(['error' => 'NO PASS'], 500);
+            }
+
+            // 驗證其他資料
+            $request->validate([
+                'data' => 'required|array',
+                'uuid' => 'required|string|max:100',
+            ]);
+
+            // 設定報名序號，時間戳 + 微秒 + 行程slug
+            $order_number = (int)(microtime(true) * 1000) . $request->route('trip');
+            $tripApplyId = [];
+            $dataArray = $request['data'];
+            $count=0;
+            // 儲存報名資料
+            foreach ($dataArray as $data) {
+                // 使用模型創建報名資料
+                $tripApply = TripApply::create([
+                    'name' => $data['name'],
+                    'order_number' => $order_number,
+                    'gender' => $data['gender'],
+                    'birthday' => $data['birthday'],
+                    'email' => $data['email'],
+                    'phone' => $data['phone'],
+                    'country' => $data['country'],
+                    'id_card' => $data['id_card'],
+                    'address' => $data['address'],
+                    'PassPort' => $data['PassPort'],
+                    'diet' => $data['diet'],
+                    'experience' => $data['experience'],
+                    'disease' => $data['disease'],
+                    'LINE' => $data['LINE'],
+                    'IG' => $data['IG'],
+                    'emContactPh' => $data['emContactPh'],
+                    'emContact' => $data['emContact'],
+                ]);
+                // 儲存每筆報名資料的 ID
+                $tripApplyId[] = $tripApply->id;
+                $count++; // 增加人數計數
+            }
+
+            // 儲存報名資料，包含報名的 ID 列表
+            TripOrder::create([
+                'order_number' => $order_number,
+                'trip_uuid' => $request['uuid'],
+                'applies' => json_encode($tripApplyId),  // 儲存報名 ID 的 JSON 格式
+            ]);
+
+            // 返回成功訊息
+            return response()->json([
+                'message' => '序號:' . $order_number . ' 報名成功<br>人數'.$count.'位',
+            ]);
+
+        } catch (\Exception $e) {
+            // 錯誤處理，返回錯誤訊息
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
     }
 
     /**
@@ -103,7 +170,7 @@ class TripController extends ItryController
         try {
             // 驗證收到的資料
             $request->validate([
-                'trip_time' => 'required|string',
+                'trip_time' => 'required|string|max:100',
             ]);
 
             // 更新 session 中的 trip_time 值

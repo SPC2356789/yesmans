@@ -180,10 +180,7 @@
             <i class="fa-solid fa-user-plus"></i>
         </div>
         <div class="flex justify-between">
-            <div class="w-44">
-                {{--            <img src="{{ captcha_src() }}" onclick="this.src='/captcha?'+Math.random()" alt="驗證碼">--}}
-                {{--            <input type="text" name="captcha" placeholder="輸入驗證碼">--}}
-            </div>
+
             <div class="mt-6 flex items-center justify-end gap-x-6">
 
                 <div id="fillTestData" type="button"

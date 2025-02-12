@@ -5,15 +5,10 @@
 
 @endsection
 @section('blink')
-    {{--    強壓TS套件的樣式--}}
-    <style>
-        .ts-control > * {
-            display: flex !important;
-        }
-    </style>
+
 @endsection
 @section('content')
-   {{session('trip_time')}}
+    {{session('trip_time')}}
     <div class=" flex lg:flex-row flex-col gap-5 w-full justify-center ">
         <div class="flex flex-col  gap-6 w-full lg:w-1/2">
             <div class="swiper top_trip w-full  mx-auto aspect-square flex items-center ">
@@ -105,15 +100,17 @@
     </div>
 
     <button class="flex flex-initial" type="button" name="agree_btn">
-        <input type="checkbox" id="agreeCheckbox" disabled />
+        <input type="checkbox" id="agreeCheckbox" disabled/>
         <div class="checkbox"></div>
         <label class="cursor-pointer hover:text-[#ff9a63]" name="CheckLabel" for="agreeCheckbox">我同意條款<span
                 class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
     </button>
 
-
-        <div class="hidden" id="trip_from" ></div>
-{{--        @include('Itinerary.tripFrom')--}}
-
+    {{--{{dd($trip_times)}}--}}
+    {{--    <pre>{{ json_encode($trip_times, JSON_PRETTY_PRINT) }}</pre>--}}
+    {{--        <div  :tripTimes="{{ json_encode($trip_times) }}" id="trip_from" ></div>--}}
+    {{--    <div class="hidden" id="trip_from" data-tripTimes='@json($trip_times)'></div>--}}
+    <div class="hidden" id="trip_from" data-trip_times='@json($trip_times)'></div>
+    {{--        @include('Itinerary.tripFrom')--}}
 
 @endsection

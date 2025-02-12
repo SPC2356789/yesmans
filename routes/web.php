@@ -26,6 +26,7 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function
     Route::patch('/itinerary/{key}', 'Itinerary\ItryController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
     Route::patch('/itinerary/{key}', 'Itinerary\ItryController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
     Route::post('/update-trip-time', 'Itinerary\TripController@update');
+    Route::post('/itinerary/{key}/trip/{trip}/apply', 'Itinerary\TripController@create');
     Route::get('/ttt', function () {
         return view('t');
     });
@@ -37,13 +38,17 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function
 //    Route::get('/blog/Search/{key}', 'Blog\BlogController@Search');
     Route::fallback(function () {
         return response()->view('errors.404', [], 404);
-
     });
 });
 
 
 Route::get('/captcha', function () {
     return captcha();
+});
+Route::post('/verify-captcha', function (Request $request) {
+
+
+//    return response()->json(['message' => '驗證成功！']);
 });
 //// routes/web.php
 //Route::group(['middleware' => ['cookie-consent']], function () {

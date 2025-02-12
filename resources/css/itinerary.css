@@ -1,33 +1,21 @@
-/* 改變選項和複選框的外觀 */
-.tom-select .checkbox-options input[type="checkbox"] {
-    @apply w-5 h-5 bg-gray-200 border-2 border-gray-400 rounded-md;
-    /* Tailwind 風格複選框 */
+
+.choices__item--selectable.is-selected  {
+    @apply !text-yes-major !bg-neutral-50
+}
+.choices__item--selectable.is-highlighted {
+    @apply !bg-[#f7dbab]
 }
 
-/* 改變選中狀態的複選框顏色 */
-.tom-select .checkbox-options input[type="checkbox"]:checked {
-    @apply bg-green-500 border-green-500;
-    /* 選中時改為綠色 */
+.choices__inner ,.choices__list--single ,.choices {
+@apply !py-0 !px-2 ;
+    border:none!important;
+    background-color: #FFFFFF!important;
 }
+.choices {
+    @apply block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6;
+    border-radius: 0.5rem!important;
 
-/* 當鼠標懸停在選項上時，背景顏色變更 */
-.tom-select .option[data-selectable]:hover {
-    @apply bg-gray-100;
-    /* 使用灰色背景顏色 */
 }
-
-/* 改變選中的項目顯示 */
-.tom-select .item {
-    @apply bg-green-500 text-white px-3 py-1 rounded-md;
-    /* 選中的項目使用綠色背景 */
-}
-
-/* 改變已選的複選框的顯示 */
-.tom-select .item .checkbox-options input[type="checkbox"] {
-    @apply hidden;
-    /* 隱藏複選框，顯示圖標或其他自定義樣式 */
-}
-
 
 .btm_trip .swiper-slide {
     @apply w-[25%] h-full relative;

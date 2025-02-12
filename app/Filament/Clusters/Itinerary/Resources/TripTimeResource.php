@@ -88,7 +88,7 @@ class TripTimeResource extends Resource
 //            ->modifyQueryUsing(fn(Builder $query) => $query->where('date_start', '>', Carbon::today()))
             ->defaultSort('date_start', 'asc')
             ->columns([
-                Tables\Columns\TextColumn::make('Trip.title')
+                Tables\Columns\TextColumn::make('Order.title')
                     ->label('模板')
                     ->getStateUsing(function ($record) {
                         return $record->Trip->title . '-' . $record->Trip->subtitle; // 合併 name 和 title

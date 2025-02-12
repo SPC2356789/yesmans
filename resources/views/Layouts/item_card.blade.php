@@ -59,10 +59,11 @@
         <p>找不到相關結果...........</p>
     </div>
 @endif
-<div class="px-1.5 w-full flex justify-center">
-    {{ $items->appends($params)->links('pagination::tailwind') }}
+
 </div>
-</div>
+    <div class="px-1.5 pt-4 w-full flex justify-center">
+        {{ $items->appends($params)->links('pagination::tailwind') }}
+    </div>
 @endif
 
 
