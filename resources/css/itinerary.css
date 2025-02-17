@@ -31,10 +31,13 @@
 .btm_trip .swiper-slide-thumb-active::before {
     @apply opacity-0
 }
-
+/*彈跳框樣式*/
 .trip_card_Swal_confirm {
     @apply  bg-neutral-50 hover:bg-yes-major hover:text-cyan-50 text-yes-major;
 
     border: 1px solid #64a19d;
+
+}
+.swal-height-limit{
 
 }

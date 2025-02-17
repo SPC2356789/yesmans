@@ -63,7 +63,7 @@ class TripController extends ItryController
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 建立訂單
      */
     public function create(Request $request)
     {
@@ -120,6 +120,7 @@ class TripController extends ItryController
             TripOrder::create([
                 'order_number' => $order_number,
                 'trip_uuid' => $request['uuid'],
+                'amount' => $request['amount'],
                 'applies' => json_encode($tripApplyId),  // 儲存報名 ID 的 JSON 格式
             ]);
 

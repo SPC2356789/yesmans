@@ -111,8 +111,8 @@
                 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-neutral-800
                 max-w-sm mx-auto max-h-12">
                             <i class="fa-regular fa-compass pl-2 pr-1 cursor-pointer" id="itinerary_compass"></i>
-                            <input type="text" id="itinerary_search"
-                                   class="block xsm:w-[90px] xxx:w-[70px] grow my-1 mx-1 xxx:text-xs xsm:text-sm text-gray-900 placeholder:text-gray-400
+                            <input type="text" id="tripTerm"
+                                   class="xsm:w-[90px] xxx:w-[70px] grow my-1 mx-1 xxx:text-xs xsm:text-sm text-gray-900 placeholder:text-gray-400
                       focus:outline-none "
                                    placeholder="探索行程">
                         </div>

@@ -4,8 +4,8 @@ import Swal from 'sweetalert2'
 
 
 $(document).ready(function () {
-    // Tool.checkbox('#trip_month');//月份功能關閉
-    updateActiveState('tag', ',',)
+
+    updateActiveState('tag', ',',)//更新標籤行為
 
     $('button.span_tag').click(function () {
         Tool.toggleUrlParameter($(this), 'tag', ',', '',);  // 'tag' 是你要更新的 URL 參數
@@ -22,20 +22,16 @@ $(document).ready(function () {
             links += `<a href="${timeHref}?trip_time=${value.uuid}" class="flex flex-col gap-0.5 " data-mould="${value.mould_id}" ><span>${value.date}</span><span>名額:${value.quota} 已報名:${value.applied_count} </span></a>`;
             // 你可以在這裡做一些處理，比如生成 HTML 或者其他操作
         });
-        let time = `<div class="flexflex-col w-full text-start gap-2.5 xxx:text-xs ss:text-base xs:text-sm md:text-lg">` + links + `</div>`;
+        let time = `<div class="flexflex-col w-full text-start gap-2.5 xxx:text-xs ss:text-base xs:text-sm md:text-lg max-h-[400px] overflow-y-auto">` + links + `</div>`;
         // console.log(timeContent)
         // 顯示 SweetAlert
         Swal.fire({
-            // title: "選擇未來一個月的月份，包含當月",
-            // icon: "info",
             html: time, // 在這裡將 data-tip 放進提示框的文本內容
             confirmButtonText: "探索其他行程", // 按鈕文字
             customClass: {
+
                 confirmButton: "trip_card_Swal_confirm" // 設定自訂 CSS 類別
             }
-            // customClass: {
-            //     confirmButton: "bg-transparent text-yes-major border-2 border-black hover:border-yes-major hover:bg-yes-major hover:text-white !important"
-            // }
         });
     });
 

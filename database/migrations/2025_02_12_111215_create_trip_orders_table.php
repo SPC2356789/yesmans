@@ -16,9 +16,10 @@ return new class extends Migration
             $table->string('order_number')->comment('訂單編號');
             $table->string('trip_uuid')->comment('對應的開團資料');
             $table->string('applies')->comment('誰報名');
-            $table->unsignedDecimal('amount', 10, 2)->default(0)->comment('訂單金額'); // 訂單總金額
+            $table->unsignedDecimal('amount', 10)->default(0)->comment('訂單金額(每人)，不是總金額'); // 訂單總金額
             $table->string('paid_amount')->nullable()->comment('已匯款金額'); // 新增已匯款金額 以陣列存放
             $table->string('account_last_five')->nullable()->comment('帳號末五碼'); // 新增帳號末五碼 以陣列存放
+            $table->boolean('Audit')->nullable()->comment('審計'); // 金額全入帳，就勾選。
             $table->tinyInteger('status')->default(0)->comment('訂單狀態');
             $table->timestamps();
             $table->softDeletes(); // Add the softDeletes column

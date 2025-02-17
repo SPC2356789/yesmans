@@ -46,10 +46,10 @@ class Trip extends BaseModel
     {
         return $this->belongsTo(Categories::class, 'category', 'id');
     }
-//    public function trip_times(): BelongsTo
-//    {
-//        return $this->belongsTo(TripTime::class, 'id', 'mould_id');
-//    }
+    public function media(): HasMany
+    {
+        return $this->hasMany(Media::class, 'id', 'carousel');
+    }
     public function trip_times(): HasMany
     {
         return $this->hasMany(TripTime::class, 'mould_id', 'id'); // TripTime 表的 mould_id 對應 Order 的 id

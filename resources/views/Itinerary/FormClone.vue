@@ -11,14 +11,17 @@ const countries = ref([]);
 
 const props = defineProps({
     data: {
-        type: String,
-        required: true
+        type: Object,
+        required: false, // 取消 required，避免崩潰
+        default: () => ({}) // 預設為空物件
     },
     CountryData: {
         type: Object,
-        required: true
+        required: false,
+        default: () => ({})
     }
 });
+
 
 
 
@@ -100,8 +103,9 @@ const submitForms = async () => {
     try {
         const urlWithoutParams = window.location.origin + window.location.pathname;
         axios.post(urlWithoutParams + '/apply', {
-            uuid: JSON.parse(props.data).uuid,
+            uuid: props.data.uuid,
             data: formList.value,
+            amount: props.data.amount,
             captcha: captchaInput.value, // 使用者輸入的驗證碼
             key: captchaKey.value, // 後端需要的 key
         })
@@ -327,7 +331,7 @@ const initChoices = (newId = 1) => {
                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6">
                     </div>
                 </div>
-                <div v-if="JSON.parse(props.data).food === 1" class="sm:col-span-1">
+                <div v-if="props.data.food === 1" class="sm:col-span-1">
                     <label :for="'diet-' + form.id"
                            class="block text-sm/6 font-medium text-gray-900">飲食</label>
                     <select v-model="form.diet" :id="'diet-' + form.id" :name="'diet-' + form.id"
@@ -351,7 +355,7 @@ const initChoices = (newId = 1) => {
     </button>
 
     <div class="mt-6 flex  justify-between items-end gap-2 w-full">
-        <div class="flex ss:flex-row flex-col  gap-2 items-start xxx:w-1/2 xs:w-1/4 ">
+        <div class="grid xxx:grid-cols-1 sm:grid-cols-2   gap-2 items-end">
             <!-- 驗證碼圖片 -->
             <img :src="captchaSrc" @click="refreshCaptcha" class="cursor-pointer w-full" alt="驗證碼">
             <!-- 輸入框 -->

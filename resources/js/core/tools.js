@@ -37,12 +37,14 @@ export const Tool = {
     ,
     toggleUrlParameter: function (obj, param, delimiter = '', replace, isMultiple = true, isReload = false) {
         // 切換元素的 active 類
-        obj.toggleClass('active');
+
+        obj.toggleClass('active');//這行只有標籤用到
 
         // 取得目前的 URL 和查詢參數
         let url = new URL(window.location.href);
         let params = url.searchParams;
         let value = obj.data('value');
+
 
 // 如果 `replace` 不為空，則執行 replace
         if (replace) {

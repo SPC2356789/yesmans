@@ -16,7 +16,17 @@ $(document).ready(function () {
     cus_select() //調用選擇器行為
     ABCopy()
     Loading()
-
+    $('#tripTerm').on('keypress', function (event) {
+        // if (event.key === 'Enter') {
+            event.preventDefault(); // 防止表單提交
+            let term = $(this).val().trim(); // 獲取輸入值
+            if (term) {
+                let url = new URL('/itinerary', window.location.origin);
+                url.searchParams.set('term', term); // 更新網址參數
+                window.location.href = url.toString(); // 重新導向
+            }
+        // }
+    });
     //關鍵字搜尋
     let debounceTimer;
     $('#Search').change('input', function () {
@@ -25,9 +35,7 @@ $(document).ready(function () {
         let tag = params.get("tag");
         let tagArray = tag ? tag.split("+") : [];
         clearTimeout(debounceTimer);
-
         $('[name="loadingIcon"]').toggleClass('hidden');
-
         Tool.search(tagArray)
     });
 });

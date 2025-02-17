@@ -5,6 +5,7 @@ import laravel from 'laravel-vite-plugin';
 import addVersion from 'vite-plugin-add-version';
 import version from './package.json'
 import vue from '@vitejs/plugin-vue';
+import vuetify from 'vite-plugin-vuetify';
 const buildVersion = `${version['version'].replace(/\./g, '_')}_${(new Date()).getTime()}`; //customer_version
 export default defineConfig({
     server: {
@@ -45,7 +46,9 @@ export default defineConfig({
             },
         }),
         addVersion(buildVersion),
+        vuetify({ autoImport: true }), // 確保這裡正確配置了
     ],
+
     build: {
         rollupOptions: {
             output: {

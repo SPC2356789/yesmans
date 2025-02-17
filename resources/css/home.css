@@ -19,7 +19,10 @@
     opacity: 1 !important;
     z-index: 20 !important;
 }
-
+.fade:not(.show) {
+    display: none!important;
+    opacity: 0;
+}
 .swiper-button-prev:after,
 .swiper-button-next:after {
     @apply !text-4xl   !px-[0.894rem]  hover:text-[#fbfbfc] text-[#ee9900] scale-50

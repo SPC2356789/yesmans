@@ -15,9 +15,12 @@ import axios from 'axios';
 import { createApp } from 'vue';
 import FormClone from '../views/Itinerary/FormClone.vue';
 
+
+const tripElement = document.getElementById('trip_from');
+const tripData = JSON.parse(tripElement.dataset.trip_times);
 // 創建 Vue 實例並註冊全局方法
 const app = createApp(FormClone, {
-    data: document.getElementById('trip_from').dataset.trip_times,
+    data: tripData,
     CountryData:getCountry()
 });
 app.mount('#trip_from');
@@ -30,7 +33,8 @@ $(document).ready(function () {
     swiper()
     getCountry()//初始化國籍選擇
     applyAgree()//同意書
-    $(document).on('click', 'li[name="trip_times"]', function () {
+
+    $(document).on('click', 'li[name="trip_times"]', function () {    //變換出團時間
         let $this = $(this);  // 儲存 $(this) 在變數中
         let tripTimeValue = $this.data('value');  // Get the value of the clicked item
 
@@ -46,19 +50,6 @@ $(document).ready(function () {
             });
 
     });
-
-    $(document).on('click', 'div[name="add_number"]', function () {
-        cloneItem()//克隆表單
-
-    });
-    $(document).on('click', '[name="remove_number"]', function () {
-        $(this).closest('[name="apply_trip"]').remove();
-    });
-
-
-    // Tool.TomSelect('#setCountry');  // 样式化并传递国家列表数据
-
-
 });
 
 
@@ -132,14 +123,18 @@ function applyAgree() {
     //     $agreementButton.focus();
     // });
     //我要報名滾動到
-    $(document).on('click', '[name="signupBtn"]', function () {
-        $agreementButton[0].scrollIntoView({behavior: 'smooth', block: 'start'});
+// 讓 `[name="signupBtn"]` 點擊時，滑動到 `$agreementButton`
+    $('[name="signupBtn"]').on('click', function () {
+        $agreementButton[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-    $(document).on('click', '[name="agree_btn"]', function () {
-        $('#agreeCheckbox').change();  // 勾選 checkbox 並觸發 change 事件
+
+// 讓 `[name="agree_btn"]` 點擊時，勾選 checkbox 並觸發變化
+    $agreementButton.on('click', function () {
+        $('#agreeCheckbox').change(); // 觸發 change 事件
         $checkbox.toggleClass('active');
         $checkboxLabel.toggleClass('active');
     });
+
 }
 
 function getCountry() {
