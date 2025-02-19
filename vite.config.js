@@ -8,6 +8,7 @@ import vue from '@vitejs/plugin-vue';
 import vuetify from 'vite-plugin-vuetify';
 const buildVersion = `${version['version'].replace(/\./g, '_')}_${(new Date()).getTime()}`; //customer_version
 export default defineConfig({
+
     server: {
         host: '127.0.0.1',
         base: '/',
@@ -46,7 +47,13 @@ export default defineConfig({
             },
         }),
         addVersion(buildVersion),
-        vuetify({ autoImport: true }), // 確保這裡正確配置了
+        vuetify({
+            autoImport: true,
+        // styles:{
+        //         configFile:'resources/css/setting.scss'
+        // }
+
+        }), // 確保這裡正確配置了
     ],
 
     build: {

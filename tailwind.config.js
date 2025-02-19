@@ -3,15 +3,13 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 export default {
     content: [
-        './resources/**/*.blade.php', // 对于 Laravel Blade 文件
-        './resources/views/*.blade.php', // 对于 Laravel Blade 文件
-        './resources/views/**/*.blade.php', // 对于 Laravel Blade 文件
-        './resources/views/**/*.vue', // 对于 Laravel Blade 文件
-        './vendor/filament/**/*.blade.php',
-        './resources/js/*.js', // js會輸出內容，防止沒吃到
-        "./node_modules/flowbite/**/*.js"
-
+        './resources/**/*.blade.php',   // 掃描所有 Blade 檔案
+        './resources/**/*.{vue,js,ts,jsx,tsx}',  // 掃描所有 Vue, JS, TS 等檔案
+        './resources/views/**/*.vue',   // 確保 views 內的 Vue 檔案被掃描
+        './resources/js/**/*.vue',  // 確保 js 內的 Vue 檔案被掃描
+        './vendor/filament/**/*.blade.php',  // Filament 插件的 Blade 檔案
     ],
+
     theme: {
         extend: {
             screens: {

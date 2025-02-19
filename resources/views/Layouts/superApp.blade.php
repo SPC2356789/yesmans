@@ -129,7 +129,7 @@
 
 </header>
 @yield('head_content')
-<section class="flex justify-start md:justify-center w-full h-auto">
+<section class="flex justify-center w-full h-auto">
     <div
         class="flex flex-col w-full xl:w-[1040px] lg:w-[900px] xxs:px-6 md:px-16 sm:px-20 lg:px-0 xs:px-6 ss:px-12 xxx:px-4 py-5 lg:gap-5 md:gap-3 xxx:gap-2">
         @yield('content')

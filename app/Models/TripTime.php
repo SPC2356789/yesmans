@@ -68,15 +68,25 @@ class TripTime extends BaseModel
 
         $trips->each(function ($trip) {
             // 查詢 `Media` 表，取得對應圖片的路徑
-            $mediaPaths = Media::whereIn('id', $trip->Trip->carousel)
+            $mediaCarousel = Media::whereIn('id', $trip->Trip->carousel)
                 ->pluck('path', 'id')
                 ->toArray();
+            $newMediaCarousel = array_map(fn($id) => $mediaCarousel[$id] ? Storage::url($mediaCarousel[$id]) : null, $trip->Trip->carousel);
 
-            // 保持 `$carouselIds` 順序並加上 Storage::url()
-            $orderedMediaPaths = array_map(fn($id) => $mediaPaths[$id] ? Storage::url($mediaPaths[$id]) : null, $trip->Trip->carousel);
+            $mediaIcon = Media::where('id', $trip->Trip->icon)
+                ->value('path'); // 只取出 path
+            $newMediaIcon =Storage::url($mediaIcon);
+
+            $tags = Categories::whereIn('id', $trip->Trip->tags)
+                ->pluck('name', 'id')
+                ->toArray();
+            $newTags = array_map(fn($id) => $tags[$id] ? $tags[$id]: null, $trip->Trip->tags);
+
 
             $trip->Trip->forceFill([
-                'carouselSpell' => $orderedMediaPaths
+                'carouselSpell' => $newMediaCarousel,
+                'iconSpell' => $newMediaIcon,
+                'tagSpell' => $newTags
             ]);
         });
         return $trips;

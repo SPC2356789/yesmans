@@ -1,3 +1,25 @@
+/**/
+.v-tab .v-ripple__container {
+    display: none !important; /* 移除點擊漣漪效果 */
+
+}
+.v-tab.v-tab.v-btn {
+    height:auto!important;
+    border-radius: 0;
+    min-width: 0px!important;
+}
+.v-btn--size-default {
+     padding: 0 0px!important;
+}
+.v-tab.v-tab--selected::before {
+    display: none !important;
+}
+.v-btn:focus::before,
+.v-btn:active::before {
+    display: none !important;
+}
+
+/**/
 
 .swiper-pagination-bullet-active {
     background: #ee9900 !important;
@@ -7,12 +29,14 @@
     background: #fbfbfc !important;
 }
 
-
-.tabutton:hover {
-    @apply pb-1 ss:pb-2 bg-[#F7DBAB];
+.tabButton{
+    @apply !rounded-t-lg;
 }
-.tabutton.active,.tabutton.active:hover {
-    @apply pb-1 ss:pb-2 bg-[#5B9894FF] !text-white;
+.tabButton:hover {
+    @apply !pb-2 ss:pb-2 !bg-[#F7DBAB];
+}
+.tabButton.v-tab--selected,.tabButton.v-tab--selected:hover {
+    @apply !pb-3 ss:pb-2 !bg-[#5B9894FF] !text-white ;;
 }
 
 .tab-lock img.lock-active {
