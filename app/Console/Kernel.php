@@ -10,9 +10,15 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
+    protected $commands = [
+        \App\Console\Commands\ClearLogs::class,
+    ];
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        $schedule->command('logs:clear')->daily(); // 每天執行
+
     }
 
     /**
