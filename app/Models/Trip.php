@@ -61,7 +61,8 @@ class Trip extends BaseModel
                         $query->orderByRaw('(COALESCE(quota, 0) - COALESCE(applied_count, 0)) ASC');
                     })
                     ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
-                    ->selectRaw(TripTime::getDateLogic())//                    ->where('is_published', 1)
+                    ->selectRaw(TripTime::getDateLogic())
+                    ->where('is_published', 1)
                 ;
             }])
             ->with(['categories' => function ($query) {
@@ -77,7 +78,8 @@ class Trip extends BaseModel
                     ->when($cate == 2, function ($query) {
 //                        $query->orderByRaw('(COALESCE(quota, 0) - COALESCE(applied_count, 0)) ASC');
 //                        $query->where('is_published', 0);;
-                    })//                    ->Where('is_published', 1)//                    ->selectRaw(TripTime::getDateLogic())
+                    })
+                    ->where('is_published', 1)
                 ;
             })
             ->when($term !== '', function ($query) use ($term, $tags) {
@@ -117,6 +119,7 @@ class Trip extends BaseModel
                 return $query->whereHas('trip_times', function ($query) use ($tripTime_uuid) {
                     $query
                         ->where('uuid', $tripTime_uuid)
+                        ->where('is_published', 1)
                         ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
                     ;
 
