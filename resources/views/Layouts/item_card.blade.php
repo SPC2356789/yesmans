@@ -5,12 +5,13 @@
     </div>
 </div>
 @if(isset($items))
-{{--    {{print_r($tag) }}--}}
+
     <div class="grid grid-cols-2 md965:grid-cols-3 gap-x-2.5 xsm:gap-x-3 md:gap-x-4 gap-y-5 xsm:gap-y-6 md:gap-y-10">
         @if($items && $items->isNotEmpty())
             @foreach($items as $item)
+
                 <{{$div??'a'}} href="/{{$Slug}}/{{$item->categories->slug}}/{{$secondSlug}}/{{$item->slug}}"
-                id="{{$Slug}}_{{$item->id}}"
+                id="{{$Slug}}_{{$item->slug}}"
                 class=" group trip_btn_apply"
                 data-time="{{json_encode($item['trip_times'])}}">
 

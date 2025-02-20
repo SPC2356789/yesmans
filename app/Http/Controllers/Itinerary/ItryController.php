@@ -42,7 +42,7 @@ class ItryController extends Controller
         $this->Trip = new Trip();
         $this->Categories = new Categories();
         $this->sidebarTitle = "行程分類";
-        $this->Page = 4;//一頁幾個
+        $this->Page = 12;//一頁幾個
         $this->apply = true;//開啟報名
         $this->urlSlug = 'recent';//初始化網址
         $this->MediaMlt = true;
@@ -93,7 +93,7 @@ class ItryController extends Controller
         return view('Layouts.item_card', compact($AllNames))->render();
     }
 
-    private function getCommonData($key, $term, $tag): array
+    private function getCommonData($key=null, $term=null, $tag=null): array
     {
         $tags = $this->Tags()->keyBy('id')->toArray();
         $tag_slug = $this->Tags()->keyBy('slug')->toArray();

@@ -13,7 +13,9 @@ class TripTime extends BaseModel
 {
     use SoftDeletes;
     use HasFactory;
-
+    protected $casts = [
+        'date' => 'array',
+    ];
     protected static function boot()
     {
         parent::boot();
@@ -53,15 +55,14 @@ class TripTime extends BaseModel
                 $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
             })
             ->when($cate == 'upcoming', function ($query) {
-                $query->orderByRaw('(quota - applied_count) ASC');
-//                $query->whereRaw('(quota - applied_count) <= 3');
+                $query->orderByRaw('(CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED)) ASC');
+
             })
             ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
             ->orderBy('mould_id', 'asc')
-//                    ->whereDate('date_start', '>=', now()->toDateString()) // 只選擇今天或以後的
+
             ->where('is_published', 1)
-//            ->whereDate('date_start', '>=', now()->toDateString())// 選擇今天或以後的日期
-//            ->orderBy('date_start', 'asc')
+
 
             ->selectRaw(self::getDateLogic())
             ->get(); // 🔥 這裡先執行查詢，獲取結果
@@ -75,12 +76,12 @@ class TripTime extends BaseModel
 
             $mediaIcon = Media::where('id', $trip->Trip->icon)
                 ->value('path'); // 只取出 path
-            $newMediaIcon =Storage::url($mediaIcon);
+            $newMediaIcon = Storage::url($mediaIcon);
 
             $tags = Categories::whereIn('id', $trip->Trip->tags)
                 ->pluck('name', 'id')
                 ->toArray();
-            $newTags = array_map(fn($id) => $tags[$id] ? $tags[$id]: null, $trip->Trip->tags);
+            $newTags = array_map(fn($id) => $tags[$id] ? $tags[$id] : null, $trip->Trip->tags);
 
 
             $trip->Trip->forceFill([
@@ -94,35 +95,34 @@ class TripTime extends BaseModel
 
     public static function getDateLogic(): string
     {
-        return 'CONCAT(DATE_FORMAT(date_start, "%Y-%m-%d")," (",
-                                   CASE DAYOFWEEK(date_start)
-                                      WHEN 1 THEN "週日"
-                                     WHEN 2 THEN "週一"
-                                     WHEN 3 THEN "週二"
-                                     WHEN 4 THEN "週三"
-                                      WHEN 5 THEN "週四"
-                                      WHEN 6 THEN "週五"
-                                       WHEN 7 THEN "週六"
-                                   END,
-                                   ")",
-                                   CASE
-                                      WHEN DATE(date_start) = DATE(date_end) THEN " 單攻"
-                                       ELSE CONCAT(" to ",
-                                           DATE_FORMAT(date_end, "%Y-%m-%d"),
-                                           " (",
-                                         CASE DAYOFWEEK(date_end)
-                                               WHEN 1 THEN "週日"
-                                              WHEN 2 THEN "週一"
-                                             WHEN 3 THEN "週二"
-                                              WHEN 4 THEN "週三"
-                                              WHEN 5 THEN "週四"
-                                               WHEN 6 THEN "週五"
-                                               WHEN 7 THEN "週六"
-                                           END,
-                                            ")"
-                                        )
-                                    END
-                                ) as date';
+        return 'CONCAT(
+    DATE_FORMAT(IFNULL(date_start, NOW()), "%Y-%m-%d"), " (",
+    CASE DAYOFWEEK(IFNULL(date_start, NOW()))
+        WHEN 1 THEN "週日"
+        WHEN 2 THEN "週一"
+        WHEN 3 THEN "週二"
+        WHEN 4 THEN "週三"
+        WHEN 5 THEN "週四"
+        WHEN 6 THEN "週五"
+        WHEN 7 THEN "週六"
+    END, ")",
+    CASE
+        WHEN DATE(IFNULL(date_start, NOW())) = DATE(IFNULL(date_end, NOW())) THEN " 單攻"
+        ELSE CONCAT(" to ",
+            DATE_FORMAT(IFNULL(date_end, NOW()), "%Y-%m-%d"), " (",
+            CASE DAYOFWEEK(IFNULL(date_end, NOW()))
+                WHEN 1 THEN "週日"
+                WHEN 2 THEN "週一"
+                WHEN 3 THEN "週二"
+                WHEN 4 THEN "週三"
+                WHEN 5 THEN "週四"
+                WHEN 6 THEN "週五"
+                WHEN 7 THEN "週六"
+            END, ")"
+        )
+    END
+) AS dateAll
+';
     }
 
     protected static function booted()

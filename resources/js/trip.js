@@ -168,6 +168,6 @@ function getCountry() {
         return countryList;
 
     } catch (error) {
-        console.error('Error processing country data:', error);
+        // console.error('Error processing country data:', error);
     }
 }

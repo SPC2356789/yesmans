@@ -34,7 +34,7 @@
 
     <div class="my-5 text-center">
         <a href="/blog"
-           class="inline-flex items-center px-4 py-2 text-white bg-primary rounded-lg hover:bg-blue-600 transition duration-300 transform hover:translate-x-1">
+           class="inline-flex items-center px-4 py-2 text-white bg-yes-major rounded-lg  transition duration-300 transform hover:translate-x-1">
             看更多文章
             <svg class="ml-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                  stroke="currentColor">

@@ -38,6 +38,7 @@ class TripTimeResource extends Resource
         return $form
             ->schema([
                 Select::make('mould_id')
+                    ->label('選擇行程')
                     ->options(self::$tripMould::getData_form())// 從分類模型中獲取選項
                     ->searchable() // 支持搜索
                     ->required()
@@ -45,15 +46,17 @@ class TripTimeResource extends Resource
                     ->afterStateUpdated(function ($state, callable $set) {
 //                        // 當模板選擇後更新名額和金額
                         $template = self::$tripMould::find($state); // 假設你可以根據選擇的模板ID獲取模板資料
-//                        dd($template->quota);
+
                         if ($template) {
                             // 更新名額和金額欄位
                             $set('quota', $template->quota); // 假設模板有名額欄位
                             $set('amount', $template->amount); // 假設模板有金額欄位
                             $set('agreement_content', $template->agreement_content); // 假設模板有金額欄位
+                            $set('hintMonth', $template->hintMonth); // 假設模板有金額欄位
                         }
                     }),
                 Forms\Components\TextInput::make('amount')
+                    ->label('費用')
                     ->required()
                     ->numeric()
                     ->prefix('NT$'),
@@ -65,18 +68,33 @@ class TripTimeResource extends Resource
                     ->hidden()
                 ,
                 Flatpickr::make('date')
+                    ->label('開團日期')
                     ->range()// Use as a Date Range Picker
                     ->required()
                 ,
                 Forms\Components\TextInput::make('quota')
+                    ->label('名額')
                     ->required()
                     ->numeric(),
+                Forms\Components\Select::make('hintMonth')
+                    ->label('提示月份')
+                    ->options(array_combine(range(0, 12), range(0, 12))) // 自動產生 0~12 的選項
+                ,
                 Forms\Components\TextInput::make('applied_count')
-                    ->numeric(),
-                Forms\Components\Textarea::make('agreement_content')
-                    ->columnSpanFull(),
+                    ->label('已報名人數')
+                    ->numeric()
+                    ->default(0) // 預設為 0
+                ,
                 Forms\Components\Toggle::make('food')
+                    ->label('有無搭伙')
                     ->required(),
+
+                Forms\Components\Textarea::make('agreement_content')
+                    ->label('同意書內容')
+                    ->rows(5) // 設定高度為 5 行
+                    ->columnSpanFull()
+                ,
+
 
             ]);
 
@@ -88,7 +106,37 @@ class TripTimeResource extends Resource
 //            ->modifyQueryUsing(fn(Builder $query) => $query->where('date_start', '>', Carbon::today()))
             ->defaultSort('date_start', 'asc')
             ->columns([
-                Tables\Columns\TextColumn::make('Order.title')
+                Tables\Columns\IconColumn::make('hintMonth')
+                    ->label('-')
+                    ->getStateUsing(function ($record) {
+                        // 解析數據
+                        $startDate = Carbon::parse($record->date_start); // 開始日期
+                        $hintMonth = (int)$record->hintMonth; // 提示月份
+                        $quota = (int)$record->quota; // 總名額
+                        $appliedCount = (int)$record->applied_count; // 已報名人數
+                        $is_published = (boolean)$record->is_published; // 已報名人數
+
+                        // 計算 `hintMonth` 月內的截止日期
+                        $cutoffDate = $startDate->copy()->subMonths($hintMonth);
+                        $showIcon = $hintMonth && ($quota - $appliedCount >= 1) && now()->between($cutoffDate, $startDate) && $is_published;
+
+                        // **重要：這裡不應該直接給 `$record->show_icon`，因為資料庫不會存這個欄位**
+                        return $showIcon ? true : null; // 若條件不符，不返回 icon
+//                        return $cutoffDate;
+                    })
+                    ->boolean()
+                    ->trueColor('danger')
+                    ->trueIcon('heroicon-o-exclamation-triangle')
+//                    ->falseIcon('heroicon-o-x-mark')
+                    ->sortable(query: function ($query, $direction) {
+                        return $query->orderByRaw("
+ (hintMonth > 0
+AND CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED) >= 1
+AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
+ $direction
+    ")->orderBy('date_start', $direction === 'asc' ? 'desc' : 'asc');
+                    }),
+                Tables\Columns\TextColumn::make('title')
                     ->label('模板')
                     ->getStateUsing(function ($record) {
                         return $record->Trip->title . '-' . $record->Trip->subtitle; // 合併 name 和 title
@@ -114,11 +162,22 @@ class TripTimeResource extends Resource
                     ->label('名額')
                     ->numeric()
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('applied_count')
-                    ->label('已報名人數')
+                    ->label('已報名')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                ,
+                Tables\Columns\TextColumn::make('available_spots')
+                    ->label('剩餘')
+                    ->getStateUsing(fn($record) => (int)$record->quota - (int)$record->applied_count) // 允許負數
+                    ->sortable(query: function ($query, $direction) {
+                        return $query->orderByRaw("CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED) $direction");
+                    }),
+
                 Tables\Columns\IconColumn::make('food')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean(),
                 Tables\Columns\ToggleColumn::make('is_published')
                     ->label('發布'),
@@ -127,16 +186,7 @@ class TripTimeResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                 ,
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                ,
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                ,
+
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -167,7 +217,7 @@ class TripTimeResource extends Resource
                                         if (!is_array($range)) { // 如果 $range 不是陣列
                                             $range = explode(' to ', $range); // 將範圍字符串分割成陣列
                                         }
-                                    }) ->when(
+                                    })->when(
                                         isset($range[0]) && $range[0], // 檢查開始日期是否存在且有效
                                         fn(Builder $query) => $query->whereDate('date_start', '>=', $range[0]),
                                     )
@@ -181,12 +231,12 @@ class TripTimeResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()//date
                 ->mutateRecordDataUsing(function (array $data): array {
-                    $data['date'] = array($data['date_start'] ?? null, $data['date_end'] ?? $data['date_start']);
+
+                    $data['date'] = $data['date_start'] . ' to ' . $data['date_end'];
 
                     return $data;
                 })
-                    ->mutateFormDataUsing(function (array $data): array {
-//                        dd($data);
+                    ->mutateFormDataUsing(function ($data) {
                         $data['date_start'] = $data['date'][0];
                         $data['date_end'] = $data['date'][1];
                         unset($data['date']);

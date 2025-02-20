@@ -63,7 +63,7 @@ class BlogController extends Controller
     {
         $key = $request->input('key') ?? $k;
         $term = $request->input('term') ?? null;
-        session(['blog_term' => $term]); // 儲存查詢條件
+//        session(['blog_term' => $term]); // 儲存查詢條件 20250220取消session
         $urlSlug = $key ?? $this->urlSlug;
 
         // 取得共用資料
@@ -104,7 +104,7 @@ class BlogController extends Controller
      */
     public function Category($cat = null): array
     {
-        return $this->Categories->getData(1, 1, '*', 'slug', $cat)->pluck('name', 'slug')->toArray();
+        return $this->Categories->getData(1, 1, '*', 'slug', $cat);
     }
 
     /**

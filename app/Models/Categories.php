@@ -31,7 +31,7 @@ class Categories extends BaseModel
                 abort(404, 'Not Found');
             }
         }
-        return $query->get();
+//        return $query->get();
         return match (true) {
             $area && $type == 2 && $mlt == "*", $area == 2 && $type == 1 && $mlt == "*" => $query->get(),
             default => $query->get()->pluck('name', $key)->toArray(),

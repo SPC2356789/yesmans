@@ -19,6 +19,7 @@ use Mews\Captcha\Captcha;
 //});
 Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function () {
     Route::get('/', 'IndexController@index');
+    Route::get('/getTrip', 'IndexController@getTrip');
     Route::get('/about', 'About\AboutController@index');
     Route::get('/itinerary', 'Itinerary\ItryController@index');
     Route::get('/itinerary/{key}', 'Itinerary\ItryController@index')->where(['key' => '[a-zA-Z0-9_-]+']);;

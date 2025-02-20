@@ -29,8 +29,8 @@
             <div thumbsSlider="" class="swiper btm_trip w-full ">
                 <div class="swiper-wrapper w-full">
                     @foreach($items->carousel  as $carouselItems)
-                        <div class="swiper-slide">
-                            <img src="{{Storage::url($Media[$carouselItems])}}" loading="lazy"/>
+                        <div class="swiper-slide cursor-pointer ">
+                            <img class="w-full h-full" src="{{Storage::url($Media[$carouselItems])}}" loading="lazy"/>
                         </div>
                     @endforeach
                 </div>
@@ -62,7 +62,7 @@
                     <div class="flex flex-row gap-2 items-center w-1/3">
                         <h1 class="xxx:text-lg md:text-xl">已報名</h1>
                         <div class="w-auto">
-                            {{ $trip_times['quota']}}
+                            {{ $trip_times['applied_count']}}
                         </div>
                     </div>
                 </div>

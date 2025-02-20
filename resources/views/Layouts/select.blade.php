@@ -6,7 +6,7 @@
             id="menu-button" aria-expanded="true" aria-haspopup="true">
         @if(isset($select,$default))
             @if(is_array($select[$default]))
-                <span >{{$select[$default]['date']}}</span>
+                <span >{{$select[$default]['dateAll']}}</span>
             @else
                 <span >{{$select[$default]}}</span>
             @endif

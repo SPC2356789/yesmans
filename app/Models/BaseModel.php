@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class BaseModel extends Model
 {
     protected $guarded = [];
+
     public static  function getData()
     {
         return self::selectRaw('*')

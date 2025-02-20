@@ -96,7 +96,7 @@ const removeForm = (index) => {
         delete countries.value[id]; // 從物件中移除該選項
     }
     formList.value = formList.value.filter(item => item.id !== index);
-    console.log("已移除 ID:", index);
+    // console.log("已移除 ID:", index);
 };
 // 提交表單
 const submitForms = async () => {
@@ -113,7 +113,7 @@ const submitForms = async () => {
                 window.scrollTo(0, 0); // 滑動到頁面頂部
                 Swal.fire({
                     title: "報名成功",
-                    text: response.data.message,
+                    html: response.data.message,
                     icon: "success",
                     confirmButtonText: "確定"
                 }).then(() => {

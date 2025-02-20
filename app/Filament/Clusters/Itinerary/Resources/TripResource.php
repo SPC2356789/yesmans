@@ -58,20 +58,32 @@ class TripResource extends Resource
                     ->columnSpanFull()
                     ->allowHtml(),
                 Select::make('icon')
-                    ->label('選擇標籤')
+                    ->label('選擇圖標')
                     ->options(Media::getMedia('icon', 10))
                     ->searchable()
                     ->allowHtml(),
                 Forms\Components\select::make('tags')
-                    ->options(self::$category::getData(2, 2,"name,id"))// 從分類模型中獲取選項
+                    ->label('選擇標籤')
+                    ->options(self::$category::getData(2, 2,'name,id'))// 從分類模型中獲取選項
                     ->multiple()
                     ->searchable() // 支持搜索
                     ->required(),
-                Forms\Components\TextInput::make('quota')
-                    ->numeric(),
-                Forms\Components\TextInput::make('amount')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Grid::make(3) // 3 欄佈局，讓 3 個輸入框並排
+                ->schema([
+                    Forms\Components\TextInput::make('quota')
+                        ->numeric()
+                        ->label('名額'),
+
+                    Forms\Components\TextInput::make('amount')
+                        ->required()
+                        ->numeric()
+                        ->label('金額'),
+
+                    Forms\Components\Select::make('hintMonth')
+                        ->label('提示月份')
+                        ->options(array_combine(range(0, 12), range(0, 12))) // 自動產生 0~12 的選項
+                        ->default(1)
+                ]),
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
                 Section::make([
@@ -98,8 +110,7 @@ class TripResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_published')
                     ->required(),
-//                Forms\Components\TextInput::make('orderby')
-//                    ->numeric(),
+
                 Forms\Components\TextInput::make('seo_title')
                     ->maxLength(255),
                 Forms\Components\Textarea::make('seo_description')

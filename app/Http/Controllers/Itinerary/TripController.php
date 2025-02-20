@@ -33,20 +33,11 @@ class TripController extends ItryController
 
         $items = $this->Trip->getTrip($trip, $tripTime_uuid);
         session(['trip_time' => $tripTime_uuid ?? '']);
-        $selectedTripTime = $items->trip_times->pluck('date', 'uuid');
+        $selectedTripTime = $items->trip_times->pluck('dateAll', 'uuid');
         $uuid_default = $tripTime_uuid ?? $selectedTripTime->keys()->first(); //如果找不到uuid就預設第一個
         $trip_times = $items->trip_times->keyBy('uuid')->get($uuid_default)->toArray();
-//        dd($trip_times);
-//        dd($selectedTripTime);
-//        dd($selectedTripTime);
 
-        // 檢查是否存在，但不影響原始查詢
-//        if ($trip_times !== null) {
-//            $checkQuery = clone $trip_times; // 複製查詢
-//            if (!$checkQuery->exists()) {
-//                abort(404, 'Not Found');
-//            }
-//        }
+
         $AllNames = array_keys(get_defined_vars());
         if (isset($_GET['t'])) {
             if ($_GET['t'] == 'a') {
@@ -126,7 +117,7 @@ class TripController extends ItryController
 
             // 返回成功訊息
             return response()->json([
-                'message' => '序號:' . $order_number . ' 報名成功<br>人數'.$count.'位',
+                'message' => '序號:' . $order_number . ' 報名成功<br> <br> 人數'.$count.'位',
             ]);
 
         } catch (\Exception $e) {
