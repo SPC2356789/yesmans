@@ -70,7 +70,7 @@
                             <img
                                 v-if="visibleImages[index]"
                                 :ref="(el) => (imageRefs[index] = el)"
-                                class="itinerary_img md965:hidden"
+                                class="itinerary_img md965:hidden w-full"
                                 :src="item.trip.carouselSpell[0]"
                                 :class="{ hidden: !visibleImages[index] }"
                                 loading="lazy"
@@ -136,10 +136,3 @@ const fetchTripData = async () => {
 
 onMounted(fetchTripData);
 </script>
-
-<style scoped>
-.itinerary-container {
-    @apply xxx:w-full xl:min-w-[550px] xl:max-w-[550px] lg992:min-w-[420px] lg992:max-w-[420px] md965:w-[370px];
-}
-
-</style>

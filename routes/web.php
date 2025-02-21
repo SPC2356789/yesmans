@@ -20,7 +20,9 @@ use Mews\Captcha\Captcha;
 Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function () {
     Route::get('/', 'IndexController@index');
     Route::get('/getTrip', 'IndexController@getTrip');
+
     Route::get('/about', 'About\AboutController@index');
+
     Route::get('/itinerary', 'Itinerary\ItryController@index');
     Route::get('/itinerary/{key}', 'Itinerary\ItryController@index')->where(['key' => '[a-zA-Z0-9_-]+']);;
     Route::get('/itinerary/{key}/trip/{trip}', 'Itinerary\TripController@index')->where(['key' => '[a-zA-Z0-9_-]+', 'trip' => '[a-zA-Z0-9_-]+']);;
@@ -36,7 +38,12 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function
     Route::get('/blog/{key}/item/{item}', 'Blog\BlogItemController@index')->where(['key' => '[a-zA-Z0-9_-]+', 'trip' => '[a-zA-Z0-9_-]+']);
     Route::post('/blog/active', 'Blog\BlogController@store');
     Route::patch('/blog/{key}', 'Blog\BlogController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
-//    Route::get('/blog/Search/{key}', 'Blog\BlogController@Search');
+
+    Route::get('/privacy', function () {
+        return view('privacy');
+    })->name('privacy');
+
+    //    Route::get('/blog/Search/{key}', 'Blog\BlogController@Search');
     Route::fallback(function () {
         return response()->view('errors.404', [], 404);
     });

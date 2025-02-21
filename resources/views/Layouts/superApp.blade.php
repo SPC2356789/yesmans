@@ -38,7 +38,7 @@
 </div>
 
 <header class="">
-    <nav class="navbar navbar-expand-lg navbar-light navbar-shrink fixed-top h-auto flex flex-col" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-shrink h-auto flex flex-col" id="mainNav">
         <div
             class="flex flex-col items-center gap-4 xl:w-[1040px] lg:w-[900px] w-[500px]  xxx:w-full md:px-16 sm:px-20 lg:px-0 ss:px-12 xxx:px-4 xxs:px-6">
             {{--            <a class="navbar-brand" href="\">{{$generals['brand_name']??''}}</a>--}}
@@ -70,7 +70,7 @@
                 <div class="flex flex-row xsm:gap-2 xxx:gap-1 items-center">
                     <div class="max-h-8 min-h-6 flex items-center order-3 lg:hidden">
                         <button
-                            class="btn-outline-primary navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-yes-major hover:text-cyan-50 text-yes-major"
+                            class="btn-outline-primary navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-yes-major hover:text-cyan-50 !text-yes-major"
                             type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
@@ -124,38 +124,54 @@
         </div>
 
     </nav>
-    <nav class="" id="B">
-    </nav>
+{{--    <nav class="" id="B">--}}
+{{--    </nav>--}}
 
 </header>
-@yield('head_content')
-<section class="flex justify-center w-full h-auto">
-    <div
-        class="flex flex-col w-full xl:w-[1040px] lg:w-[900px] xxs:px-6 md:px-16 sm:px-20 lg:px-0 xs:px-6 ss:px-12 xxx:px-4 py-5 lg:gap-5 md:gap-3 xxx:gap-2">
-        @yield('content')
-    </div>
-</section>
+<div class="h-screen overflow-auto" id="scrollable-content">
 
-<section class="bg-white">
-    <div class="pt-16 lg:px-5">
-        <div class="flex gap-3 justify-center">
-            @if($foots)
-                @foreach($foots['media'] as $foot)
-                    @if($foot['data']['status'])
-                        <a href="{{ $foot['data']['url'] ?? '#' }}" class="w-12 h-12">
-                            <img src="{{ Storage::url($foot['data']['image']) }}" class="w-full h-full object-cover"
-                                 alt="Social Media Icon">
-                        </a>
-                    @endif
-                @endforeach
-            @endif
+    @yield('head_content')
+    <section class="flex justify-center w-full h-auto">
+        <div
+            class="flex flex-col w-full xl:w-[1040px] lg:w-[900px] xxs:px-6 md:px-16 sm:px-20 lg:px-0 xs:px-6 ss:px-12 xxx:px-4 py-5 lg:gap-5 md:gap-3 xxx:gap-2">
+            @yield('content')
         </div>
-    </div>
-    <footer class="bg-white text-center py-6 lg:px-5">
-        <div class="text-black">{{ $foots['copyright'] ?? '' }}</div>
-    </footer>
-</section>
+    </section>
 
+    <section class="bg-white">
+        <div class="pt-16 lg:px-5">
+            <div class="flex items-center justify-center gap-4">
+                @if ($foots && isset($foots['media']))
+                    @foreach ($foots['media'] as $foot)
+                        @if ($foot['data']['status'])
+                            <a href="{{ $foot['data']['url'] ?? '#' }}" class="w-12 h-12 transition-transform hover:scale-110">
+                                <img src="{{ Storage::url($foot['data']['image']) }}" class="w-full h-full object-cover" alt="Social Media Icon">
+                            </a>
+                        @endif
+                    @endforeach
+                @endif
+            </div>
+        </div>
+        <footer class="bg-white py-6 lg:px-5">
+            <div class="flex flex-col gap-4 items-center sm:grid sm:grid-cols-12">
+                <!-- 左側假元素（占 4 格，隱藏在 sm 以上） -->
+                <div class="col-span-4 hidden sm:block"></div>
+                <!-- 版權文字（占 4 格，居中；在 sm 以上居中） -->
+                <div class="col-span-4 text-center sm:w-full sm:text-center">
+                    <div class="text-gray-700 text-sm">
+                        {{ $foots['copyright'] ?? '' }}
+                    </div>
+                </div>
+                <!-- 隱私權政策按鈕（占 4 格，靠右；在 sm 以上居中） -->
+                <div class="col-span-4 text-right sm:text-center sm:w-full">
+                    <a href="{{ route('privacy') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-yes-minor bg-yes-minor bg-opacity-10 rounded-full hover:bg-opacity-20 transition-colors duration-200">
+                        隱私權政策
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </section>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 @yield('blink')

@@ -14,7 +14,7 @@ $(document).ready(function () {
         getOrder();
     });
     cus_select() //調用選擇器行為
-    ABCopy()
+    // ABCopy()
     Loading()
     $('#tripTerm').on('keypress', function (event) {
         // if (event.key === 'Enter') {
