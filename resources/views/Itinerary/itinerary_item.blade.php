@@ -38,11 +38,13 @@
 
         </div>
         <div class="flex flex-col gap-10 justify-between">
-            <div>
-                <h1 class="text-2xl">{{$items->title.'-'. $items->subtitle}}</h1>
-                <p>
-                    {{$items->description}}
-                </p>
+            <div class="flex flex-col gap-3">
+                <h1 class="flex flex-wrap items-end gap-2">
+                    <span class="sm:text-2xl text-xl font-bold">{{ $items->title ?? '未命名' }}</span>
+                    <span class="text-lg sm:text-xl text-gray-700">{{ $items->subtitle ?? '無副標題' }}</span>
+                </h1>
+
+                <p>{{ $items->description ?? '無描述內容' }}</p>
             </div>
             <div class="w-full flex flex-col gap-4 ">
 
@@ -56,13 +58,13 @@
                     <div class="flex flex-row gap-2 items-center w-2/3">
                         <h1 class="xxx:text-lg md:text-xl">行程名額</h1>
                         <div class="w-auto">
-                            {{ $trip_times['quota']}}
+                            {{ $trip_times['quota'] ??''}}
                         </div>
                     </div>
                     <div class="flex flex-row gap-2 items-center w-1/3">
                         <h1 class="xxx:text-lg md:text-xl">已報名</h1>
                         <div class="w-auto">
-                            {{ $trip_times['applied_count']}}
+                            {{ $trip_times['applied_count']??''}}
                         </div>
                     </div>
                 </div>
@@ -70,7 +72,7 @@
                     <div class="flex flex-row gap-2 items-center w-2/3">
                         <h1 class="xxx:text-lg md:text-xl">報名費用</h1>
                         <div class="w-auto">
-                            {{ $trip_times['amount']}}
+                            {{ $trip_times['amount']??''}}
                         </div>
                     </div>
                     <button

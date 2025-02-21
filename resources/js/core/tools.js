@@ -45,7 +45,6 @@ export const Tool = {
         let params = url.searchParams;
         let value = obj.data('value');
 
-
 // 如果 `replace` 不為空，則執行 replace
         if (replace) {
             value = value.replace(replace, '');
