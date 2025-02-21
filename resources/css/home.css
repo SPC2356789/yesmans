@@ -30,7 +30,7 @@
 }
 
 .tabButton{
-    @apply !rounded-t-lg;
+    @apply !rounded-t-lg !pt-2 !pb-1;
 }
 .tabButton:hover {
     @apply !pb-2 ss:pb-2 !bg-[#F7DBAB];

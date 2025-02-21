@@ -1,7 +1,6 @@
 <script setup>
 import {ref} from 'vue';
 import Choices from 'choices.js';
-
 import {onMounted, nextTick, defineProps} from 'vue';
 import axios from "axios";
 import Swal from "sweetalert2";

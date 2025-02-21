@@ -22,9 +22,9 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                // 'node_modules/choices.js/public/assets/scripts/choices.min.js', // 手動加載 Choices.js
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'node_modules/choices.js/public/assets/scripts/choices.min.js', // 手動加載 Choices.js
             ],
             refresh: true,
         }),

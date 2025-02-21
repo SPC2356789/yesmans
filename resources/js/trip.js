@@ -113,8 +113,6 @@ function applyAgree() {
     $(document).on('change', '#agreeCheckbox', function () {
 
         $tripFrom.toggleClass('hidden');  // 勾選 checkbox
-        // $tripFrom.removeClass('hidden');  // 勾選 checkbox
-        // console.log(1);
     });
 
 

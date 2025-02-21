@@ -13,7 +13,7 @@
         <v-tabs bg-color="transparent" v-model="tab"
                 class="pt-2 hover:pt-6 xxx:w-full xl:min-w-[550px] xl:max-w-[550px] lg992:min-w-[420px] lg992:max-w-[420px] md965:w-[370px]">
 
-            <div class="flex flex-row justify-between    w-full  items-end relative overflow-visible gap-1 h-full">
+            <div class="flex flex-row justify-between    w-full  items-end relative overflow-visible h-full">
 
 
                 <v-tab
@@ -23,7 +23,7 @@
                     :key="key"
                     :value="key"
                     @click="refreshComponent"
-                    class=" text-none text-black tabButton h-full pt-2 pb-1 transition-all duration-300 ease-in-out hover:py-6 xxx:w-[19.5%] xxs:w-[18.8%] us-420:w-[18%] lg:w-[18%]
+                    class=" text-none text-black tabButton h-full  transition-all duration-300 ease-in-out hover:py-6 xxx:w-[19.5%] xxs:w-[18.8%] us-420:w-[18%] lg:w-[18%]
         transform "
                     :style="{
             backgroundColor: tab === key ? '#5B9894' : '#b8cac9'
