@@ -10,7 +10,7 @@
     </div>
 
     <div class="flex flex-row gap-10">
-        <v-tabs bg-color="transparent" v-model="tab"
+        <v-tabs bg-color="transparent" v-model="tab" hide-slider
                 class="pt-2 xxx:w-full xl:min-w-[550px] xl:max-w-[550px] lg992:min-w-[420px] lg992:max-w-[420px] md965:w-[370px]">
             <div class="flex flex-row justify-between w-full items-end relative overflow-visible h-full">
                 <v-tab

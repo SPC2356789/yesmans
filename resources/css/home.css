@@ -33,10 +33,10 @@
     @apply !rounded-t-lg !pt-2 !pb-1;
 }
 .tabButton:hover {
-    @apply !pb-2 ss:pb-2 !bg-[#F7DBAB];
+    @apply !pb-2 ss:pb-1.5 !bg-[#F7DBAB];
 }
 .tabButton.v-tab--selected,.tabButton.v-tab--selected:hover {
-    @apply !pb-3 ss:pb-2 !bg-[#5B9894FF] !text-white ;;
+    @apply !pb-2 ss:pb-1.5 !bg-[#5B9894FF] !text-white ;;
 }
 
 .tab-lock img.lock-active {
