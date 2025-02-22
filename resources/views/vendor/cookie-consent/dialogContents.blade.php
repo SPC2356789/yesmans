@@ -53,26 +53,26 @@
         document.body.classList.remove('locked');
         document.querySelector('.js-cookie-consent').style.display = 'none';
         document.querySelector('#cookie-overlay').style.display = 'none';
-        fetch('/set-cookie-consent', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ consent: '1' })
-        });
+        {{--fetch('/set-cookie-consent', {--}}
+        {{--    method: 'POST',--}}
+        {{--    headers: {--}}
+        {{--        'Content-Type': 'application/json',--}}
+        {{--        'X-CSRF-TOKEN': '{{ csrf_token() }}'--}}
+        {{--    },--}}
+        {{--    body: JSON.stringify({ consent: '1' })--}}
+        {{--});--}}
     });
 
     document.querySelector('.js-cookie-consent-reject').addEventListener('click', function () {
         document.cookie = 'cookieConsent=0; path=/; max-age=31536000';
         window.history.back();
-        fetch('/set-cookie-consent', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ consent: '0' })
-        });
+        {{--fetch('/set-cookie-consent', {--}}
+        {{--    method: 'POST',--}}
+        {{--    headers: {--}}
+        {{--        'Content-Type': 'application/json',--}}
+        {{--        'X-CSRF-TOKEN': '{{ csrf_token() }}'--}}
+        {{--    },--}}
+        {{--    body: JSON.stringify({ consent: '0' })--}}
+        {{--});--}}
     });
 </script>

@@ -16,7 +16,7 @@ $(document).ready(function () {
     updateActiveState('tag', ',',)//更新標籤行為
 
     $('button.span_tag').click(function () {
-        Tool.toggleUrlParameter($(this), 'tag', ',', '',false);  // 'tag' 是你要更新的 URL 參數
+        Tool.toggleUrlParameter($(this), 'tag', ',', '',);  // 'tag' 是你要更新的 URL 參數
         updateActiveState('tag', ',',)
         tag()
     });

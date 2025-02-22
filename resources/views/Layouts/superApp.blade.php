@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset("vendor/cookie-consent/css/cookie-consent.css")}}">
 </head>
 
-<body id="page-top" class="@yield('bg') flex flex-col justify-between" data-page="{{($jsPage??($Slug??''))}}">
+<body id="page-top" class="@yield('bg') flex flex-col justify-between h-screen" data-page="{{($jsPage??($Slug??''))}}">
 @if (config('services.GTM.enabled'))
     <!-- Google Tag Manager (noscript) -->
     <noscript>
@@ -70,17 +70,17 @@
                 <div class="flex flex-row xsm:gap-2 xxx:gap-1 items-center">
                     <div class="max-h-8 min-h-6 flex items-center order-3 lg:hidden">
                         <button
-                            class="btn-outline-primary navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-yes-major hover:text-cyan-50 !text-yes-major"
+                            class=" navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-yes-major "
                             type="button"
                             data-bs-toggle="offcanvas"
-                            data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                            data-bs-target="#Menu" aria-controls="Menu">
                             選單
                             <i class="fas fa-bars"></i>
                         </button>
                     </div>
 
-                    <div class="offcanvas offcanvas-start w-auto order-1" tabindex="-1" id="offcanvasExample"
-                         aria-labelledby="offcanvasExampleLabel">
+                    <div class="offcanvas offcanvas-start w-auto order-1" tabindex="-1" id="Menu"
+                         aria-labelledby="MenuLabel">
                         <div class="offcanvas-header">
                             <button type="button" class="btn-close ms-auto text-reset" data-bs-dismiss="offcanvas"
                                     aria-label="Close"></button>

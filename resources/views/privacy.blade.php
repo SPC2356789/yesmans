@@ -1,7 +1,7 @@
 @extends('Layouts.app')
 
 @section('content')
-    <div class=" py-12 max-w-4xl">
+    <div class=" py-12 w-full">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 text-center">隱私權政策</h1>
         <p class="text-gray-600 text-lg mb-10 leading-relaxed">
             水喔探索家育樂有限公司（以下簡稱本網站），為了讓您能夠安心使用本網站的各項服務與資訊，特此向您說明本網站的隱私權保護政策，以保障您的權益，請您詳閱下列內容：
