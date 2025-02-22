@@ -22,8 +22,6 @@ const props = defineProps({
 });
 
 
-
-
 const formList = ref([
     {
         id: 1,
@@ -51,7 +49,7 @@ let addFormId = 2;  // 初始化一個 ID 計數器
 onMounted(() => {
     refreshCaptcha();
 
-    // const {proxy} = getCurrentInstance(); // 獲取 Vue 實例
+   console.log(props.data)
     if (props && props.CountryData) {
         countries.value = props.CountryData
     }
@@ -65,7 +63,7 @@ const addForm = () => {
     const newId = addFormId++;
     formList.value.push({
         id: newId,
-        name: '測試使用者'+newId,
+        name: '測試使用者' + newId,
         gender: 'male', // 或 '女'
         birthday: '1990-01-01',
         email: 'test@example.com',
@@ -210,8 +208,14 @@ const initChoices = (newId = 1) => {
                         <option value="other">其他</option>
                     </select>
                 </div>
+                <div class="sm:col-span-2">
+                    <label :for="'country-' + form.id" for="country" class="block text-sm/6 font-medium text-gray-900">國家</label>
+                    <select v-model="form.country" :id="'country-' + form.id" :name="'country-' + form.id"
+                            class="">
 
-                <div class="sm:col-span-3">
+                    </select>
+                </div>
+                <div class="sm:col-span-2">
 
                     <label :for="'id_card-' + form.id"
                            class="block text-sm/6 font-medium text-gray-900">身分證/居留證</label>
@@ -221,22 +225,18 @@ const initChoices = (newId = 1) => {
                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6">
                     </div>
                 </div>
-                <div class="sm:col-span-3">
-                    <label :for="'PassPort-' + form.id"
-                           class="block text-sm/6 font-medium text-gray-900">護照</label>
-                    <div class="mt-2">
-                        <input v-model="form.PassPort" :id="'PassPort-' + form.id" :name="'PassPort-' + form.id"
-                               type="text" autocomplete="off"
-                               class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6">
-                    </div>
-                </div>
-                <div class="sm:col-span-3">
-                    <label :for="'country-' + form.id" for="country" class="block text-sm/6 font-medium text-gray-900">國家</label>
-                    <select v-model="form.country" :id="'country-' + form.id" :name="'country-' + form.id"
-                            class="">
 
-                    </select>
-                </div>
+                    <div  v-if="props.data.passport_enabled === 1" class="sm:col-span-2">
+                        <label :for="'PassPort-' + form.id"
+                               class="block text-sm/6 font-medium text-gray-900">護照</label>
+                        <div class="mt-2">
+                            <input v-model="form.PassPort" :id="'PassPort-' + form.id" :name="'PassPort-' + form.id"
+                                   type="text" autocomplete="off"
+                                   class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6">
+                        </div>
+                    </div>
+
+
                 <div class="sm:col-span-3">
                     <label :for="'address-' + form.id"
                            class="block text-sm/6 font-medium text-gray-900">居住地址</label>

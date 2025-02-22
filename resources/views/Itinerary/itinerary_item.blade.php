@@ -8,6 +8,7 @@
 
 @endsection
 @section('content')
+
     {{session('trip_time')}}
     <div class=" flex lg:flex-row flex-col gap-5 w-full justify-center ">
         <div class="flex flex-col  gap-6 w-full lg:w-1/2">
@@ -15,7 +16,7 @@
                 <div class="swiper-wrapper">
 
                     @foreach( $items->carousel as $carouselItem)
-                        <div class="swiper-slide">
+                        <div class="swiper-slide" name="click">
                             <img class="absolute top-0 left-0 w-full h-full object-cover object-center"
                                  src="{{Storage::url($Media[$carouselItem])}}" loading="lazy"/>
                         </div>
@@ -29,7 +30,7 @@
             <div thumbsSlider="" class="swiper btm_trip w-full ">
                 <div class="swiper-wrapper w-full">
                     @foreach($items->carousel  as $carouselItems)
-                        <div class="swiper-slide cursor-pointer ">
+                        <div class="swiper-slide cursor-pointer " name="thumbs">
                             <img class="w-full h-full" src="{{Storage::url($Media[$carouselItems])}}" loading="lazy"/>
                         </div>
                     @endforeach
@@ -108,11 +109,6 @@
                 class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
     </button>
 
-    {{--{{dd($trip_times)}}--}}
-    {{--    <pre>{{ json_encode($trip_times, JSON_PRETTY_PRINT) }}</pre>--}}
-    {{--        <div  :tripTimes="{{ json_encode($trip_times) }}" id="trip_from" ></div>--}}
-    {{--    <div class="hidden" id="trip_from" data-tripTimes='@json($trip_times)'></div>--}}
     <div class="hidden" id="trip_from" data-trip_times='@json($trip_times)'></div>
-    {{--        @include('Itinerary.tripFrom')--}}
 
 @endsection

@@ -76,6 +76,7 @@ class Controller extends BaseController
      * ISO 8601 格式
      */
     private function formatDate($date)
+
     {
 
         if ($date instanceof \Carbon\Carbon) {
@@ -88,4 +89,6 @@ class Controller extends BaseController
             return null;
         }
     }
+
+
 }

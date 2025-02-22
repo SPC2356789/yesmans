@@ -52,7 +52,7 @@ class TripResource extends Resource
                 MediaPicker::make('carousel')
                     ->label('選擇照片')
                     ->multiple()
-                    ->options(Media::getMedia())
+                    ->options(Media::getMedia(''))
                     ->searchable()
                     ->helperText('超過10張會拖效能')
                     ->columnSpanFull()
@@ -64,7 +64,7 @@ class TripResource extends Resource
                     ->allowHtml(),
                 Forms\Components\select::make('tags')
                     ->label('選擇標籤')
-                    ->options(self::$category::getData(2, 2,'name,id'))// 從分類模型中獲取選項
+                    ->options(self::$category::getData(2, 2, 'name,id'))// 從分類模型中獲取選項
                     ->multiple()
                     ->searchable() // 支持搜索
                     ->required(),
@@ -107,7 +107,11 @@ class TripResource extends Resource
                         ->required(),
                 ]),
                 Forms\Components\Textarea::make('agreement_content')
+                    ->rows(5)
                     ->columnSpanFull(),
+                Forms\Components\Toggle::make('passport_enabled')
+                    ->label('護照號碼是否開啟')
+                ,
                 Forms\Components\Toggle::make('is_published')
                     ->required(),
 
@@ -127,7 +131,11 @@ class TripResource extends Resource
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
+                    ->label('模板')
+                    ->searchable()
+                    ->getStateUsing(function ($record) {
+                        return $record->title . '-' . $record->subtitle; // 合併 name 和 title
+                    }),
                 Tables\Columns\TextColumn::make('subtitle')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('quota')
@@ -136,13 +144,18 @@ class TripResource extends Resource
                 Tables\Columns\TextColumn::make('amount')
                     ->money('TWD') // 顯示台幣格式
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_published')
-                    ->boolean(),
+                Tables\Columns\ToggleColumn::make('passport_enabled')
+                    ->label('護照'),
+                Tables\Columns\ToggleColumn::make('is_published')
+                    ->label('發布'),
                 Tables\Columns\TextColumn::make('orderby')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                ,
                 Tables\Columns\TextColumn::make('seo_title')
-                    ->searchable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

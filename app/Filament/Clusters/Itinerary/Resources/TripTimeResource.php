@@ -53,6 +53,7 @@ class TripTimeResource extends Resource
                             $set('amount', $template->amount); // 假設模板有金額欄位
                             $set('agreement_content', $template->agreement_content); // 假設模板有金額欄位
                             $set('hintMonth', $template->hintMonth); // 假設模板有金額欄位
+                            $set('passport_enabled', $template->passport_enabled); // 假設模板有護照開啟欄位
                         }
                     }),
                 Forms\Components\TextInput::make('amount')
@@ -87,6 +88,9 @@ class TripTimeResource extends Resource
                 ,
                 Forms\Components\Toggle::make('food')
                     ->label('有無搭伙')
+                    ->required(),
+                Forms\Components\Toggle::make('passport_enabled')
+                    ->label('護照號碼是否開啟')
                     ->required(),
 
                 Forms\Components\Textarea::make('agreement_content')
@@ -136,8 +140,12 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
  $direction
     ")->orderBy('date_start', $direction === 'asc' ? 'desc' : 'asc');
                     }),
-                Tables\Columns\TextColumn::make('title')
+                Tables\Columns\TextColumn::make('Trip.title')
                     ->label('模板')
+                    ->searchable([
+                        'trips.title',          // 搜尋 Trip 表的 title
+                        'trips.subtitle',       // 搜尋 Trip 表的 subtitle
+                    ])
                     ->getStateUsing(function ($record) {
                         return $record->Trip->title . '-' . $record->Trip->subtitle; // 合併 name 和 title
                     }),
@@ -151,10 +159,11 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
 
                 Tables\Columns\TextColumn::make('date_start')
                     ->label('日期')
-                    ->getStateUsing(fn($record) => // 檢查 date_start 和 date_end 是否不同
-                    ($record->date_start !== $record->date_end)
-                        ? $record->date_start . ' ~ ' . $record->date_end  // 如果不同，顯示範圍
-                        : $record->date_start . ' ( 單攻 )' // 如果相同，僅顯示 date_start
+                    ->getStateUsing(fn ($record) =>
+                        Carbon::parse($record->date_start)->isoFormat('Y-M-D (dd)') .
+                        ($record->date_start !== $record->date_end
+                            ? ' ~ ' . Carbon::parse($record->date_end)->isoFormat('Y-M-D (dd)')
+                            : ' (單攻)')
                     )
                     ->sortable()
                     ->searchable(),

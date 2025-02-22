@@ -6,6 +6,7 @@ use App\Filament\Clusters\Order;
 use App\Filament\Clusters\Order\Resources\TripOrderResource\Pages;
 use App\Filament\Clusters\Order\Resources\TripOrderResource\RelationManagers;
 use App\Models\TripOrder;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +14,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Http\Controllers\Controller;
+use Filament\Tables\Columns\Layout\Panel;
+
+use Filament\Tables\Columns\Layout\Stack;
 
 class TripOrderResource extends Resource
 {
@@ -55,34 +60,80 @@ class TripOrderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('order_number')
-                    ->searchable(),
+                    ->label('訂單編號')
+                    ->searchable()
+                ,
                 Tables\Columns\TextColumn::make('trip_uuid')
-                    ->searchable(),
+                    ->label('行程編號')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                ,
+                Tables\Columns\TextColumn::make('trip_times.trip.title')
+                    ->label('行程資訊')
+                    ->searchable()
+                    ->formatStateUsing(fn($record) => ($trip = $record->trip_times->first()?->trip)
+                        ? "{$trip->title} - {$trip->subtitle}"
+                        : ''
+                    ),
+
+                Tables\Columns\TextColumn::make('trip_times.date_start')
+                    ->label('行程時間')
+                    ->searchable()
+                    ->formatStateUsing(fn($record) => ($time = $record->trip_times->first())
+                        ? Carbon::parse($time->date_start)->isoFormat('Y-M-D (dd)') .
+                        ($time->date_start !== $time->date_end
+                            ? ' ~ ' . Carbon::parse($time->date_end)->isoFormat('Y-M-D (dd)')
+                            : ' (單攻)')
+                        : ''
+                    ),
                 Tables\Columns\TextColumn::make('applies')
+                    ->label('團員')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
+                    ->label('每人金額')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                ,
+                Tables\Columns\TextColumn::make('total_amount') // 新增總金額欄位
+                ->label('總金額')
+                    ->numeric()
+                    ->getStateUsing(function ($record) {
+                        $applies = json_decode($record->applies); // 假設 applies 是模型屬性
+                        $amount = $record->amount;   // 假設 amount 是模型屬性
+                        return is_array($applies) ? count($applies) * $amount : $amount;
+                    }),
                 Tables\Columns\TextColumn::make('paid_amount')
+                    ->label('已付金額')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('account_last_five')
+                    ->label('帳戶後五碼')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->numeric()
-                    ->sortable(),
+
+                Tables\Columns\IconColumn::make('status')
+                    ->label('狀態')
+                    ->sortable()
+                    ->icon(fn ($state) => config("order_statuses.$state.icon") ?? 'heroicon-o-question-mark-circle')
+                    ->color(fn ($state) => config("order_statuses.$state.color") ?? 'gray')
+                    ->tooltip(fn ($state) => config("order_statuses.$state.text") ?? '未知狀態'),
+
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('建立時間')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('更新時間')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deleted_at')
+                    ->label('刪除時間')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->recordUrl(null) // 禁用整行點擊導航
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])

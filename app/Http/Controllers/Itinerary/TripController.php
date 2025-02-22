@@ -115,6 +115,7 @@ class TripController extends ItryController
                 'trip_uuid' => $request['uuid'],
                 'amount' => $request['amount'],
                 'applies' => json_encode($tripApplyId),  // 儲存報名 ID 的 JSON 格式
+                'status' => 10,  // 報名的初始階段
             ]);
 
             // 返回成功訊息

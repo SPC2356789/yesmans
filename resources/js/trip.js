@@ -12,7 +12,7 @@ import {Tool} from './core/tools';
 import tripCountry from '../lib/trip_country.json';
 import axios from 'axios';
 
-import { createApp } from 'vue';
+import {createApp} from 'vue';
 import FormClone from '../views/Itinerary/FormClone.vue';
 
 
@@ -21,7 +21,7 @@ const tripData = JSON.parse(tripElement.dataset.trip_times);
 // 創建 Vue 實例並註冊全局方法
 const app = createApp(FormClone, {
     data: tripData,
-    CountryData:getCountry()
+    CountryData: getCountry()
 });
 app.mount('#trip_from');
 
@@ -53,13 +53,13 @@ $(document).ready(function () {
 });
 
 
-
-
-
 function swiper() {
+    const slidesCount = $('.swiper-slide[name="thumbs"]').length;
+    const clickCount = $('.swiper-slide[name="click"]').length;
+
     // 輪播
     const swiper = new Swiper(".btm_trip", {
-        loop: true,
+        loop: slidesCount > 3, // 如果幻燈片超過 5 張才開啟 loop
         slidesPerView: 3,
         spaceBetween: 10,
         pagination: {
@@ -81,7 +81,7 @@ function swiper() {
         modules: [Navigation, FreeMode, Thumbs],  // 引入模組
     });
     const swiper2 = new Swiper(".top_trip", {
-        loop: true,
+        loop: clickCount > 1,
         spaceBetween: 10,
         navigation: {
             nextEl: ".swiper-button-next",
@@ -123,7 +123,7 @@ function applyAgree() {
     //我要報名滾動到
 // 讓 `[name="signupBtn"]` 點擊時，滑動到 `$agreementButton`
     $('[name="signupBtn"]').on('click', function () {
-        $agreementButton[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        $agreementButton[0].scrollIntoView({behavior: 'smooth', block: 'start'});
     });
 
 // 讓 `[name="agree_btn"]` 點擊時，勾選 checkbox 並觸發變化
