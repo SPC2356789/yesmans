@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('order_has_apply', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('trip_order_id')->constrained('trip_orders')->onDelete('cascade');
+            $table->foreignId('trip_apply_id')->constrained('trip_applies')->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('order_has_apply');
+    }
+};

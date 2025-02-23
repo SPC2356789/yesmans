@@ -110,14 +110,15 @@ class TripController extends ItryController
             }
 
             // 儲存報名資料，包含報名的 ID 列表
-            TripOrder::create([
+            $tripOrder = TripOrder::create([
                 'order_number' => $order_number,
                 'trip_uuid' => $request['uuid'],
                 'amount' => $request['amount'],
-                'applies' => json_encode($tripApplyId),  // 儲存報名 ID 的 JSON 格式
+//                'applies' => json_encode($tripApplyId),  // 儲存報名 ID 的 JSON 格式
                 'status' => 10,  // 報名的初始階段
             ]);
-
+// 將 TripApply 關聯到 TripOrder
+            $tripOrder->applies()->attach($tripApplyId);
             // 返回成功訊息
             return response()->json([
                 'message' => '序號:' . $order_number . ' 報名成功<br> <br> 人數'.$count.'位',

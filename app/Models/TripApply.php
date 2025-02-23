@@ -18,5 +18,9 @@ class TripApply extends BaseModel
     {
         return $this->belongsTo(Trip::class, 'mould_id', 'id');
     }
+    public function orders(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(TripOrder::class, 'order_has_apply', 'trip_apply_id', 'trip_order_id');
+    }
 
 }

@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset("vendor/cookie-consent/css/cookie-consent.css")}}">
 </head>
 
-<body id="page-top" class="@yield('bg') flex flex-col justify-between h-screen" data-page="{{($jsPage??($Slug??''))}}">
+<body id="page-top" class="@yield('bg') flex flex-col justify-between h-screen overflow-hidden" data-page="{{($jsPage??($Slug??''))}}">
 @if (config('services.GTM.enabled'))
     <!-- Google Tag Manager (noscript) -->
     <noscript>
@@ -137,7 +137,6 @@
             @yield('content')
         </div>
     </section>
-
     <section class="bg-white">
         <div class="pt-16 lg:px-5">
             <div class="flex items-center justify-center gap-4">
@@ -172,6 +171,7 @@
         </footer>
     </section>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 @yield('blink')
