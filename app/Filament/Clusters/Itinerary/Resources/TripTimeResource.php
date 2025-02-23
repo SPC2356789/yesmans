@@ -264,11 +264,19 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                 ]),
             ]);
     }
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\TripOrdersRelationManager::class,
+        ];
+    }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageTripTimes::route('/'),
+            'index' => Pages\ListTripTime::route('/'),
+            'create' => Pages\CreateTripTime::route('/create'),
+            'edit' => Pages\EditTripTime::route('/{record}/edit'),
         ];
     }
 

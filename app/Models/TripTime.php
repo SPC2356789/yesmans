@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\belongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -26,7 +27,17 @@ class TripTime extends BaseModel
             }
         });
     }
-
+    public function Orders():belongsToMany
+    {
+        return $this->belongsToMany(
+            TripOrder::class,
+            'time_has_order',
+            'trip_times_uuid',
+            'trip_order_id',
+            'uuid',
+            'id' // 用 trip_uuid 作為目標鍵
+        );
+    }
     public function Trip(): BelongsTo
     {
         return $this->belongsTo(Trip::class, 'mould_id', 'id');

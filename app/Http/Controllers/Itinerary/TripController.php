@@ -119,6 +119,7 @@ class TripController extends ItryController
             ]);
 // 將 TripApply 關聯到 TripOrder
             $tripOrder->applies()->attach($tripApplyId);
+            $tripOrder->times()->attach($request['uuid']);
             // 返回成功訊息
             return response()->json([
                 'message' => '序號:' . $order_number . ' 報名成功<br> <br> 人數'.$count.'位',

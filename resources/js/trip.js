@@ -123,7 +123,7 @@ function applyAgree() {
     //我要報名滾動到
 // 讓 `[name="signupBtn"]` 點擊時，滑動到 `$agreementButton`
     $('[name="signupBtn"]').on('click', function () {
-        $agreementButton[0].scrollIntoView({behavior: 'smooth', block: 'start'});
+        $agreementButton[0].scrollIntoView({behavior: 'smooth', block: 'end'});
     });
 
 // 讓 `[name="agree_btn"]` 點擊時，勾選 checkbox 並觸發變化

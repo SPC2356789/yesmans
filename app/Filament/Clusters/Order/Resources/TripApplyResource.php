@@ -153,6 +153,7 @@ class TripApplyResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),

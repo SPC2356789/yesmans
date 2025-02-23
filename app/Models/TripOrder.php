@@ -37,6 +37,25 @@ class TripOrder extends BaseModel
 //    }
     public function applies(): BelongsToMany
     {
-        return $this->belongsToMany(TripApply::class, 'order_has_apply', 'trip_order_id', 'trip_apply_id');
+        return $this->belongsToMany(
+            TripApply::class,
+            'order_has_apply',
+            'trip_order_on',  // 中間表指向 TripOrder 的欄位
+            'trip_apply_id',      // 中間表指向 TripApply 的欄位
+            'order_number',       // TripOrder 的關聯鍵
+            'id'                  // TripApply 的關聯鍵
+        );
+    }
+
+    public function times():belongsToMany
+    {
+        return $this->belongsToMany(
+            TripTime::class,
+            'time_has_order',
+            'trip_order_id',
+            'trip_times_uuid',
+            'id',
+            'uuid'
+        );
     }
 }

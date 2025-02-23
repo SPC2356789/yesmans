@@ -1,34 +1,21 @@
 <?php
 
-namespace App\Filament\Clusters\Order\Resources;
+namespace App\Filament\Clusters\Itinerary\Resources\TripTimeResource\RelationManagers;
 
-use App\Filament\Clusters\Order;
-use App\Filament\Clusters\Order\Resources\TripOrderResource\Pages;
-use App\Filament\Clusters\Order\Resources\TripOrderResource\RelationManagers;
-use App\Models\TripApply;
-use App\Models\TripOrder;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Http\Controllers\Controller;
-use Filament\Tables\Columns\Layout\Panel;
 
-use Filament\Tables\Columns\Layout\Stack;
-
-class TripOrderResource extends Resource
+class TripOrdersRelationManager extends RelationManager
 {
-    protected static ?string $model = TripOrder::class;
+    protected static string $relationship = 'Orders';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    protected static ?string $cluster = Order::class;
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -56,9 +43,10 @@ class TripOrderResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('order_number')
             ->columns([
                 Tables\Columns\TextColumn::make('order_number')
                     ->label('訂單編號')
@@ -94,14 +82,14 @@ class TripOrderResource extends Resource
                     ->searchable()
                     ->lineClamp(2)
 
-                     ->searchable(query: function ($query, $search) {
-                         return $query->whereHas('applies', function ($query) use ($search) {
-                             $query->where('name', 'like', "%{$search}%");
-                         });
-                     })
-                     ->formatStateUsing(function ($record) {
-                         return $record->applies->pluck('name')->implode(', ') ?: '無團員';
-                     }),
+                    ->searchable(query: function ($query, $search) {
+                        return $query->whereHas('applies', function ($query) use ($search) {
+                            $query->where('name', 'like', "%{$search}%");
+                        });
+                    })
+                    ->formatStateUsing(function ($record) {
+                        return $record->applies->pluck('name')->implode(', ') ?: '無團員';
+                    }),
 
                 Tables\Columns\TextColumn::make('amount')
                     ->label('每人金額')
@@ -141,54 +129,26 @@ class TripOrderResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-//                Tables\Columns\TextColumn::make('updated_at')
-//                    ->label('更新時間')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
-//                Tables\Columns\TextColumn::make('deleted_at')
-//                    ->label('刪除時間')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->recordUrl(null) // 禁用整行點擊導航
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->before(function () {
+                        \Log::info('Edit action triggered'); // 測試是否觸發
+                    }),
+                Tables\Actions\DeleteAction::make(),
+//                Tables\Actions\EditAction::make(),
+//                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            RelationManagers\TripAppliesRelationManager::class,
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListTripOrders::route('/'),
-            'create' => Pages\CreateTripOrder::route('/create'),
-            'edit' => Pages\EditTripOrder::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
             ]);
     }
 }
