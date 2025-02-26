@@ -58,8 +58,9 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->homeUrl('/')
             ->id('admin')
-            ->path('admin')
+            ->path('yes-admin')
             ->authGuard('web')
             ->favicon(Storage::url($this->Settings->getElseOrGeneral()['favicon']))
             ->profile(isSimple: false)
