@@ -25,9 +25,8 @@ class TripOrdersRelationManager extends RelationManager
                 Forms\Components\TextInput::make('trip_uuid')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('applies')
-                    ->required()
-                    ->maxLength(255),
+
+
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric()
@@ -36,10 +35,17 @@ class TripOrdersRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\TextInput::make('account_last_five')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\select::make('status')//config拉出陣列
+                    ->options(
+                        collect(config('order_statuses'))
+                            ->mapWithKeys(function ($item, $key) {
+                                return [$key => $item['text'].$item['note']];
+                            })
+                            ->all()
+                    )
+                    ->default(0)
                     ->required()
-                    ->numeric()
-                    ->default(0),
+                  ,
             ]);
     }
 

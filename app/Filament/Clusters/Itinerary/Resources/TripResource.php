@@ -30,7 +30,7 @@ class TripResource extends Resource
 
     protected static ?string $cluster = Itinerary::class;
     protected static ?string $category = Categories::class;
-
+    protected static ?int $navigationSort = 1;
     public static function form(Form $form): Form
     {
 

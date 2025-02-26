@@ -8,22 +8,35 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\belongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class TripOrder extends BaseModel
 {
     use SoftDeletes;
     use HasFactory;
-
-    /**
-     * Get the trip times associated with this model.
-     * Note: trip_uuid是tripTimes 的id.
-     *
-     * @return HasMany
-     */
-    public function trip_times(): HasMany
+    protected static function booted()
     {
-        return $this->hasMany(TripTime::class, 'uuid', 'trip_uuid');
+//        static::updating(function ($tripOrder) {
+//            if ($tripOrder->isDirty('order_number')) {
+//                $order_on =$tripOrder->getOriginal('order_number');
+//                $New_order_on =$tripOrder->order_number;
+////
+////                DB::table('order_has_apply')
+////                    ->where('trip_order_on', $order_on)
+////                    ->update(['trip_order_on' => $New_order_on]);
+//            }
+//        });
     }
+//    /**
+//     * Get the trip times associated with this model.
+//     * Note: trip_uuid是tripTimes 的id.
+//     *
+//     * @return HasMany
+//     */
+//    public function trip_times(): HasMany
+//    {
+//        return $this->hasMany(TripTime::class, 'uuid', 'trip_uuid');
+//    }
 
     /**
      * Get the trip times associated with this model.

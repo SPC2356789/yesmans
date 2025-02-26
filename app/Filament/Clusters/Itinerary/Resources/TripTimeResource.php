@@ -30,7 +30,7 @@ class TripTimeResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Itinerary::class;
-
+    protected static ?int $navigationSort = 0;
     public static function form(Form $form): Form
     {
 
@@ -199,12 +199,7 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-//                Filter::make('before_date')
-//                    ->label('檢閱已經結束的行程') // 過濾器標籤
-//                    ->toggle() // 讓這個篩選器變成開關（可開/關）
-//                    ->query(function (Builder $query): Builder {
-//                        return $query->whereDate('date_start',   '<' , Carbon::today());
-//                    }),
+
                 Filter::make('date')
                     ->form([
                         Flatpickr::make('date_start')

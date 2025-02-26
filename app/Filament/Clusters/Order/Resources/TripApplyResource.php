@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Helper\ShortCrypt;
 
 class TripApplyResource extends Resource
 {
@@ -40,21 +41,27 @@ class TripApplyResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->tel()
                     ->required()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('country')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('id_card')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('address')
-                    ->required()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('PassPort')
+                    ->required()
+                    ->maxLength(255)
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state),
+                Forms\Components\TextInput::make('address')
+                    ->required()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('diet')
                     ->required()
@@ -69,6 +76,7 @@ class TripApplyResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emContactPh')
                     ->required()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emContact')
                     ->required()
@@ -82,13 +90,13 @@ class TripApplyResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('姓名')
-                    ->searchable(),
+                   ,
                 Tables\Columns\TextColumn::make('order_number')
                     ->label('訂單編號')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('gender')
                     ->label('性別')
-                    ->searchable(),
+                ,
                 Tables\Columns\TextColumn::make('birthday')
                     ->label('生日')
                     ->date()
@@ -96,30 +104,27 @@ class TripApplyResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('email')
                     ->label('電子郵件')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                  ->toggleable(isToggledHiddenByDefault: true)
+               ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('phone')
                     ->label('電話')
-                    ->searchable(),
+             ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('country')
                     ->label('國家')
-                    ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('id_card')
                     ->label('身份證號')
-                    ->searchable()
-             ,
+              ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('address')
                     ->label('地址')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+              ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('PassPort')
                     ->label('護照號碼')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+             ,
                 Tables\Columns\TextColumn::make('LINE')
                     ->label('LINE ID')
-                    ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('IG')
                     ->label('Instagram')
@@ -127,8 +132,9 @@ class TripApplyResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('emContactPh')
                     ->label('緊急聯絡電話')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+
+                ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('emContact')
                     ->label('緊急聯絡人')
                     ->searchable()
@@ -137,7 +143,7 @@ class TripApplyResource extends Resource
                     ->label('建立時間')
                     ->dateTime()
                     ->sortable()
-             ,
+                ,
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('更新時間')
                     ->dateTime()
@@ -167,7 +173,23 @@ class TripApplyResource extends Resource
                 ]),
             ]);
     }
+    protected static ?int $navigationSort = 2;
+    protected static ?string $title = '訂單團員';
 
+    public static function getModelLabel(): string
+    {
+        return self::$title;
+    }
+
+    public function getTitle(): string//標題
+    {
+        return self::$title;
+    }
+
+    public static function getNavigationLabel(): string//集群標題
+    {
+        return self::$title;
+    }
     public static function getPages(): array
     {
         return [

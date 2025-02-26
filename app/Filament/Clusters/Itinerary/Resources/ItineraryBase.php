@@ -3,8 +3,10 @@
 namespace App\Filament\Clusters\Itinerary\Resources;
 
 use App\Filament\Clusters\Itinerary;
+use App\Models\BlogItem;
 use Closure;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
@@ -25,6 +27,7 @@ class ItineraryBase extends BaseSettings
 
     protected static ?string $title = '基礎設定';
     protected static ?string $area = 'index';
+    protected static ?int $navigationSort = 3;
 
     public static function getModelLabel(): string
     {
@@ -46,70 +49,43 @@ class ItineraryBase extends BaseSettings
         return [
             Tabs::make('Settings')
                 ->schema([
-                    Tabs\Tab::make('一般設定(general)')
-                        ->schema([
-                            Split::make([
-                                Section::make([
-                                    TextInput::make('general.brand_name')
-                                        ->label('品牌名稱')
-                                        ->required(),
-
-                                    FileUpload::make('general.favicon')
-                                        ->label('網站標誌')
-                                        ->image(),
-                                    TextInput::make('general.favicon_alt')
-                                        ->label('標誌描述')
-                                    ,
-                                ]),
-                                Section::make([
-                                    Builder::make('general.brand')
-                                        ->label('品牌名稱圖標版')
-                                        ->blocks([
-                                            Builder\Block::make('general.brand_img')
-                                                ->label('新增品牌圖')
-                                                ->schema([
-                                                    Split::make([
-                                                        Section::make([
-                                                            FileUpload::make('image')
-                                                                ->label('圖標上傳')
-                                                                ->image()
-                                                                ->imageEditor(),
-                                                        ]),
-                                                    ])->from('md')
-
-
-                                                ])
-
-                                        ]),
-                                ]),
-                            ])->from('md'),
-
-                        ]),
-
                     Tabs\Tab::make('關鍵字(Seo)')
                         ->schema([
-                            TextInput::make(self::$area.'_seo.title')
-                                ->label('網頁標題')
-                                ->placeholder('標題不要超過 25 – 30 個中文字')
+                            TextInput::make(self::$area . '_seo.title')
+                                ->label('主題')
                                 ->required(),
-                            TextInput::make(self::$area.'_seo.description')
+                            Repeater::make(self::$area . '_hot')
+                                ->label('熱門文章')
+                                ->schema([
+                                    Select::make('blogItem')
+                                        ->label('選擇文章')
+                                        ->options(
+                                            BlogItem::SelectDataImg()
+                                        )
+                                        ->searchable()
+                                        ->distinct()
+                                        ->helperText('每篇文章只能選一次')
+                                        ->selectablePlaceholder(false)
+                                        ->allowHtml(),
+                                ])
+                                ->defaultItems(4)
+                                ->deletable(false)
+                                ->grid(4)
+                                ->minItems(4)
+                                ->maxItems(4)
+                                ->reorderableWithButtons(),
+                            TextInput::make(self::$area . '_seo.description')
                                 ->label('介紹')
-                                ->placeholder('網頁描述字數控制在 50 – 76 個中文字')
                                 ->required(),
-                            Textarea::make(self::$area.'_seo.schema_markup')
-                                ->label('結構化資料')
-                                ->rows(5)
-                                ->placeholder('https://search.google.com/test/rich-results?hl=zh-tw'),
-
-                            TextInput::make(self::$area.'_OG.title')
+                            TextInput::make(self::$area . '_OG.title')
                                 ->label('OG標題')
                                 ->placeholder('標題不要超過 25 – 30 個中文字')
                                 ->required(),
-                            FileUpload::make(self::$area.'_OG.image')
+                            FileUpload::make(self::$area . '_OG.image')
                                 ->label('OG圖片上傳')
-                                ->imageEditor()
-                                ->image(),
-                            Select::make(self::$area.'_seo.robots')
+                                ->image()
+                                ->imageEditor(),
+                            Select::make(self::$area . '_seo.robots')
                                 ->label('索引')
                                 ->options([
                                     'index, follow' => 'Index, Follow',
@@ -118,58 +94,9 @@ class ItineraryBase extends BaseSettings
                                     'noindex, nofollow' => 'Noindex, Nofollow',
                                 ]),
                         ]),
-                    Tabs\Tab::make('頁腳設定(foot)')
-                        ->schema([
-                            Split::make([
-                                Section::make([
-                                    TextInput::make('foot.copyright')
-                                        ->label('版權宣告')
-                                        ->required(),
-                                    TextInput::make('foot.alt')
-                                        ->label('描述'),
-                                ]),
-                                Section::make([
-                                    FileUpload::make('foot.bg')
-                                        ->label('底部背景圖')
-                                        ->imageEditor()
-                                        ->image(),
-                                ]),
-                            ]),
-
-                            Builder::make('foot.media')
-                                ->label('頁腳媒體圖標設定')
-                                ->blocks([
-                                    Builder\Block::make('foot.mediaData')
-                                        ->label('新增媒體圖標')
-                                        ->schema([
-                                            Split::make([
-                                                Section::make([
-                                                    TextInput::make('title')
-                                                        ->label('圖標媒體名稱')
-                                                        ->required(),
-                                                    TextInput::make('url')
-                                                        ->label('媒體連結')
-                                                        ->required(),
-                                                    Toggle::make('status')
-                                                        ->label('開啟')
-                                                        ->onColor('success')
-                                                    ,
-                                                ]),
-                                                Section::make([
-                                                    FileUpload::make('image')
-                                                        ->label('圖標上傳')
-                                                        ->image()
-                                                        ->imageEditor()
-                                                ]),
-                                            ])->from('md')
 
 
-                                        ])
-
-                                ]),
-                        ]),
                 ]),
         ];
     }
-
 }

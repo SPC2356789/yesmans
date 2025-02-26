@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Order\Resources\TripOrderResource\RelationManagers;
 
+use App\Helper\ShortCrypt;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -31,10 +32,14 @@ class TripAppliesRelationManager extends RelationManager
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->tel()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('country')
@@ -42,11 +47,17 @@ class TripAppliesRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\TextInput::make('id_card')
                     ->required()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
                     ->required()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
                     ->maxLength(255),
                 Forms\Components\TextInput::make('PassPort')
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
                     ->maxLength(255),
                 Forms\Components\TextInput::make('diet')
                     ->required()
@@ -61,6 +72,8 @@ class TripAppliesRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emContactPh')
                     ->required()
+                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emContact')
                     ->required()

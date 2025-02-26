@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Itinerary;
 
+use App\Helper\ShortCrypt;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use function Laravel\Prompts\alert;
 use App\Models\TripApply;
 use App\Models\TripOrder;
+use Illuminate\Support\Facades\Crypt;
 
 class TripController extends ItryController
 {
@@ -23,6 +26,7 @@ class TripController extends ItryController
      */
     public function index(Request $request): \Illuminate\Http\Response
     {
+
         $jsPage = $this->jsPage;
         $Slug = $this->Slug;
         $secondSlug = $this->secondSlug;
@@ -77,11 +81,11 @@ class TripController extends ItryController
                 'uuid' => 'required|string|max:100',
             ]);
 
-            // 設定報名序號，時間戳 + 微秒 + 行程slug
-            $order_number = (int)(microtime(true) * 1000) . $request->route('trip');
+            // 設定報名序號，時間戳 + 微秒 +_+行程slug
+            $order_number = (int)(microtime(true) * 1000) .'_'. $request->route('trip');
             $tripApplyId = [];
             $dataArray = $request['data'];
-            $count=0;
+            $count = 0;
             // 儲存報名資料
             foreach ($dataArray as $data) {
                 // 使用模型創建報名資料
@@ -94,15 +98,15 @@ class TripController extends ItryController
                     'phone' => $data['phone'],
                     'country' => $data['country'],
                     'id_card' => $data['id_card'],
-                    'address' => $data['address'],
                     'PassPort' => $data['PassPort'],
+                    'address' => $data['address'],
                     'diet' => $data['diet'],
                     'experience' => $data['experience'],
                     'disease' => $data['disease'],
                     'LINE' => $data['LINE'],
                     'IG' => $data['IG'],
-                    'emContactPh' => $data['emContactPh'],
                     'emContact' => $data['emContact'],
+                    'emContactPh' => $data['emContact'],
                 ]);
                 // 儲存每筆報名資料的 ID
                 $tripApplyId[] = $tripApply->id;
@@ -112,7 +116,7 @@ class TripController extends ItryController
             // 儲存報名資料，包含報名的 ID 列表
             $tripOrder = TripOrder::create([
                 'order_number' => $order_number,
-                'trip_uuid' => $request['uuid'],
+//                'trip_uuid' => $request['uuid'],
                 'amount' => $request['amount'],
 //                'applies' => json_encode($tripApplyId),  // 儲存報名 ID 的 JSON 格式
                 'status' => 10,  // 報名的初始階段
@@ -122,7 +126,7 @@ class TripController extends ItryController
             $tripOrder->times()->attach($request['uuid']);
             // 返回成功訊息
             return response()->json([
-                'message' => '序號:' . $order_number . ' 報名成功<br> <br> 人數'.$count.'位',
+                'message' => '序號:' . $order_number . ' 報名成功<br> <br> 人數' . $count . '位',
             ]);
 
         } catch (\Exception $e) {

@@ -56,9 +56,17 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
- 'vite' => 'https://easy-ibex-nearly.ngrok-free.app/',
+    'vite' => 'https://easy-ibex-nearly.ngrok-free.app/',
 
     'asset_url' => env('ASSET_URL', '/'),
+    /*
+        |--------------------------------------------------------------------------
+        | 私鑰，整個網站的鑰，更改後之後全部亂碼，非常嚴重
+        |--------------------------------------------------------------------------
+        |請將所有資料解碼後備份再更改!!
+        |
+     */
+    'Privacy_key' => env('Privacy_key', 'spencer'),
 
     /*
     |--------------------------------------------------------------------------
@@ -126,7 +134,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY','base64:CnoZTWrl2zmakr0WeYE9ssfTf4RA+wPTH8CCHhKNyVk='),
 
     'cipher' => 'AES-256-CBC',
 

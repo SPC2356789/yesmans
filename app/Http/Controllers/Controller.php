@@ -11,19 +11,21 @@ use RalphJSmit\Laravel\SEO\SchemaCollection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+
     protected array $Media;
     protected Setting $Settings;
+
 
     public function __construct()
     {
         $this->Media = Media::getData();//取照片
 
         $this->Settings = new Setting();
+
     }
 
 
