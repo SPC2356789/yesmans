@@ -29,11 +29,10 @@
     </div>
     @if($stories)
         <div>
-
             @foreach($stories['story'] as $storyK=> $story)
                 @if($story['data']['status'])
                     <div
-                        class="flex flex-col {{ $storyK % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse' }} justify-center items-center  fade-in animation"
+                        class="flex flex-col {{ $storyK % 2 === 0 ? 'md:flex-row  ' : 'md:flex-row-reverse fade-in animation' }} justify-center items-center "
                         style="background-color: {{$story['data']['C_bg'] ?? '#000000'}}"
                     >
                         <div class="w-full md:w-1/2  mx-auto relative">

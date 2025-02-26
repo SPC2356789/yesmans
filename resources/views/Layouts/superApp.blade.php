@@ -162,7 +162,7 @@
                     </div>
                 </div>
                 <!-- 隱私權政策按鈕（占 4 格，靠右；在 sm 以上居中） -->
-                <div class="col-span-4 text-right sm:text-center sm:w-full">
+                <div class="col-span-4 xxx:text-right sm:text-center sm:w-full">
                     <a href="{{ route('privacy') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-yes-minor bg-yes-minor bg-opacity-10 rounded-full hover:bg-opacity-20 transition-colors duration-200">
                         隱私權政策
                     </a>
