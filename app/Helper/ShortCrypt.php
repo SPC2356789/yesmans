@@ -70,21 +70,36 @@ class ShortCrypt
     {
         $key = $key ?? self::getDefaultKey();
         $decoded = base64_decode($encrypted);
-        if ($decoded === false) {
-            throw new Exception('Base64 decoding failed: ' . $encrypted);
+
+        if ($decoded === false || strlen($decoded) < 16) {
+            throw new Exception("Base64 decoding failed or data too short:\n" .
+                "🛑 Encrypted Data: " . $encrypted . "\n" .
+                "📏 Decoded Length: " . strlen($decoded) . " (Expected at least 16)");
         }
+
         if ($cipher === 'AES-256-CBC') {
-            $iv = substr($decoded, 0, 16); // 提取前 16 字節作為 IV
-            $data = substr($decoded, 16);  // 剩餘部分作為加密數據
+            $iv = substr($decoded, 0, 16);
+            $data = substr($decoded, 16);
+
+            if (strlen($iv) !== 16) {
+                throw new Exception("❌ IV 長度錯誤: " . strlen($iv) . " (應該是 16)");
+            }
+
             $decrypted = openssl_decrypt($data, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+
+            if ($decrypted === false) {
+                throw new Exception("🔐 解密失敗：\n" .
+                    "🔑 IV (Hex): " . bin2hex($iv) . "\n" .
+                    "🛑 加密內容 (Hex): " . bin2hex($data) . "\n" .
+                    "🛠 OpenSSL Error: " . (openssl_error_string() ?: '無錯誤資訊'));
+            }
         } else {
             $decrypted = openssl_decrypt($decoded, $cipher, $key, OPENSSL_RAW_DATA);
         }
-        if ($decrypted === false) {
-            throw new Exception('Decryption failed: ' . openssl_error_string());
-        }
+
         return $decrypted;
     }
+
 
     /**
      * 使用本身值循環補充密鑰到 32 字節

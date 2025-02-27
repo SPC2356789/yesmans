@@ -61,7 +61,6 @@ class TripApplyResource extends Resource
                     ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state),
                 Forms\Components\TextInput::make('address')
                     ->required()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('diet')
                     ->required()

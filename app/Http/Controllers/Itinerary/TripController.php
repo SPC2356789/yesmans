@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Itinerary;
 
+use App\Filament\Clusters\Order;
 use App\Helper\ShortCrypt;
 use App\Http\Controllers\Controller;
+use App\Models\TripTime;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use function Laravel\Prompts\alert;
@@ -82,7 +85,7 @@ class TripController extends ItryController
             ]);
 
             // 設定報名序號，時間戳 + 微秒 +_+行程slug
-            $order_number = (int)(microtime(true) * 1000) .'_'. $request->route('trip');
+            $order_number = (int)(microtime(true) * 1000) . '_' . $request->route('trip');
             $tripApplyId = [];
             $dataArray = $request['data'];
             $count = 0;
@@ -136,11 +139,77 @@ class TripController extends ItryController
 
     }
 
+    public function gatOrder(Request $request)
+    {
+        $id_card = $request->input('id_card');
+        $phone = $request->input('phone');
+        $email = $request->input('email');
+
+// 驗證所有欄位必須輸入
+        if (!$id_card || !$phone || !$email) {
+            return response()->json([
+                'status' => 'error',
+                'message' => '請提供身分證號碼、電話號碼和電子郵件，所有欄位皆為必填'
+            ], 400);
+        }
+// 使用 Laravel 的驗證器檢查格式
+        $request->validate([
+            'id_card' => 'required|string|size:10',
+            'phone' => 'required|string|regex:/^09\d{8}$/',
+            'email' => 'required|email',
+        ]);
+
+// 生成雜湊值
+        $emailHash = hash('sha256', $email);
+        $phoneHash = hash('sha256', $phone);
+        $id_cardHash = hash('sha256', $id_card);
+
+// 使用雜湊值查詢
+        $applies = TripApply::where('email_hash', $emailHash)
+            ->where('phone_hash', $phoneHash)
+            ->where('id_card_hash', $id_cardHash) // 修正大小寫一致性
+            ->get();
+
+        $matchedApplies = [];
+
+        $applies->each(function ($apply, $index) use ($email, $phone, $id_card, &$matchedApplies) {
+            if ($apply->email === $email && $apply->phone === $phone && $apply->id_card === $id_card) {
+                $order = $apply->orders->first(); // 只取第一筆訂單
+                if ($order) {
+                    $times = $order->times()->whereDate('date_start', '>=', Carbon::today())->first();
+                    if ($times) { // 檢查是否有符合日期條件的 TripTime
+                        $date = $order->times()->whereDate('date_start', '>=', Carbon::today())
+                            ->selectRaw(TripTime::getDateLogic())
+                            ->first();
+                        $trip = $times->trip;
+                        $matchedApplies[$index] = [
+                            'name' => "{$apply->name}",
+                            'title' => "{$trip->title} ~ {$trip->subtitle}",
+                            'times' => $date ? $date->dateAll : '無日期',
+                            'orders' => "訂單編號: {$order->order_number}",
+                            'status' => "狀態: " . config("order_statuses.{$order->status}.text", '未知') . config("order_statuses.{$order->status}.note", '')
+                        ];
+                    }
+                }
+            }
+        });
+
+        if (!empty($matchedApplies)) {
+            return response()->json([
+                $matchedApplies
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => '查無訂單'
+            ], 404);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public
-    function store(Request $request)
+    public function store(Request $request)
     {
         //
     }
@@ -148,8 +217,7 @@ class TripController extends ItryController
     /**
      * Display the specified resource.
      */
-    public
-    function show(string $id)
+    public function show(string $id)
     {
         //
     }

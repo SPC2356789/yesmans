@@ -30,6 +30,7 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function
     Route::patch('/itinerary/{key}', 'Itinerary\ItryController@search')->where(['key' => '[a-zA-Z0-9_-]+']);
     Route::post('/update-trip-time', 'Itinerary\TripController@update');
     Route::post('/itinerary/{key}/trip/{trip}/apply', 'Itinerary\TripController@create');
+    Route::post('/get-order', 'Itinerary\TripController@gatOrder');
     Route::get('/ttt', function () {
         return view('t');
     });

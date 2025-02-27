@@ -46,7 +46,7 @@ class TripApply extends BaseModel
             'trip_order_on',
             'id',
             'order_number'
-        )->withPivot('trip_apply_order_number');
+        );
     }
 
     /**
@@ -55,7 +55,7 @@ class TripApply extends BaseModel
      * @var array
      */
     protected array $encryptedFields = [
-        'email', 'phone', 'id_card', 'address', 'PassPort', 'emContactPh'
+        'email', 'phone', 'id_card', 'PassPort', 'emContactPh'
     ];
 
     /**
@@ -68,9 +68,17 @@ class TripApply extends BaseModel
     public function setAttribute($key, $value): void
     {
         if (in_array($key, $this->encryptedFields) && !empty($value)) {
+            // 生成並儲存雜湊值
+            $hashKey = $key . '_hash';
+            $hashValue = hash('sha256', $value);
+            parent::setAttribute($hashKey, $hashValue);
+
             $value = ShortCrypt::encrypt($value);
+
         }
         parent::setAttribute($key, $value);
+
+
     }
 
     /**

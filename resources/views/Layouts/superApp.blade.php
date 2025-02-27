@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<header class="">
+
     <nav class="navbar navbar-expand-lg navbar-light navbar-shrink h-auto flex flex-col" id="mainNav">
         <div
             class="flex flex-col items-center gap-4 xl:w-[1040px] lg:w-[900px] w-[500px]  xxx:w-full md:px-16 sm:px-20 lg:px-0 ss:px-12 xxx:px-4 xxs:px-6">
@@ -99,9 +99,10 @@
                                         <i cflex justify-centerlass="fa-solid fa-newspaper"></i><span
                                             class="ml-1">文章區</span></a></li>
                                 <li class="nav-item">
-                                    <button class="px-0 nav-link " name="getOrder">
+                                    <button class="px-0 nav-link " name="getOrder" data-bs-dismiss="offcanvas">
                                         <i class="fa-solid fa-newspaper"></i><span class="ml-1">訂單查詢</span></button>
                                 </li>
+
                             </ul>
 
                         </div>
@@ -113,7 +114,7 @@
                             <i class="fa-regular fa-compass pl-2 pr-1 cursor-pointer" id="itinerary_compass"></i>
                             <input type="text" id="tripTerm"
                                    class="xsm:w-[90px] xxx:w-[70px] grow my-1 mx-1 xxx:text-xs xsm:text-sm text-gray-900 placeholder:text-gray-400
-                      focus:outline-none "
+                "
                                    placeholder="探索行程">
                         </div>
                     </div>
@@ -127,7 +128,7 @@
 {{--    <nav class="" id="B">--}}
 {{--    </nav>--}}
 
-</header>
+
 <div class="h-screen overflow-auto" id="scrollable-content">
 
     @yield('head_content')
