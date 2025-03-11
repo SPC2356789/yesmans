@@ -2,7 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Mews\Captcha\Captcha;
+use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\PrivateFileController;
+use Filament\Http\Middleware\Authenticate;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,6 +48,9 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Http\Controllers'], function
         return view('privacy');
     })->name('privacy');
 
+    Route::get('/private-file/passport/{path}.jpg', 'PrivateFileController@show')
+        ->middleware(Authenticate::class) // 直接使用 Filament 的中間件
+        ->name('private.file');
     //    Route::get('/blog/Search/{key}', 'Blog\BlogController@Search');
     Route::fallback(function () {
         return response()->view('errors.404', [], 404);

@@ -18,9 +18,11 @@ import FormClone from '../views/Itinerary/FormClone.vue';
 
 const tripElement = document.getElementById('trip_from');
 const tripData = JSON.parse(tripElement.dataset.trip_times);
+const bankData = JSON.parse(tripElement.dataset.bank_info);
 // 創建 Vue 實例並註冊全局方法
 const app = createApp(FormClone, {
     data: tripData,
+    bank: bankData,
     CountryData: getCountry()
 });
 app.mount('#trip_from');

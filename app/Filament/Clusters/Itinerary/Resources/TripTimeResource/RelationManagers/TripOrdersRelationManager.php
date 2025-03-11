@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Itinerary\Resources\TripTimeResource\RelationManagers;
 
+use App\Helper\ShortCrypt;
 use Carbon\Carbon;
 use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
 use Filament\Forms;
@@ -62,28 +63,6 @@ class TripOrdersRelationManager extends RelationManager
                     ->copyMessage('訂單編號 copied')
                     ->copyMessageDuration(1500)
                 ,
-                Tables\Columns\TextColumn::make('trip_uuid')
-                    ->label('行程編號')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                ,
-                Tables\Columns\TextColumn::make('times.title')
-                    ->label('行程資訊')
-                    ->getStateUsing(fn($record) => ($trip = $record->times()->first()?->trip)
-                        ? "{$trip->title} - {$trip->subtitle}"
-                        : ''
-                    )
-                ,
-                Tables\Columns\TextColumn::make('times.date_start')
-                    ->label('行程時間')
-                    ->searchable()
-                    ->formatStateUsing(fn($record) => ($time = $record->times()->first())
-                        ? Carbon::parse($time->date_start)->isoFormat('Y-M-D (dd)') .
-                        ($time->date_start !== $time->date_end
-                            ? ' ~ ' . Carbon::parse($time->date_end)->isoFormat('Y-M-D (dd)')
-                            : ' (單攻)')
-                        : ''
-                    ),
                 Tables\Columns\TextColumn::make('applies')
                     ->label('團員')
                     ->searchable()
@@ -114,12 +93,12 @@ class TripOrdersRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('paid_amount')
                     ->label('已付金額')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true)
+
                 ,
                 Tables\Columns\TextColumn::make('account_last_five')
                     ->label('帳戶後五碼')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true)
+
                 ,
                 Tables\Columns\TextColumn::make('status')
                     ->formatStateUsing(fn($state) => config("order_statuses.$state.text") ?? '未知狀態')
@@ -185,7 +164,12 @@ class TripOrdersRelationManager extends RelationManager
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->url(function ($record) {
+                        return "/yes-admin/order/trip-orders/{$record->id}/edit";
+                    })
+                    ->openUrlInNewTab()
+                ,
                 Tables\Actions\ViewAction::make()
                     ->form(function ($record) {
                         return [
@@ -200,15 +184,46 @@ class TripOrdersRelationManager extends RelationManager
                                         ->label('')
                                         ->schema([
                                             Forms\Components\TextInput::make('name')
-                                                ->label('姓名')
-                                                ->suffixAction(
-                                                    Forms\Components\Actions\Action::make('copy')
-                                                        ->icon('heroicon-o-clipboard')
-                                                        ->action(fn ($state) => 'navigator.clipboard.writeText("' . $state . '")')
-                                                        ->extraAttributes(['title' => '複製到剪貼簿'])
-                                                )
-                                            ,
+                                                ->required()
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('gender')
+                                                ->required()
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('phone')
+                                                ->tel()
+                                                ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
 
+                                                ->required()
+                                                ->maxLength(255),
+                                            Forms\Components\DatePicker::make('birthday')
+                                                ->required(),
+                                            Forms\Components\TextInput::make('id_card')
+                                                ->required()
+                                                ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('address')
+                                                ->required()
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('emContact')
+                                                ->required()
+                                                ->maxLength(255),
+                                            Forms\Components\TextInput::make('emContactPh')
+                                                ->required()
+                                                ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
+                                                ->maxLength(255),
+
+                                            Forms\Components\TextInput::make('email')
+                                                ->email()
+                                                ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+
+                                                ->required()
+                                                ->maxLength(255),
+
+                                            Forms\Components\TextInput::make('PassPort')
+                                                ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+                                                ->maxLength(255),
                                         ])
                                         ->columns(3)
                                         ->disabled(), // 只讀模式

@@ -97,13 +97,12 @@ class TripOrderResource extends Resource
                 ,
                 Forms\Components\Placeholder::make('total_amount')
                     ->label('')
-                    ->hint(fn ($get) => '訂單總金額'.$get('total_amount') )
-                   ,
+                    ->hint(fn($get) => '訂單總金額' . $get('total_amount'))
+                ,
                 Forms\Components\Placeholder::make('lave_amount')
                     ->label('')
-
-                    ->hint(fn ($get, $record) => $get('lave_amount') > 0 ? '未付款金額 '.$record->lave_amount : '已全部付款')
-                    ->hintColor(fn ($get) => $get('lave_amount') > 0 ? 'danger' : 'success')
+                    ->hint(fn($get, $record) => $get('lave_amount') > 0 ? '未付款金額 ' . $record->lave_amount : '已全部付款')
+                    ->hintColor(fn($get) => $get('lave_amount') > 0 ? 'danger' : 'success')
             ]);
     }
 
@@ -118,17 +117,19 @@ class TripOrderResource extends Resource
                     ->copyMessage('copied')
                     ->copyMessageDuration(1500)
                 ,
-                Tables\Columns\TextColumn::make('trip_uuid')
-                    ->label('行程編號')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                ,
+
                 Tables\Columns\TextColumn::make('times.title')
                     ->label('行程資訊')
-                    ->getStateUsing(fn($record) => ($trip = $record->times()->first()?->trip)
-                        ? "{$trip->title} - {$trip->subtitle}"
-                        : ''
-                    )
+                    ->searchable(query: function ($query, $search) {
+                        return $query->orWhereHas('times.trip', function ($query) use ($search) {
+                            $query->where('title', 'like', "%{$search}%")
+                                ->orWhere('subtitle', 'like', "%{$search}%");
+                        });
+                    })
+                    ->getStateUsing(function ($record) {
+                        $trip = $record->times()->first()?->trip;
+                        return $trip ? "{$trip->title} - {$trip->subtitle}" : '';
+                    })
                 ,
                 Tables\Columns\TextColumn::make('times.date_start')
                     ->label('行程時間')

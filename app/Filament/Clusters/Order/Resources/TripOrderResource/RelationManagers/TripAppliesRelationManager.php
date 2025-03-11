@@ -8,8 +8,12 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Http\UploadedFile;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class TripAppliesRelationManager extends RelationManager
 {
@@ -32,14 +36,12 @@ class TripAppliesRelationManager extends RelationManager
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
-
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->tel()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
-
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('country')
@@ -47,16 +49,13 @@ class TripAppliesRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\TextInput::make('id_card')
                     ->required()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
-
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
                     ->required()
-
                     ->maxLength(255),
                 Forms\Components\TextInput::make('PassPort')
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
-
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('diet')
                     ->required()
@@ -71,12 +70,29 @@ class TripAppliesRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emContactPh')
                     ->required()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
-
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emContact')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\FileUpload::make('passport_pic')
+                    ->label('護照照片上傳')
+                    ->image()
+                    ->directory(fn($get) => 'passport') // 📂 設定儲存目錄
+                    ->disk('private')
+                    ->visibility('private')
+                    ->imageEditor()
+                    ->getUploadedFileNameForStorageUsing(function (UploadedFile $file, $get): string {
+                        $passportNumber = $get('PassPort') ?? $get('id_card'); // 取得護照號碼，預防 null
+                        $extension = $file->getClientOriginalExtension(); // 取得副檔名 (jpg/png)
+                        return "{$passportNumber}.{$extension}"; // 設定檔案名稱
+                    })
+                    ->dehydrated(true), // 確保狀態被保存
+                Forms\Components\ViewField::make('passport_')
+                    ->label('護照照片預覽')
+                    ->view('components.passport-pic-preview')
+                    ->dehydrated(false), // 確保狀態被保存
+
             ]);
     }
 
@@ -89,17 +105,18 @@ class TripAppliesRelationManager extends RelationManager
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('訂單編號')
-                    ->searchable(),
+                   ,
                 Tables\Columns\TextColumn::make('name')
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('姓名')
-                    ->searchable(),
+                   ,
                 Tables\Columns\TextColumn::make('gender')
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('性別')
-                    ->searchable(),
+                    ->formatStateUsing(fn ($state) => $state === 'male' ? '男' : ($state === 'female' ? '女' : $state)),
+
                 Tables\Columns\TextColumn::make('birthday')
                     ->copyable()
                     ->copyMessage('copied')
@@ -117,7 +134,7 @@ class TripAppliesRelationManager extends RelationManager
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('電話')
-                    ->searchable(),
+                   ,
                 Tables\Columns\TextColumn::make('country')
                     ->copyable()
                     ->copyMessage('copied')
@@ -154,24 +171,26 @@ class TripAppliesRelationManager extends RelationManager
                     ->label('Instagram')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('emContactPh')
-                    ->copyable()
-                    ->copyMessage('copied')
-                    ->label('緊急聯絡電話')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('emContact')
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('緊急聯絡人')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                  ,
+                Tables\Columns\TextColumn::make('emContactPh')
+                    ->copyable()
+                    ->copyMessage('copied')
+                    ->label('緊急聯絡電話')
+                    ->searchable()
+                   ,
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('建立時間')
                     ->dateTime()
                     ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                 ,
                 Tables\Columns\TextColumn::make('updated_at')
                     ->copyable()
@@ -189,7 +208,7 @@ class TripAppliesRelationManager extends RelationManager
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordAction(null) // 禁用單行點擊動作
-            ->recordUrl(fn () => null) // 明確返回 null 的閉包
+            ->recordUrl(fn() => null) // 明確返回 null 的閉包
             ->filters([
                 //
             ])

@@ -87,7 +87,6 @@ return [
         'users.view' => '/admin/users/*',
         'users.create' => '/admin/users/create',
         'users.update' => '/admin/users/*/edit',
-
         'roles.*' => '/admin/roles*',
         'roles.viewAny' => '/admin/users',
         'roles.view' => '/admin/users/*',

@@ -17,7 +17,16 @@ class TripApply extends BaseModel
 
     // 定義可以進行批量賦值的欄位
     use SoftDeletes;
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::saving(function ($model) {
+            unset($model->total_amount);
+            unset($model->lave_amount);
+        });
+
+    }
     protected static function booted()
     {
         static::updating(function ($tripApply) {

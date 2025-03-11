@@ -77,7 +77,8 @@ class Setting extends Model
 
     public function getBase($where, $cut = '_'): array
     {
-        $results = Setting::where('key', 'like', $where . '_%')->pluck('value', 'key')->toArray();
+
+        $results = Setting::where('key', 'like', $where . $cut.'%')->pluck('value', 'key')->toArray();
 
         $processedResults = array_map(function ($key) use ($where, $cut) {
             return str_replace($where . $cut, '', $key);

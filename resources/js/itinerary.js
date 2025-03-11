@@ -33,12 +33,16 @@ $(document).ready(function () {
         // console.log(timeContent)
         // 顯示 SweetAlert
         Swal.fire({
+            showCloseButton: true, // 顯示右上角的 X 按鈕
+            showConfirmButton: false, // 隱藏確認按鈕
+            showCancelButton: false, // 隱藏取消按鈕
+            allowOutsideClick: true, // 可選：允許點擊外部關閉
             html: time, // 在這裡將 data-tip 放進提示框的文本內容
-            confirmButtonText: "探索其他行程", // 按鈕文字
-            customClass: {
-
-                confirmButton: "trip_card_Swal_confirm" // 設定自訂 CSS 類別
-            }
+            // confirmButtonText: "探索其他行程", // 按鈕文字
+            // customClass: {
+            //
+            //     confirmButton: "trip_card_Swal_confirm" // 設定自訂 CSS 類別
+            // }
         });
     });
 

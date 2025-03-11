@@ -26,7 +26,7 @@ class ItineraryBase extends BaseSettings
     protected static ?string $cluster = Itinerary::class;
 
     protected static ?string $title = '基礎設定';
-    protected static ?string $area = 'index';
+    protected static ?string $area = 'Itinerary';
     protected static ?int $navigationSort = 3;
 
     public static function getModelLabel(): string
@@ -49,38 +49,37 @@ class ItineraryBase extends BaseSettings
         return [
             Tabs::make('Settings')
                 ->schema([
+                    Tabs\Tab::make('行程設定')
+                        ->schema([
+                            TextInput::make(self::$area . '_bank.name')
+                                ->label('銀行名稱')
+                            ,
+
+                            TextInput::make(self::$area . '_bank.account')
+                                ->label('銀行帳號')
+                            ,
+
+                            TextInput::make(self::$area . '_bank.branch')
+                                ->label('分行')
+                            ,
+
+                            TextInput::make(self::$area . '_bank.holder')
+                                ->label('戶名')
+                            ,
+                        ]),
+
                     Tabs\Tab::make('關鍵字(Seo)')
                         ->schema([
                             TextInput::make(self::$area . '_seo.title')
                                 ->label('主題')
-                                ->required(),
-                            Repeater::make(self::$area . '_hot')
-                                ->label('熱門文章')
-                                ->schema([
-                                    Select::make('blogItem')
-                                        ->label('選擇文章')
-                                        ->options(
-                                            BlogItem::SelectDataImg()
-                                        )
-                                        ->searchable()
-                                        ->distinct()
-                                        ->helperText('每篇文章只能選一次')
-                                        ->selectablePlaceholder(false)
-                                        ->allowHtml(),
-                                ])
-                                ->defaultItems(4)
-                                ->deletable(false)
-                                ->grid(4)
-                                ->minItems(4)
-                                ->maxItems(4)
-                                ->reorderableWithButtons(),
+                            ,
                             TextInput::make(self::$area . '_seo.description')
                                 ->label('介紹')
-                                ->required(),
+                            ,
                             TextInput::make(self::$area . '_OG.title')
                                 ->label('OG標題')
                                 ->placeholder('標題不要超過 25 – 30 個中文字')
-                                ->required(),
+                            ,
                             FileUpload::make(self::$area . '_OG.image')
                                 ->label('OG圖片上傳')
                                 ->image()

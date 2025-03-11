@@ -29,6 +29,7 @@ class TripController extends ItryController
      */
     public function index(Request $request): \Illuminate\Http\Response
     {
+        $bankInfo=$this->Settings->getBase($this->Slug,'_bank');
 
         $jsPage = $this->jsPage;
         $Slug = $this->Slug;
@@ -65,8 +66,23 @@ class TripController extends ItryController
     /**
      * 建立訂單
      */
-    public function create(Request $request)
+    public function create(Request $request): \Illuminate\Http\JsonResponse
     {
+
+        // 驗證其他資料
+        $request->validate([
+            'data' => 'required|array',
+            'uuid' => 'required|string|max:100',
+            'paid_amount' => 'required|numeric',
+            'account_last_five' => 'required|string|max:5',
+
+        ], [
+            'data.required' => '資料欄位是必填的。',
+            'uuid.required' => 'UUID有誤。',
+            'uuid.max' => 'UUID有誤。',
+            'paid_amount.required' => '付款金額必填。',
+            'account_last_five.required' => '帳號末五碼必填。',
+        ]);
 
         try {
             // 驗證驗證碼
@@ -78,13 +94,7 @@ class TripController extends ItryController
                 return response()->json(['error' => 'NO PASS'], 500);
             }
 
-            // 驗證其他資料
-            $request->validate([
-                'data' => 'required|array',
-                'uuid' => 'required|string|max:100',
-                'paid_amount' => 'string|max:10',
-                'account_last_five' => 'string|max:10',
-            ]);
+
 
             // 設定報名序號，時間戳 + 微秒 +_+行程slug
             $order_number = (int)(microtime(true) * 1000) . '_' . $request->route('trip');
@@ -111,7 +121,7 @@ class TripController extends ItryController
                     'LINE' => $data['LINE'],
                     'IG' => $data['IG'],
                     'emContact' => $data['emContact'],
-                    'emContactPh' => $data['emContact'],
+                    'emContactPh' => $data['emContactPh'],
                 ]);
                 // 儲存每筆報名資料的 ID
                 $tripApplyId[] = $tripApply->id;
@@ -141,8 +151,10 @@ class TripController extends ItryController
         }
 
     }
+    public function gatBank(){
 
-    public function gatOrder(Request $request)
+    }
+    public function gatOrder(Request $request): \Illuminate\Http\JsonResponse
     {
         $id_card = $request->input('id_card');
         $phone = $request->input('phone');
