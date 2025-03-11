@@ -3,10 +3,12 @@
 namespace App\Filament\Clusters\Itinerary\Resources\TripTimeResource\RelationManagers;
 
 use Carbon\Carbon;
+use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -36,23 +38,22 @@ class TripOrdersRelationManager extends RelationManager
                 Forms\Components\TextInput::make('account_last_five')
                     ->maxLength(255),
                 Forms\Components\Select::make('status')//config拉出陣列
-                    ->options(
-                        collect(config('order_statuses'))
-                            ->mapWithKeys(function ($item, $key) {
-                                return [$key => $item['text'].$item['note']];
-                            })
-                            ->all()
-                    )
+                ->options(
+                    collect(config('order_statuses'))
+                        ->mapWithKeys(function ($item, $key) {
+                            return [$key => $item['text'] . $item['note']];
+                        })
+                        ->all()
+                )
                     ->default(0)
                     ->required()
-                  ,
+                ,
             ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('order_number')
             ->columns([
                 Tables\Columns\TextColumn::make('order_number')
                     ->label('訂單編號')
@@ -66,17 +67,17 @@ class TripOrdersRelationManager extends RelationManager
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
                 ,
-                Tables\Columns\TextColumn::make('trip_times.trip.title')
+                Tables\Columns\TextColumn::make('times.title')
                     ->label('行程資訊')
-                    ->searchable()
-                    ->formatStateUsing(fn($record) => ($trip = $record->trip_times->first()?->trip)
+                    ->getStateUsing(fn($record) => ($trip = $record->times()->first()?->trip)
                         ? "{$trip->title} - {$trip->subtitle}"
                         : ''
-                    ),
-                Tables\Columns\TextColumn::make('trip_times.date_start')
+                    )
+                ,
+                Tables\Columns\TextColumn::make('times.date_start')
                     ->label('行程時間')
                     ->searchable()
-                    ->formatStateUsing(fn($record) => ($time = $record->trip_times->first())
+                    ->formatStateUsing(fn($record) => ($time = $record->times()->first())
                         ? Carbon::parse($time->date_start)->isoFormat('Y-M-D (dd)') .
                         ($time->date_start !== $time->date_end
                             ? ' ~ ' . Carbon::parse($time->date_end)->isoFormat('Y-M-D (dd)')
@@ -87,7 +88,6 @@ class TripOrdersRelationManager extends RelationManager
                     ->label('團員')
                     ->searchable()
                     ->lineClamp(2)
-
                     ->searchable(query: function ($query, $search) {
                         return $query->whereHas('applies', function ($query) use ($search) {
                             $query->where('name', 'like', "%{$search}%");
@@ -135,25 +135,63 @@ class TripOrdersRelationManager extends RelationManager
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+//                Tables\Columns\TextColumn::make('updated_at')
+//                    ->label('更新時間')
+//                    ->dateTime()
+//                    ->sortable()
+//                    ->toggleable(isToggledHiddenByDefault: true),
+//                Tables\Columns\TextColumn::make('deleted_at')
+//                    ->label('刪除時間')
+//                    ->dateTime()
+//                    ->sortable()
+//                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->recordUrl(null) // 禁用整行點擊導航
             ->filters([
-                //
-            ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Filters\TrashedFilter::make(),
+                Filter::make('date')
+                    ->form([
+                        Flatpickr::make('date_start')
+                            ->default(function () {
+                                // 設定預設範圍為今天起算，一年後
+                                $today = \Carbon\Carbon::today()->toDateString(); // 當前日期
+                                $oneYearLater = \Carbon\Carbon::today()->addYear()->toDateString(); // 一年後的日期
+                                return [$today, $oneYearLater]; // 開始日期為今天，結束日期為一年後
+                            })
+                            ->range(),
+
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        $result = $query->when(
+                            $data['date_start'],
+                            function (Builder $query, $range) {
+                                if (!is_array($range)) {
+                                    $range = explode(' to ', $range);
+                                }
+                                $query->whereHas('times', function (Builder $subQuery) use ($range) {
+                                    $subQuery
+                                        ->when(
+                                            isset($range[0]) && $range[0],
+                                            fn(Builder $subQuery) => $subQuery->whereDate('date_start', '>=', $range[0])
+                                        )
+                                        ->when(
+                                            isset($range[1]) && $range[1],
+                                            fn(Builder $subQuery) => $subQuery->whereDate('date_start', '<=', $range[1])
+                                        );
+                                });
+                            }
+                        );
+                        return $result;
+                    })
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->before(function () {
-                        \Log::info('Edit action triggered'); // 測試是否觸發
-                    }),
-                Tables\Actions\DeleteAction::make(),
-//                Tables\Actions\EditAction::make(),
-//                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

@@ -38,7 +38,7 @@ class TripTimeResource extends Resource
 
         return $form
             ->schema([
-                Select::make('mould_id')
+                Forms\Components\Select::make('mould_id')
                     ->label('選擇行程')
                     ->options(self::$tripMould::getData_form())// 從分類模型中獲取選項
                     ->searchable() // 支持搜索
