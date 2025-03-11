@@ -115,7 +115,7 @@ class TripOrderResource extends Resource
                     ->label('訂單編號')
                     ->searchable()
                     ->copyable()
-                    ->copyMessage('訂單編號 copied')
+                    ->copyMessage('copied')
                     ->copyMessageDuration(1500)
                 ,
                 Tables\Columns\TextColumn::make('trip_uuid')

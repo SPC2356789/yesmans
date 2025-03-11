@@ -12,7 +12,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Infolists\Components\TextEntry;
 class TripOrdersRelationManager extends RelationManager
 {
     protected static string $relationship = 'Orders';
@@ -186,6 +186,35 @@ class TripOrdersRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->form(function ($record) {
+                        return [
+                            Forms\Components\TextInput::make('order_number')
+                                ->label('訂單編號')
+                                ->default($record->order_number)
+                                ->disabled(),
+                            Forms\Components\Section::make('申請記錄')
+                                ->schema([
+                                    Forms\Components\Repeater::make('applies')
+                                        ->relationship('applies')
+                                        ->label('')
+                                        ->schema([
+                                            Forms\Components\TextInput::make('name')
+                                                ->label('姓名')
+                                                ->suffixAction(
+                                                    Forms\Components\Actions\Action::make('copy')
+                                                        ->icon('heroicon-o-clipboard')
+                                                        ->action(fn ($state) => 'navigator.clipboard.writeText("' . $state . '")')
+                                                        ->extraAttributes(['title' => '複製到剪貼簿'])
+                                                )
+                                            ,
+
+                                        ])
+                                        ->columns(3)
+                                        ->disabled(), // 只讀模式
+                                ]),
+                        ];
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
