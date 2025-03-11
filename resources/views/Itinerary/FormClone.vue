@@ -103,6 +103,8 @@ const submitForms = async () => {
             uuid: props.data.uuid,
             data: formList.value,
             amount: props.data.amount,
+            account_last_five: account_last_five.value, // 使用者輸入的驗證碼
+            paid_amount: paid_amount.value, // 使用者輸入的驗證碼
             captcha: captchaInput.value, // 使用者輸入的驗證碼
             key: captchaKey.value, // 後端需要的 key
         })
@@ -137,6 +139,8 @@ const submitForms = async () => {
 const captchaSrc = ref(""); // 存驗證碼圖片
 const captchaKey = ref(""); // 存驗證碼 Key
 const captchaInput = ref(""); // 存使用者輸入的驗證碼
+const account_last_five = ref(""); // 存使用者輸入的驗證碼
+const paid_amount = ref(""); // 存使用者輸入的驗證碼
 // 重新加載驗證碼
 const refreshCaptcha = async () => {
     try {
@@ -163,11 +167,71 @@ const initChoices = (newId = 1) => {
     countries.value[id].setChoiceByValue('TWN');
 
 };
+
+const copyAccount = () => {
+    const account = "123456789";
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(account)
+            .then(() => {
+                alert("帳號已複製到剪貼簿");
+            })
+            .catch((error) => {
+                console.error("複製失敗:", error);
+            });
+    } else {
+        console.warn("Clipboard API 不支援，請手動複製");
+    }
+}
+
 </script>
 
 <template>
     <!--    <div class="max-w-2xl mx-auto p-6 shadow-md rounded">-->
     <h2 class="text-xl font-bold mb-4">報名表單</h2>
+    <div class="bg-gray-50 p-4 rounded border border-gray-200 my-4 cursor-pointer" @click="copyAccount">
+        <p class="text-gray-700">請將款項轉入以下銀行帳戶：</p>
+        <ul class="mt-2 space-y-1">
+            <li>
+                <span class="font-semibold">銀行名稱:</span> 國泰世華銀行
+            </li>
+            <li>
+                <span class="font-semibold">分行:</span> 台北分行
+            </li>
+            <li>
+                <span class="font-semibold" >帳號:</span> 123456789
+            </li>
+            <li>
+                <span class="font-semibold">戶名:</span> 王小明
+            </li>
+            <li>
+                <span class="font-semibold">需轉帳金額:</span>2000
+            </li>
+        </ul>
+        <p class="text-sm text-gray-500 mt-2">
+            轉帳完成後，請務必填寫帳號末五碼，以便確認付款。
+        </p>
+        <p class="text-gray-700">填寫匯款資訊：</p>
+        <div class="mt-2 flex space-x-4">
+            <!-- 帳號末五碼 -->
+            <div class="flex-1">
+                <input
+                    type="text"
+                    v-model="account_last_five"
+                    class="w-full p-2 border rounded-md focus:ring focus:ring-blue-200 focus:border-blue-500"
+                    placeholder="請輸入轉帳號末五碼">
+            </div>
+
+            <!-- 匯款金額 -->
+            <div class="flex-1">
+                <input
+                    type="text"
+                    v-model="paid_amount"
+                    class="w-full p-2 border rounded-md focus:ring focus:ring-blue-200 focus:border-blue-500"
+                    placeholder="請輸入匯款金額"
+                    min="0">
+            </div>
+        </div>
+    </div>
 
     <div v-for="(form, index) in formList" :key="form.id" class="mb-4 p-4 border rounded">
         <div class="flex flex-row justify-between">

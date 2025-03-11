@@ -35,7 +35,7 @@ class TripOrdersRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\TextInput::make('account_last_five')
                     ->maxLength(255),
-                Forms\Components\select::make('status')//config拉出陣列
+                Forms\Components\Select::make('status')//config拉出陣列
                     ->options(
                         collect(config('order_statuses'))
                             ->mapWithKeys(function ($item, $key) {

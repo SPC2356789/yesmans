@@ -31,6 +31,7 @@ class TripTimeResource extends Resource
 
     protected static ?string $cluster = Itinerary::class;
     protected static ?int $navigationSort = 0;
+
     public static function form(Form $form): Form
     {
 
@@ -62,16 +63,15 @@ class TripTimeResource extends Resource
                     ->numeric()
                     ->prefix('NT$'),
 
-                Flatpickr::make('date_start')
+                Forms\Components\DatePicker::make('date_start')
                     ->hidden()
                 ,
-                Flatpickr::make('date_end')
+                Forms\Components\DatePicker::make('date_end')
                     ->hidden()
                 ,
-                Flatpickr::make('date')
+                Flatpickr::make('date_range')
                     ->label('開團日期')
-                    ->range()// Use as a Date Range Picker
-                    ->required()
+                    ->range()
                 ,
                 Forms\Components\TextInput::make('quota')
                     ->label('名額')
@@ -159,8 +159,7 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
 
                 Tables\Columns\TextColumn::make('date_start')
                     ->label('日期')
-                    ->getStateUsing(fn ($record) =>
-                        Carbon::parse($record->date_start)->isoFormat('Y-M-D (dd)') .
+                    ->getStateUsing(fn($record) => Carbon::parse($record->date_start)->isoFormat('Y-M-D (dd)') .
                         ($record->date_start !== $record->date_end
                             ? ' ~ ' . Carbon::parse($record->date_end)->isoFormat('Y-M-D (dd)')
                             : ' (單攻)')
@@ -207,7 +206,7 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                                 // 設定預設範圍為今天起算，一年後
                                 $today = \Carbon\Carbon::today()->toDateString(); // 當前日期
                                 $oneYearLater = \Carbon\Carbon::today()->addYear()->toDateString(); // 一年後的日期
-                                return [$today, $oneYearLater]; // 開始日期為今天，結束日期為一年後
+                                return $today . ' to ' . $oneYearLater; // 開始日期為今天，結束日期為一年後
                             })
                             ->range(),
 
@@ -233,20 +232,7 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make()//date
-                ->mutateRecordDataUsing(function (array $data): array {
-
-                    $data['date'] = $data['date_start'] . ' to ' . $data['date_end'];
-
-                    return $data;
-                })
-                    ->mutateFormDataUsing(function ($data) {
-                        $data['date_start'] = $data['date'][0];
-                        $data['date_end'] = $data['date'][1];
-                        unset($data['date']);
-                        return $data;
-                    })
-                ,
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
@@ -259,6 +245,7 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                 ]),
             ]);
     }
+
     public static function getRelations(): array
     {
         return [

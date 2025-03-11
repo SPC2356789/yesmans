@@ -154,6 +154,8 @@ class TripAppliesRelationManager extends RelationManager
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->recordAction(null) // 禁用單行點擊動作
+            ->recordUrl(fn () => null) // 明確返回 null 的閉包
             ->filters([
                 //
             ])

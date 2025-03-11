@@ -14,18 +14,21 @@ class TripOrder extends BaseModel
 {
     use SoftDeletes;
     use HasFactory;
-    protected static function booted()
+    protected static function boot()
     {
-//        static::updating(function ($tripOrder) {
-//            if ($tripOrder->isDirty('order_number')) {
-//                $order_on =$tripOrder->getOriginal('order_number');
-//                $New_order_on =$tripOrder->order_number;
-////
-////                DB::table('order_has_apply')
-////                    ->where('trip_order_on', $order_on)
-////                    ->update(['trip_order_on' => $New_order_on]);
-//            }
-//        });
+        parent::boot();
+        static::retrieved(function ($model) {
+
+            $applies = json_decode($model->applies, true); // 將 JSON 轉為陣列
+            $amount = $model->amount; // 獲取表單中用戶輸入的 amount
+            $model->total_amount = is_array($applies) ? count($applies) * $amount : $amount;
+            $model->lave_amount = $model->total_amount  - $model->paid_amount;
+        });
+        static::saving(function ($model) {
+            unset($model->total_amount);
+            unset($model->lave_amount);
+        });
+
     }
 //    /**
 //     * Get the trip times associated with this model.

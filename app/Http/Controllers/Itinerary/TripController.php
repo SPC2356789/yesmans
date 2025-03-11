@@ -82,6 +82,8 @@ class TripController extends ItryController
             $request->validate([
                 'data' => 'required|array',
                 'uuid' => 'required|string|max:100',
+                'paid_amount' => 'string|max:10',
+                'account_last_five' => 'string|max:10',
             ]);
 
             // 設定報名序號，時間戳 + 微秒 +_+行程slug
@@ -119,7 +121,8 @@ class TripController extends ItryController
             // 儲存報名資料，包含報名的 ID 列表
             $tripOrder = TripOrder::create([
                 'order_number' => $order_number,
-//                'trip_uuid' => $request['uuid'],
+                'account_last_five' => $request['account_last_five'],
+                'paid_amount' => $request['paid_amount'],
                 'amount' => $request['amount'],
 //                'applies' => json_encode($tripApplyId),  // 儲存報名 ID 的 JSON 格式
                 'status' => 10,  // 報名的初始階段

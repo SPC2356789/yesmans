@@ -11,8 +11,11 @@ class EditTripTime extends EditRecord
 {
     protected static string $resource = TripTimeResource::class;
 
+
     protected function getHeaderActions(): array
     {
+
+
         return [
             Actions\DeleteAction::make(),
         ];

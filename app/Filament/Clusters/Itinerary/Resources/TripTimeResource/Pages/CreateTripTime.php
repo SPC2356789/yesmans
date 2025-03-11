@@ -10,4 +10,6 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateTripTime extends CreateRecord
 {
     protected static string $resource = TripTimeResource::class;
+
+
 }

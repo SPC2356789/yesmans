@@ -43,7 +43,7 @@ class TripOrderResource extends Resource
                 Forms\Components\Select::make('selected_times')
 //                    ->required()
                     ->label('行程時間')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->date_start} to {$record->date_end}")
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->date_start} to {$record->date_end}")
                     ->relationship(
                         name: 'times',
                         modifyQueryUsing: function ($query, callable $get, $livewire) {
@@ -71,31 +71,39 @@ class TripOrderResource extends Resource
                             return $query;
                         }
                     )
-
                     ->dehydrated(false),
                 Forms\Components\TextInput::make('amount')
                     ->label('每位成員金額')
                     ->required()
                     ->numeric()
                     ->reactive() // 使欄位反應，當值改變時觸發更新
-                   ,
+                ,
 
                 Forms\Components\TextInput::make('paid_amount')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('account_last_five')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
                     ->label('訂單狀態')
+                    ->options(
+                        collect(config('order_statuses'))
+                            ->mapWithKeys(function ($item, $key) {
+                                return [$key => $item['text'] . $item['note']];
+                            })
+                            ->all()
+                    )
+                    ->default(10)
                     ->required()
-                    ->numeric()
-                    ->default(0),
+                ,
                 Forms\Components\Placeholder::make('total_amount')
-                    ->label('訂單總金額')
-                    ->content(function ($get, $record) {
-                        $applies = json_decode($record->applies, true); // 將 JSON 轉為陣列
-                        $amount = $get('amount'); // 獲取表單中用戶輸入的 amount
-                        return is_array($applies) ? count($applies) * $amount : $amount;
-                    }),
+                    ->label('')
+                    ->hint(fn ($get) => '訂單總金額'.$get('total_amount') )
+                   ,
+                Forms\Components\Placeholder::make('lave_amount')
+                    ->label('')
+
+                    ->hint(fn ($get, $record) => $get('lave_amount') > 0 ? '未付款金額 '.$record->lave_amount : '已全部付款')
+                    ->hintColor(fn ($get) => $get('lave_amount') > 0 ? 'danger' : 'success')
             ]);
     }
 

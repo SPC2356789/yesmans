@@ -14,20 +14,38 @@ class TripTime extends BaseModel
 {
     use SoftDeletes;
     use HasFactory;
-    protected $casts = [
-        'date' => 'array',
-    ];
+
+//    protected $casts = [
+//        'date' => 'array',
+//    ];
     protected static function boot()
     {
         parent::boot();
-
+// 當記錄從資料庫載入時觸發
+        static::retrieved(function ($model) {
+            $model->date_range = $model->date_start . ' to ' . $model->date_end; // 將 quota 設為 1
+        });
         static::creating(function ($model) {
             if (empty($model->uuid)) {
                 $model->uuid = Str::uuid();
             }
         });
+        static::saving(function ($model) {
+
+            $dates =$model->date_range;
+            $model->date_start = $dates[0] ?? null;
+            $model->date_end = $dates[1] ?? $dates[0];
+            unset($model->date_range);
+        });
     }
-    public function Orders():belongsToMany
+
+    protected static function booted()
+    {
+
+
+    }
+
+    public function Orders(): belongsToMany
     {
         return $this->belongsToMany(
             TripOrder::class,
@@ -38,6 +56,7 @@ class TripTime extends BaseModel
             'id' // 用 trip_uuid 作為目標鍵
         );
     }
+
     public function Trip(): BelongsTo
     {
         return $this->belongsTo(Trip::class, 'mould_id', 'id');
@@ -71,10 +90,7 @@ class TripTime extends BaseModel
             })
             ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
             ->orderBy('mould_id', 'asc')
-
             ->where('is_published', 1)
-
-
             ->selectRaw(self::getDateLogic())
             ->get(); // 🔥 這裡先執行查詢，獲取結果
 
@@ -136,10 +152,5 @@ class TripTime extends BaseModel
 ';
     }
 
-    protected static function booted()
-    {
-//        static::saving(function ($model) {
-//          dd($model);
-//        });
-    }
+
 }

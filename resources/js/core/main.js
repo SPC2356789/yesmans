@@ -59,9 +59,9 @@ function getOrder() {
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: '<i class="fa fa-search"></i> 查詢',
+        confirmButtonText: '<i class="fa fa-search"></i> <span class="text-white">查詢</span>',
         confirmButtonColor:'#64A19D',
-        cancelButtonText: '<i class="fa fa-times"></i> 取消',
+        cancelButtonText: '<i class="fa fa-times"></i>  <span class="text-white">取消</span>',
         didOpen: () => {
             const orderForm = Swal.getPopup().querySelector('#get_Order_form');
             const app = createApp(get_Order_form, {
