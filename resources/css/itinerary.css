@@ -3,9 +3,13 @@
     @apply !text-yes-major !bg-neutral-50
 }
 .choices__item--selectable.is-highlighted {
-    @apply !bg-[#f7dbab]
+    @apply !bg-[#f7dbab] !flex
 }
 
+.choices__list.choices__list--multiple{
+    @apply !py-1;
+    display: block;
+}
 .choices__inner ,.choices__list--single ,.choices {
 @apply !py-0 !px-2 ;
     border:none!important;

@@ -29,7 +29,9 @@ class TripController extends ItryController
      */
     public function index(Request $request): \Illuminate\Http\Response
     {
-        $bankInfo=$this->Settings->getBase($this->Slug,'_bank');
+
+
+        $bankInfo = $this->Settings->getBase($this->Slug, '_bank');
 
         $jsPage = $this->jsPage;
         $Slug = $this->Slug;
@@ -95,7 +97,6 @@ class TripController extends ItryController
             }
 
 
-
             // 設定報名序號，時間戳 + 微秒 +_+行程slug
             $order_number = (int)(microtime(true) * 1000) . '_' . $request->route('trip');
             $tripApplyId = [];
@@ -103,6 +104,7 @@ class TripController extends ItryController
             $count = 0;
             // 儲存報名資料
             foreach ($dataArray as $data) {
+
                 // 使用模型創建報名資料
                 $tripApply = TripApply::create([
                     'name' => $data['name'],
@@ -117,7 +119,7 @@ class TripController extends ItryController
                     'address' => $data['address'],
                     'diet' => $data['diet'],
                     'experience' => $data['experience'],
-                    'disease' => $data['disease'],
+                    'disease' => $data['disease']?implode(',', $data['disease']):'無',
                     'LINE' => $data['LINE'],
                     'IG' => $data['IG'],
                     'emContact' => $data['emContact'],
@@ -140,10 +142,19 @@ class TripController extends ItryController
 // 將 TripApply 關聯到 TripOrder
             $tripOrder->applies()->attach($tripApplyId);
             $tripOrder->times()->attach($request['uuid']);
+//uuid尋找時間與團名
+            $TripTimes = TripTime::with('Trip')->where('uuid', $request['uuid'])->first();;
+            $TripTime = TripTime::selectRaw(TripTime::getDateLogic())->where('uuid', $request['uuid'])->first();
+            $trip = "{$TripTimes->Trip->title}-{$TripTimes->Trip->subtitle}({$TripTime->dateAll})";
+// 假設 $order_number 和 $trip 已定義
+            $lineLink = "<a href='https://line.me/R/oaMessage/@808ahrka/?訂單序號: {$order_number}，{$trip}' class='inline-block bg-green-500 p-2 rounded-md hover:bg-green-600 transition-colors'>";
+            $lineLink .= "<img src='https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png' class='w-32' alt='加入好友' border='0'></a>";
+
+
             // 返回成功訊息
             return response()->json([
-                'message' => '序號:' . $order_number . ' 報名成功<br> <br> 人數' . $count . '位',
-            ]);
+                'message' => '序號: ' . $order_number . '<br><br>人數: ' . $count . '位<br>' .$lineLink
+             ]);
 
         } catch (\Exception $e) {
             // 錯誤處理，返回錯誤訊息
@@ -151,9 +162,12 @@ class TripController extends ItryController
         }
 
     }
-    public function gatBank(){
+
+    public function gatBank()
+    {
 
     }
+
     public function gatOrder(Request $request): \Illuminate\Http\JsonResponse
     {
         $id_card = $request->input('id_card');

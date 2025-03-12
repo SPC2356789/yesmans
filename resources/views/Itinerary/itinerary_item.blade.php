@@ -109,6 +109,6 @@
                 class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
     </button>
 
-    <div class="hidden" id="trip_from" data-trip_times='@json($trip_times)'data-bank_info='@json($bankInfo)' ></div>
+    <div class="hidden" id="trip_from" data-trip_times='@json($trip_times)'data-bank_info='@json($bankInfo)'></div>
 
 @endsection

@@ -244,18 +244,19 @@
             <fieldset>
                 <legend class="text-sm/6 font-semibold text-gray-900">過往經驗(請準確填寫)</legend>
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-3">
+                    <div class="sm:col-span-2">
                         <label :for="'disease-' + form.id" class="block text-sm/6 font-medium text-gray-900">病史</label>
-                        <input
+                        <select
+                            multiple
                             v-model="form.disease"
                             :id="'disease-' + form.id"
                             :name="'disease-' + form.id"
-                            type="text"
-                            required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
-                        />
-                        <span v-if="errors[`disease-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`disease-${form.id}`] }}</span>
+                        >
+                            <!-- Choices.js 會動態填充選項 -->
+                        </select>
                     </div>
+
                     <div class="sm:col-span-3">
                         <label :for="'experience-' + form.id" class="block text-sm/6 font-medium text-gray-900">爬山/運動經驗(過去一年)</label>
                         <input
@@ -334,7 +335,7 @@ const formList = ref([
         id: 1,
         name: '測試使用者',
         gender: 'male',
-        birthday: '1990-01-01',
+        birthday: '1990-01-01',I    
         email: 'test@example.com',
         phone: '0912345678',
         country: 'TWN',
@@ -343,7 +344,7 @@ const formList = ref([
         PassPort: 'E12345678',
         diet: 'vegetarian',
         experience: '5年戶外經驗',
-        disease: '無',
+        disease: [], // 改為陣列
         LINE: '@test123',
         IG: 'test_ig',
         emContactPh: '0922334455',
@@ -373,9 +374,9 @@ const fieldLabels = computed(() => {
         dynamicLabels[`emContact-${form.id}`] = '緊急連絡人';
         dynamicLabels[`emContactPh-${form.id}`] = '緊急連絡人電話';
         dynamicLabels[`LINE-${form.id}`] = 'LINE-ID';
-        dynamicLabels[`IG-${form.id}`] = 'IG-ID';
-        dynamicLabels[`disease-${form.id}`] = '病史';
-        dynamicLabels[`experience-${form.id}`] = '爬山/運動經驗';
+        // dynamicLabels[`IG-${form.id}`] = 'IG-ID';
+        // dynamicLabels[`disease-${form.id}`] = '病史';
+        // dynamicLabels[`experience-${form.id}`] = '爬山/運動經驗';
         dynamicLabels[`diet-${form.id}`] = '飲食';
     });
     return { ...baseLabels, ...dynamicLabels };
@@ -389,12 +390,18 @@ const props = defineProps({
 });
 
 // 其他數據
-const countries = ref([]);
+const countries = ref([]);//國家選項
+const disease = ref([]);//國家選項
+const diseases = ref([
+    { value: '流感', label: '流感' },
+    { value: 'COVID-19', label: 'COVID-19' },
+    { value: '哮喘', label: '哮喘' },
+]);//疾病選項
 const captchaSrc = ref('');
 const captchaKey = ref('');
 const captchaInput = ref('');
-const account_last_five = ref('');
-const paid_amount = ref('');
+const account_last_five = ref('');//帳號後五碼
+const paid_amount = ref('');//付款金額
 let addFormId = 2;
 
 // 初始化
@@ -423,7 +430,7 @@ const addForm = () => {
         PassPort: 'E12345678',
         diet: 'vegetarian',
         experience: '5年戶外經驗',
-        disease: '無',
+        disease: ['無'], // 改為陣列
         LINE: '@test123',
         IG: 'test_ig',
         emContactPh: '0922334455',
@@ -450,7 +457,6 @@ const onSubmit = async (event) => {
     const form = event.target;
     errors.value = {};
 
-    // HTML5 驗證
     const isValid = form.checkValidity();
 
     if (isValid) {
@@ -469,10 +475,12 @@ const onSubmit = async (event) => {
 
             window.scrollTo(0, 0);
             Swal.fire({
+                showCloseButton: true, // 顯示右上角的 X 按鈕
+                showConfirmButton: false, // 隱藏確認按鈕
+                showCancelButton: false, // 隱藏取消按鈕
+                allowOutsideClick: true, // 可選：允許點擊外部關閉
                 title: '報名成功',
                 html: response.data.message,
-                icon: 'success',
-                confirmButtonText: '確定',
             }).then(() => {
                 location.reload();
             });
@@ -525,14 +533,41 @@ const refreshCaptcha = async () => {
 
 // 初始化 Choices.js
 const initChoices = (newId = 1) => {
-    const id = `country-${newId}`;
-    countries.value[id] = new Choices(`#${id}`, {
+
+    const disease_id = `disease-${newId}`;
+    disease.value[disease_id] = new Choices(`#${disease_id}`, {
+        searchEnabled: true,
+        allowHTML: false,
+        itemSelectText: '',
+        choices: diseases.value,
+        searchPlaceholderValue: '輸入疾病名稱搜尋或新增...',
+        noResultsText: '無符合疾病，按 Enter 新增',
+        addItems: true, // 必須啟用
+        addChoices: true, // 新增此屬性以啟用動態新增
+        removeItems: true,
+        removeItemButton: true,
+        duplicateItemsAllowed: false,
+        editItems: false,
+
+        maxItemCount: 10,
+        addItemFilter: (value) => value.trim().length >= 2,
+        callbackOnInit: function () {
+            console.log(`${disease_id} 初始化完成`);
+        },
+        // 強制顯示下拉選項
+        shouldSort: false,
+        position: 'bottom', // 確保下拉位置正確
+    });
+
+
+    const country_id = `country-${newId}`;
+    countries.value[country_id] = new Choices(`#${country_id}`, {
         searchEnabled: true,
         allowHTML: true,
         itemSelectText: '',
         choices: countries.value,
     });
-    countries.value[id].setChoiceByValue('TWN');
+    countries.value[country_id].setChoiceByValue('TWN');
 };
 
 // 複製銀行帳號
