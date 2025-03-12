@@ -27,6 +27,7 @@ use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Setting;
+
 //env
 use Outerweb\FilamentSettings\Filament\Plugins\FilamentSettingsPlugin;
 
@@ -47,7 +48,7 @@ class AdminPanelProvider extends PanelProvider
     {
 
         FilamentAsset::register([
-            Css::make('media-select', __DIR__ . '/../../../resources/css/mediaSelect.css')->loadedOnRequest() ,
+            Css::make('media-select', __DIR__ . '/../../../resources/css/mediaSelect.css')->loadedOnRequest(),
             Css::make('cus-curator', __DIR__ . '/../../../resources/css/cus-curator.css'),
             Css::make('admin_css', __DIR__ . '/../../../resources/css/admin.css'),
             Js::make('admin_js', __DIR__ . '/../../../resources/js/admin.js'),

@@ -83,15 +83,14 @@ class TripAppliesRelationManager extends RelationManager
                     ->visibility('private')
                     ->imageEditor()
                     ->getUploadedFileNameForStorageUsing(function (UploadedFile $file, $get): string {
-                        $passportNumber = $get('PassPort') ?? $get('id_card'); // 取得護照號碼，預防 null
-                        $extension = $file->getClientOriginalExtension(); // 取得副檔名 (jpg/png)
-                        return "{$passportNumber}.{$extension}"; // 設定檔案名稱
+                        return $get('PassPort') ?? $get('id_card'); // 只使用護照號碼作為檔名
                     })
                     ->dehydrated(true), // 確保狀態被保存
                 Forms\Components\ViewField::make('passport_')
                     ->label('護照照片預覽')
                     ->view('components.passport-pic-preview')
                     ->dehydrated(false), // 確保狀態被保存
+
 
             ]);
     }

@@ -116,7 +116,7 @@ class UsResource extends Resource
         $relations = [];
 
         // 检查是否具有 'super-admin' 权限
-        if (auth()->id()==1) {
+        if (Auth()->id()==1) {
             $relations[] = RelationManagers\RlRelationManager::class;
         }
 
