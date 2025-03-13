@@ -12,7 +12,8 @@
     <link rel="stylesheet" type="text/css" href="{{asset("vendor/cookie-consent/css/cookie-consent.css")}}">
 </head>
 
-<body id="page-top" class="@yield('bg') flex flex-col justify-between h-screen overflow-hidden" data-page="{{($jsPage??($Slug??''))}}">
+<body id="page-top" class="@yield('bg') flex flex-col justify-between h-screen overflow-hidden"
+      data-page="{{($jsPage??($Slug??''))}}">
 @if (config('services.GTM.enabled'))
     <!-- Google Tag Manager (noscript) -->
     <noscript>
@@ -38,93 +39,95 @@
 </div>
 
 
-    <nav class="navbar navbar-expand-lg navbar-light navbar-shrink h-auto flex flex-col" id="mainNav">
-        <div
-            class="flex flex-col items-center gap-4 xl:w-[1040px] lg:w-[900px] w-[500px]  xxx:w-full md:px-16 sm:px-20 lg:px-0 ss:px-12 xxx:px-4 xxs:px-6">
-            {{--            <a class="navbar-brand" href="\">{{$generals['brand_name']??''}}</a>--}}
-            <div class="flex flex-row-reverse  justify-between w-full items-center gap-0.5">
-                <a class="flex items-end justify-start max-h-12 mr-2 order-4" href="/" id="brand-link">
-                    @if($generals)
-                        <div
-                            class="relative sm:min-w-16 sm:h-12 min-h-9 aspect-w-4 aspect-h-3 min-w-12 overflow-hidden">
-                            @foreach($generals['brand'] as $general)
-                                @if($loop->iteration !== 3)
-                                    <img
-                                        class="absolute left-0 w-auto h-full object-cover {{ $loop->first ? 'opacity-100 top-0 z-10' : 'z-0 bottom-0 opacity-0 translate-y-5 transition-all duration-[3000ms] ease-in-out' }}"
-                                        src="{{ Storage::url($general['data']['image']) }}"
-                                        alt="YESMAN_LOGO"
-                                        id="{{ $loop->first ?'':'hover-image'}}"
-                                    >
-                                @endif
-                            @endforeach
+<nav class="navbar navbar-expand-lg navbar-light navbar-shrink h-auto flex flex-col" id="mainNav">
+    <div
+        class="flex flex-col items-center gap-4 xl:w-[1040px] lg:w-[900px] w-[500px]  xxx:w-full md:px-16 sm:px-20 lg:px-0 ss:px-12 xxx:px-4 xxs:px-6">
+        {{--            <a class="navbar-brand" href="\">{{$generals['brand_name']??''}}</a>--}}
+        <div class="flex flex-row-reverse  justify-between w-full items-center gap-0.5">
+            <a class="flex items-end justify-start max-h-12 mr-2 order-4" href="/" id="brand-link">
+                @if($generals)
+                    <div
+                        class="relative sm:min-w-16 sm:h-12 min-h-9 aspect-w-4 aspect-h-3 min-w-12 overflow-hidden">
+                        @foreach($generals['brand'] as $general)
+                            @if($loop->iteration !== 3)
+                                <img
+                                    class="absolute left-0 w-auto h-full object-cover {{ $loop->first ? 'opacity-100 top-0 z-10' : 'z-0 bottom-0 opacity-0 translate-y-5 transition-all duration-[3000ms] ease-in-out' }}"
+                                    src="{{ Storage::url($general['data']['image']) }}"
+                                    alt="YESMAN_LOGO"
+                                    id="{{ $loop->first ?'':'hover-image'}}"
+                                >
+                            @endif
+                        @endforeach
+                    </div>
+                    @if(isset($generals['brand'][2]))
+                        <div class="aspect-w-16 aspect-h-5 min-h-8 sm:h-12 h-10 pt-2.5 sm:pt-2 flex">
+                            <img class="h-full  object-contain"
+                                 src="{{ Storage::url($generals['brand'][2]['data']['image']) }}" alt="YESMAN首頁">
                         </div>
-                        @if(isset($generals['brand'][2]))
-                            <div class="aspect-w-16 aspect-h-5 min-h-8 sm:h-12 h-10 pt-2.5 sm:pt-2 flex">
-                                <img class="h-full  object-contain"
-                                     src="{{ Storage::url($generals['brand'][2]['data']['image']) }}" alt="YESMAN首頁">
-                            </div>
-                        @endif
-
                     @endif
-                </a>
-                <div class="flex flex-row xsm:gap-2 xxx:gap-1 items-center">
-                    <div class="max-h-8 min-h-6 flex items-center order-3 lg:hidden">
-                        <button
-                            class=" navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-yes-major "
-                            type="button"
-                            data-bs-toggle="offcanvas"
-                            data-bs-target="#Menu" aria-controls="Menu">
-                            選單
-                            <i class="fas fa-bars"></i>
-                        </button>
+
+                @endif
+            </a>
+            <div class="flex flex-row xsm:gap-2 xxx:gap-1 items-center">
+                <div class="max-h-8 min-h-6 flex items-center order-3 lg:hidden">
+                    <button
+                        class=" navbar-toggler xxx:px-1 xsm:px-2 sm:px-6 navbar-toggler-right xxx:text-xs xsm:text-sm hover:bg-yes-major "
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#Menu" aria-controls="Menu">
+                        選單
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+
+                <div class="offcanvas offcanvas-start w-auto order-1" tabindex="-1" id="Menu"
+                     aria-labelledby="MenuLabel">
+                    <div class="offcanvas-header">
+                        <button type="button" class="btn-close ms-auto text-reset" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
                     </div>
+                    <div class="offcanvas-body lg992:ms-auto ">
+                        <ul class="navbar-nav   md:gap-3 lg:gap-4 lg:items-center">
+                            <li class="nav-item "><a class="px-0 nav-link @yield('index')"
+                                                     href="/"><span>首頁</span></a></li>
+                            <li class="nav-item"><a class="px-0 nav-link @yield('blog')" href="/blog">
+                                   <span
+                                   >文章區</span></a></li>
+                            <li class="nav-item"><a class="px-0 nav-link @yield('about')" href="/about">
+                                    <span>關於我們</span></a>
+                            </li>
 
-                    <div class="offcanvas offcanvas-start w-auto order-1" tabindex="-1" id="Menu"
-                         aria-labelledby="MenuLabel">
-                        <div class="offcanvas-header">
-                            <button type="button" class="btn-close ms-auto text-reset" data-bs-dismiss="offcanvas"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body lg992:ms-auto ">
-                            <ul class="navbar-nav   md:gap-3 lg:gap-4 lg:items-center">
-                                <li class="nav-item "><a class="px-0 nav-link @yield('index')" href="/"><i
-                                            class="fa-solid fa-house"></i><span class="ml-1">首頁</span></a></li>
-                                <li class="nav-item"><a class="px-0 nav-link @yield('about')" href="/about">
-                                        <i class="fa-solid fa-mountain-sun"></i><span class="ml-1">關於我們</span></a>
-                                </li>
-                                <li class="nav-item"><a class="px-0 nav-link @yield('itinerary')" href="/itinerary">
-                                        <i class="fa-solid fa-person-hiking"></i><span class="ml-1">行程資訊</span></a>
-                                </li>
-                                <li class="nav-item"><a class="px-0 nav-link @yield('blog')" href="/blog">
-                                        <i cflex justify-centerlass="fa-solid fa-newspaper"></i><span
-                                            class="ml-1">文章區</span></a></li>
-                                <li class="nav-item">
-                                    <button class="px-0 nav-link " name="getOrder" data-bs-dismiss="offcanvas">
-                                        <i class="fa-solid fa-newspaper"></i><span class="ml-1">訂單查詢</span></button>
-                                </li>
 
-                            </ul>
+                            <li class="nav-item"><a class="px-0 nav-link @yield('itinerary')" href="/itinerary">
+                                    <span>行程資訊</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <button class="px-0 nav-link " name="getOrder" data-bs-dismiss="offcanvas">
+                                    <span>訂單查詢</span></button>
+                            </li>
 
-                        </div>
+                        </ul>
+
                     </div>
-                    <div class="order-2 xxx:pl-0.5 xsm:pl-3">
-                        <div class="flex items-center rounded-md bg-white outline outline-1 outline-gray-300
+                </div>
+                <div class="order-2 xxx:pl-0.5 xsm:pl-3">
+                    <div class="flex items-center rounded-md bg-white outline outline-1 outline-gray-300
                 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-neutral-800
                 max-w-sm mx-auto max-h-12">
-                            <i class="fa-regular fa-compass pl-2 pr-1 cursor-pointer" id="itinerary_compass"></i>
-                            <input type="text" id="tripTerm"
-                                   class="xsm:w-[90px] xxx:w-[70px] grow my-1 mx-1 xxx:text-xs xsm:text-sm text-gray-900 placeholder:text-gray-400
+                        <i class="fa-regular fa-compass pl-2 pr-1 cursor-pointer" id="itinerary_compass"></i>
+                        <input type="text" id="tripTerm"
+                               class="xsm:w-[90px] xxx:w-[70px] grow my-1 mx-1 xxx:text-xs xsm:text-sm text-gray-900 placeholder:text-gray-400
                 "
-                                   placeholder="探索行程">
-                        </div>
+                               placeholder="探索行程">
                     </div>
-
-
                 </div>
+
+
             </div>
         </div>
+    </div>
 
-    </nav>
+</nav>
 {{--    <nav class="" id="B">--}}
 {{--    </nav>--}}
 
@@ -144,8 +147,10 @@
                 @if ($foots && isset($foots['media']))
                     @foreach ($foots['media'] as $foot)
                         @if ($foot['data']['status'])
-                            <a href="{{ $foot['data']['url'] ?? '#' }}" class="w-12 h-12 transition-transform hover:scale-110">
-                                <img src="{{ Storage::url($foot['data']['image']) }}" class="w-full h-full object-cover" alt="Social Media Icon">
+                            <a href="{{ $foot['data']['url'] ?? '#' }}"
+                               class="w-12 h-12 transition-transform hover:scale-110">
+                                <img src="{{ Storage::url($foot['data']['image']) }}" class="w-full h-full object-cover"
+                                     alt="Social Media Icon">
                             </a>
                         @endif
                     @endforeach
@@ -159,12 +164,13 @@
                 <!-- 版權文字（占 4 格，居中；在 sm 以上居中） -->
                 <div class="col-span-4 text-center sm:w-full sm:text-center">
                     <div class="text-gray-700 text-sm">
-                        {{ $foots['copyright'] ?? '' }}
+                        {{ $foots['copyright'] ?? '' }} All Rights Reserved.<br> Designed by SPC網頁設計.
                     </div>
                 </div>
                 <!-- 隱私權政策按鈕（占 4 格，靠右；在 sm 以上居中） -->
                 <div class="col-span-4 xxx:text-right sm:text-center sm:w-full">
-                    <a href="{{ route('privacy') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-yes-minor bg-yes-minor bg-opacity-10 rounded-full hover:bg-opacity-20 transition-colors duration-200">
+                    <a href="{{ route('privacy') }}"
+                       class="inline-flex items-center px-4 py-2 text-sm font-medium text-yes-minor bg-yes-minor bg-opacity-10 rounded-full hover:bg-opacity-20 transition-colors duration-200">
                         隱私權政策
                     </a>
                 </div>

@@ -2,9 +2,8 @@ import $ from "jquery";
 import Swal from 'sweetalert2'
 import {Tool} from "./tools";
 import axios from "axios";
-import { createApp } from 'vue';
-import getOrderPanel from '../../views/Layouts/getOrder.vue';
-import get_Order_form from '../../views/Layouts/get_Order_form.vue';
+
+
 let startTime;
 
 $(document).ready(function () {
@@ -16,7 +15,7 @@ $(document).ready(function () {
     cus_select() //調用選擇器行為
     Loading()
     $(document).on('click', '[name="getOrder"]', function () {
-        getOrder();
+        Tool.getOrder();
     });
     $('#tripTerm').on('keypress', function (event) {
         // if (event.key === 'Enter') {
@@ -51,87 +50,6 @@ function changeTerm(obj, url, params) {
     window.history.pushState({}, '', url);
 }
 
-function getOrder() {
-    Swal.fire({
-        title: '<strong>訂單查詢</strong>',
-        icon: 'question',
-        html: `<div id="get_Order_form" class="mb-2">    </div>`,
-        showCloseButton: true,
-        showCancelButton: true,
-        focusConfirm: false,
-        confirmButtonText: '<i class="fa fa-search"></i> <span class="text-white">查詢</span>',
-        confirmButtonColor:'#64A19D',
-        cancelButtonText: '<i class="fa fa-times"></i>  <span class="text-white">取消</span>',
-        didOpen: () => {
-            const orderForm = Swal.getPopup().querySelector('#get_Order_form');
-            const app = createApp(get_Order_form, {
-
-            });
-            app.mount(orderForm);
-        },
-        preConfirm: () => {
-            const id_card = Swal.getPopup().querySelector('#id_card').value;
-            const phone = Swal.getPopup().querySelector('#phone').value;
-            const email = Swal.getPopup().querySelector('#email').value;
-
-            if (!id_card || !phone || !email) {
-                Swal.showValidationMessage('請輸入身分證號碼、電話號碼和電子郵件！');
-                return;
-            }
-            if (id_card.length !== 10) {
-                Swal.showValidationMessage('身分證號碼應為10碼！');
-                return;
-            }
-            if (!phone.match(/^09\d{8}$/)) {
-                Swal.showValidationMessage('電話號碼格式錯誤，應為09開頭的10位數字！');
-                return;
-            }
-            if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
-                Swal.showValidationMessage('電子郵件格式錯誤！');
-                return;
-            }
-
-            Swal.showLoading();
-
-            return axios.post('/get-order', {
-                id_card,
-                phone,
-                email
-            }).then(response => {
-                if (response.data) {
-                    Swal.fire({
-                        title: '<strong>查詢結果</strong>',
-                        icon: 'success',
-                        html: '<div id="get_order" class="mt-4 max-h-60 overflow-y-auto"></div>',
-                        showCloseButton: true,
-                        showConfirmButton: false,
-                        didOpen: () => {
-                            const get_order = Swal.getPopup().querySelector('#get_order');
-                            const app = createApp(getOrderPanel, {
-                                orders: response.data[0],
-                                onBack: () => {
-                                    Swal.close();
-                                    getOrder();
-                                }
-                            });
-                            app.mount(get_order);
-                        }
-                    });
-                } else {
-                    throw new Error(response.data.message || '查詢失敗');
-                }
-            }).catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: '查詢失敗',
-                    text: error.message,
-                    confirmButtonText: '確定'
-                });
-                return false;
-            });
-        }
-    });
-}
 
 function cus_select(selector = '[aria-haspopup="true"]', submenu = '[role="menu"]', subMenuitem = '[role="menuitem"]') {
     // 點擊按鈕時，切換該按鈕所在父元素的菜單顯示/隱藏

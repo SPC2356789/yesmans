@@ -1,8 +1,30 @@
 import $ from "jquery";
 
 import axios from "axios";
+import Swal from "sweetalert2";
+import {createApp, ref} from 'vue';
+import getOrderPanel from '../../views/Layouts/getOrder.vue';
+import get_Order_form from '../../views/Layouts/get_Order_form.vue';
 
 export const Tool = {
+    getOrder:
+        function (tag) {
+            Swal.fire({
+                title: '<strong>訂單查詢</strong>',
+                icon: 'question',
+                html: `<div id="get_Order_form" class="mb-2"></div>`,
+                showCloseButton: true,
+                showCancelButton: false,
+                focusConfirm: false,
+                showConfirmButton: false, // 隱藏確認按鈕
+                didOpen: () => {
+                    const orderForm = Swal.getPopup().querySelector('#get_Order_form');
+                    const app = createApp(get_Order_form, {});
+                    app.mount(orderForm);
+                },
+            })
+        },
+
     search:
         function (tag) {
             const page = $('#page-top').data('page')
@@ -85,7 +107,6 @@ export const Tool = {
         }
     }
     ,
-
 
 
 }

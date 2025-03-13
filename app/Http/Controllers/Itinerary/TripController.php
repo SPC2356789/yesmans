@@ -119,7 +119,7 @@ class TripController extends ItryController
                     'address' => $data['address'],
                     'diet' => $data['diet'],
                     'experience' => $data['experience'],
-                    'disease' => $data['disease']?implode(',', $data['disease']):'無',
+                    'disease' => $data['disease'] ? implode(',', $data['disease']) : '無',
                     'LINE' => $data['LINE'],
                     'IG' => $data['IG'],
                     'emContact' => $data['emContact'],
@@ -147,14 +147,14 @@ class TripController extends ItryController
             $TripTime = TripTime::selectRaw(TripTime::getDateLogic())->where('uuid', $request['uuid'])->first();
             $trip = "{$TripTimes->Trip->title}-{$TripTimes->Trip->subtitle}({$TripTime->dateAll})";
 // 假設 $order_number 和 $trip 已定義
-            $lineLink = "<a href='https://line.me/R/oaMessage/@808ahrka/?訂單序號: {$order_number}，{$trip}' class='inline-block bg-green-500 p-2 rounded-md hover:bg-green-600 transition-colors'>";
+            $lineLink = "<a href='https://line.me/R/oaMessage/" . env('Line_ID') . "/?訂單序號: {$order_number}，{$trip}' class='inline-block bg-green-500 p-2 rounded-md hover:bg-green-600 transition-colors'>";
             $lineLink .= "<img src='https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png' class='w-32' alt='加入好友' border='0'></a>";
 
 
             // 返回成功訊息
             return response()->json([
-                'message' => '序號: ' . $order_number . '<br><br>人數: ' . $count . '位<br>' .$lineLink
-             ]);
+                'message' => '序號: ' . $order_number . '<br><br>人數: ' . $count . '位<br>' . $lineLink
+            ]);
 
         } catch (\Exception $e) {
             // 錯誤處理，返回錯誤訊息
@@ -163,13 +163,15 @@ class TripController extends ItryController
 
     }
 
-    public function gatBank()
-    {
-
-    }
-
     public function gatOrder(Request $request): \Illuminate\Http\JsonResponse
     {
+        // 驗證驗證碼
+        $rules = ['captcha' => 'required|captcha_api:' . request('key') . ',math'];
+        $validator = validator()->make(request()->all(), $rules);
+        if ($validator->fails()) {
+            // 驗證碼錯誤，返回錯誤訊息
+            return response()->json('驗證失敗', 500);
+        }
         $id_card = $request->input('id_card');
         $phone = $request->input('phone');
         $email = $request->input('email');
@@ -201,7 +203,7 @@ class TripController extends ItryController
 
         $matchedApplies = [];
 
-        $applies->each(function ($apply, $index) use ($email, $phone, $id_card, &$matchedApplies) {
+        $applies->each(function ($apply) use ($email, $phone, $id_card, &$matchedApplies) {
             if ($apply->email === $email && $apply->phone === $phone && $apply->id_card === $id_card) {
                 $order = $apply->orders->first(); // 只取第一筆訂單
                 if ($order) {
@@ -211,7 +213,7 @@ class TripController extends ItryController
                             ->selectRaw(TripTime::getDateLogic())
                             ->first();
                         $trip = $times->trip;
-                        $matchedApplies[$index] = [
+                        $matchedApplies[] = [
                             'name' => "{$apply->name}",
                             'title' => "{$trip->title} ~ {$trip->subtitle}",
                             'times' => $date ? $date->dateAll : '無日期',
