@@ -57,10 +57,12 @@ class TripTimeResource extends Resource
                         }
                     })
                 ,
+                Forms\Components\TextInput::make('fake_amount')
+                    ->label('原價')
+                    ->prefix('NT$'),
                 Forms\Components\TextInput::make('amount')
                     ->label('費用')
                     ->required()
-                    ->numeric()
                     ->prefix('NT$'),
 
                 Forms\Components\DatePicker::make('date_start')
@@ -69,10 +71,10 @@ class TripTimeResource extends Resource
                 Forms\Components\DatePicker::make('date_end')
                     ->hidden()
                 ,
-//                Flatpickr::make('date_range')
-//                    ->label('開團日期')
-//                    ->range()
-//                ,
+                Flatpickr::make('date_range')
+                    ->label('開團日期')
+                    ->range()
+                ,
                 Forms\Components\TextInput::make('quota')
                     ->label('名額')
                     ->required()
@@ -81,10 +83,9 @@ class TripTimeResource extends Resource
                     ->label('提示月份')
                     ->options(array_combine(range(0, 12), range(0, 12))) // 自動產生 0~12 的選項
                 ,
-                Forms\Components\TextInput::make('applied_count')
+
+                Forms\Components\Placeholder::make('applied_count')
                     ->label('已報名人數')
-                    ->numeric()
-                    ->default(0) // 預設為 0
                 ,
                 Forms\Components\Toggle::make('food')
                     ->label('有無搭伙')

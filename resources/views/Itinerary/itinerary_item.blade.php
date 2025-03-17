@@ -72,9 +72,14 @@
                 <div class="flex justify-between">
                     <div class="flex flex-row gap-2 items-center w-2/3">
                         <h1 class="xxx:text-lg md:text-xl">報名費用</h1>
-                        <div class="w-auto">
+
+                        <div class="w-auto text-neutral-500">
+                            <del>{{ $trip_times['fake_amount']??''}}</del>
+                        </div>
+                        <div class="w-auto text-yes-major">
                             {{ $trip_times['amount']??''}}
                         </div>
+                       元 新台幣
                     </div>
                     <button
                         name="signupBtn"
