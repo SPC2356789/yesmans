@@ -29,20 +29,19 @@ class Controller extends BaseController
     }
 
 
-    public function verifyCaptcha(Request $request): string|\Illuminate\Http\RedirectResponse
+    public function verifyCaptcha(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'captcha' => 'required|captcha',
-        ], [
-            'captcha.required' => '請輸入驗證碼',
-            'captcha.captcha' => '驗證碼錯誤，請重新輸入',
-        ]);
+
+        // 驗證驗證碼
+        $rules = ['captcha' => 'required|captcha_api:' . request('key') . ',math'];
+        $validator = validator()->make(request()->all(), $rules);
+
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+
+            return response()->json(['error' => 'NO PASS'], 500);
         }
 
-        return '驗證成功！';
     }
 
     /**

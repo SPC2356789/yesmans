@@ -75,15 +75,15 @@ class TripController extends ItryController
         $request->validate([
             'data' => 'required|array',
             'uuid' => 'required|string|max:100',
-            'paid_amount' => 'required|numeric',
-            'account_last_five' => 'required|string|max:5',
+//            'paid_amount' => 'required|numeric',
+//            'account_last_five' => 'required|string|max:5',
 
         ], [
             'data.required' => '資料欄位是必填的。',
             'uuid.required' => 'UUID有誤。',
             'uuid.max' => 'UUID有誤。',
-            'paid_amount.required' => '付款金額必填。',
-            'account_last_five.required' => '帳號末五碼必填。',
+//            'paid_amount.required' => '付款金額必填。',
+//            'account_last_five.required' => '帳號末五碼必填。',
         ]);
 
         try {
@@ -91,9 +91,9 @@ class TripController extends ItryController
             $rules = ['captcha' => 'required|captcha_api:' . request('key') . ',math'];
             $validator = validator()->make(request()->all(), $rules);
 
+
             if ($validator->fails()) {
-                // 驗證碼錯誤，返回錯誤訊息
-                return response()->json(['error' => 'NO PASS'], 500);
+                return response()->json(['error' => '驗證碼錯誤'], 500);
             }
 
 

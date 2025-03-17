@@ -2,6 +2,70 @@
     <form @submit.prevent="onSubmit" class="space-y-6">
         <h2 class="text-xl font-bold mb-4">報名表單</h2>
 
+        <!-- 模態框 -->
+        <div v-if="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded shadow-lg">
+                <h3 class="text-lg font-semibold mb-4">請確認匯款資訊</h3>
+                <div class="bg-gray-50 p-4 rounded border border-gray-200 my-4">
+                    <p class="text-gray-700">請將款項轉入以下銀行帳戶：</p>
+                    <ul class="mt-2 space-y-1">
+                        <li><span class="font-semibold">銀行名稱:</span> {{ props.bank['Itinerary_bank.name'] }}</li>
+                        <li><span class="font-semibold">分行:</span> {{ props.bank['Itinerary_bank.branch'] }}</li>
+                        <li><span class="font-semibold">帳號:</span> {{ props.bank['Itinerary_bank.account'] }}</li>
+                        <li><span class="font-semibold">戶名:</span> {{ props.bank['Itinerary_bank.holder'] }}</li>
+                        <li><span class="font-semibold">需轉帳金額:</span> {{ props.data['amount'] }}</li>
+                    </ul>
+                    <p class="text-gray-700">您輸入的資訊：</p>
+                    <p>帳號末五碼：{{ formData.account_last_five }}</p>
+                    <p>匯款金額：{{ formData.paid_amount }}</p>
+                </div>
+                <div class="mt-4 flex space-x-4">
+                    <button @click="confirmSubmit" class="bg-green-500 text-white px-4 py-2 rounded">確認提交</button>
+                    <button @click="showModal = false" class="bg-red-500 text-white px-4 py-2 rounded">取消</button>
+                </div>
+                <p v-if="submitError" class="mt-2 text-red-600">{{ submitError }}</p>
+            </div>
+        </div>
+
+        <!-- 銀行資訊區塊 -->
+        <div class="bg-gray-50 p-4 rounded border border-gray-200 my-4">
+            <ul class="mt-2 space-y-1">
+                <li><span class="font-semibold">需轉帳金額:</span> {{ props.data['amount'] }}</li>
+                <li><span class="text-red-700 font-semibold">匯款帳號將在送出申請後出現</span></li>
+            </ul>
+            <p class="text-gray-700 mt-2">請務必填寫欲轉帳帳號末五碼，以便確認付款。</p>
+            <p class="text-gray-700">填寫匯款資訊：</p>
+            <div class="mt-2 flex space-x-4">
+                <div class="flex-1">
+                    <input
+                        v-model="account_last_five"
+                        name="account_last_five"
+                        type="text"
+                        required
+                        minlength="5"
+                        maxlength="5"
+                        class="w-full p-2 border rounded-md focus:ring focus:ring-blue-200 focus:border-blue-500"
+                        placeholder="請輸入轉帳號末五碼"
+                    />
+                    <span v-if="errors.account_last_five" class="mt-1 text-sm text-red-600">{{
+                            errors.account_last_five
+                        }}</span>
+                </div>
+                <div class="flex-1">
+                    <input
+                        v-model="paid_amount"
+                        name="paid_amount"
+                        type="number"
+                        required
+                        min="0"
+                        class="w-full p-2 border rounded-md focus:ring focus:ring-blue-200 focus:border-blue-500"
+                        placeholder="請輸入匯款金額"
+                    />
+                    <span v-if="errors.paid_amount" class="mt-1 text-sm text-red-600">{{ errors.paid_amount }}</span>
+                </div>
+            </div>
+        </div>
+
         <!-- 動態表單項 -->
         <div v-for="(form, index) in formList" :key="form.id" class="mb-4 p-4 border rounded">
             <div class="flex flex-row justify-between">
@@ -29,13 +93,11 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`name-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`name-${form.id}`] }}</span>
+                        <span v-if="errors[`name-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`name-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-2">
-                        <label :for="'birthday-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">生日</label>
+                        <label :for="'birthday-' + form.id" class="block text-sm/6 font-medium text-gray-900">生日</label>
                         <input
                             v-model="form.birthday"
                             :id="'birthday-' + form.id"
@@ -44,8 +106,7 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`birthday-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`birthday-${form.id}`] }}</span>
+                        <span v-if="errors[`birthday-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`birthday-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-1">
@@ -58,17 +119,15 @@
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         >
                             <option value="">請選擇</option>
-                            <option value="male">男性</option>
-                            <option value="female">女性</option>
-                            <option value="other">其他</option>
+                            <option value="男性" selected>男性</option>
+                            <option value="女性">女性</option>
+                            <option value="其他">其他</option>
                         </select>
-                        <span v-if="errors[`gender-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`gender-${form.id}`] }}</span>
+                        <span v-if="errors[`gender-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`gender-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-2">
-                        <label :for="'country-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">國家</label>
+                        <label :for="'country-' + form.id" class="block text-sm/6 font-medium text-gray-900">國家</label>
                         <select
                             v-model="form.country"
                             :id="'country-' + form.id"
@@ -77,13 +136,11 @@
                         >
                             <!-- Choices.js 會動態填充選項 -->
                         </select>
-                        <span v-if="errors[`country-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`country-${form.id}`] }}</span>
+                        <span v-if="errors[`country-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`country-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-2">
-                        <label :for="'id_card-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">身分證/居留證</label>
+                        <label :for="'id_card-' + form.id" class="block text-sm/6 font-medium text-gray-900">身分證/居留證</label>
                         <input
                             v-model="form.id_card"
                             :id="'id_card-' + form.id"
@@ -92,13 +149,11 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`id_card-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`id_card-${form.id}`] }}</span>
+                        <span v-if="errors[`id_card-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`id_card-${form.id}`] }}</span>
                     </div>
 
                     <div v-if="props.data['passport_enabled'] === 1" class="sm:col-span-2">
-                        <label :for="'PassPort-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">護照</label>
+                        <label :for="'PassPort-' + form.id" class="block text-sm/6 font-medium text-gray-900">護照</label>
                         <input
                             v-model="form.PassPort"
                             :id="'PassPort-' + form.id"
@@ -107,13 +162,11 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`PassPort-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`PassPort-${form.id}`] }}</span>
+                        <span v-if="errors[`PassPort-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`PassPort-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label :for="'address-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">居住地址</label>
+                        <label :for="'address-' + form.id" class="block text-sm/6 font-medium text-gray-900">居住地址</label>
                         <input
                             v-model="form.address"
                             :id="'address-' + form.id"
@@ -122,13 +175,11 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`address-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`address-${form.id}`] }}</span>
+                        <span v-if="errors[`address-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`address-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label :for="'email-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">電子郵件</label>
+                        <label :for="'email-' + form.id" class="block text-sm/6 font-medium text-gray-900">電子郵件</label>
                         <input
                             v-model="form.email"
                             :id="'email-' + form.id"
@@ -137,13 +188,11 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`email-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`email-${form.id}`] }}</span>
+                        <span v-if="errors[`email-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`email-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label :for="'phone-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">聯絡電話</label>
+                        <label :for="'phone-' + form.id" class="block text-sm/6 font-medium text-gray-900">聯絡電話</label>
                         <input
                             v-model="form.phone"
                             :id="'phone-' + form.id"
@@ -152,13 +201,11 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`phone-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`phone-${form.id}`] }}</span>
+                        <span v-if="errors[`phone-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`phone-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label :for="'emContact-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">緊急連絡人</label>
+                        <label :for="'emContact-' + form.id" class="block text-sm/6 font-medium text-gray-900">緊急連絡人</label>
                         <input
                             v-model="form.emContact"
                             :id="'emContact-' + form.id"
@@ -167,13 +214,11 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`emContact-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`emContact-${form.id}`] }}</span>
+                        <span v-if="errors[`emContact-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`emContact-${form.id}`] }}</span>
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label :for="'emContactPh-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">緊急連絡人電話</label>
+                        <label :for="'emContactPh-' + form.id" class="block text-sm/6 font-medium text-gray-900">緊急連絡人電話</label>
                         <input
                             v-model="form.emContactPh"
                             :id="'emContactPh-' + form.id"
@@ -182,8 +227,7 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`emContactPh-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`emContactPh-${form.id}`] }}</span>
+                        <span v-if="errors[`emContactPh-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`emContactPh-${form.id}`] }}</span>
                     </div>
                 </div>
             </fieldset>
@@ -193,8 +237,7 @@
                 <legend class="text-sm/6 font-semibold text-gray-900">聯絡資訊</legend>
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-3">
-                        <label :for="'LINE-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">LINE-ID(必填)</label>
+                        <label :for="'LINE-' + form.id" class="block text-sm/6 font-medium text-gray-900">LINE-ID(必填)</label>
                         <input
                             v-model="form.LINE"
                             :id="'LINE-' + form.id"
@@ -203,8 +246,7 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`LINE-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`LINE-${form.id}`] }}</span>
+                        <span v-if="errors[`LINE-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`LINE-${form.id}`] }}</span>
                     </div>
                     <div class="sm:col-span-3">
                         <label :for="'IG-' + form.id" class="block text-sm/6 font-medium text-gray-900">IG-ID</label>
@@ -215,8 +257,7 @@
                             type="text"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`IG-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`IG-${form.id}`] }}</span>
+                        <span v-if="errors[`IG-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`IG-${form.id}`] }}</span>
                     </div>
                 </div>
             </fieldset>
@@ -226,8 +267,7 @@
                 <legend class="text-sm/6 font-semibold text-gray-900">過往經驗(請準確填寫)</legend>
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-2">
-                        <label :for="'disease-' + form.id"
-                               class="block text-sm/6 font-medium text-gray-900">病史</label>
+                        <label :for="'disease-' + form.id" class="block text-sm/6 font-medium text-gray-900">病史</label>
                         <select
                             multiple
                             v-model="form.disease"
@@ -249,8 +289,7 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         />
-                        <span v-if="errors[`experience-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`experience-${form.id}`] }}</span>
+                        <span v-if="errors[`experience-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`experience-${form.id}`] }}</span>
                     </div>
                     <div v-if="props.data['food'] === 1" class="sm:col-span-1">
                         <label :for="'diet-' + form.id" class="block text-sm/6 font-medium text-gray-900">飲食</label>
@@ -265,8 +304,7 @@
                             <option value="素食">素食</option>
                             <option value="葷食">葷食</option>
                         </select>
-                        <span v-if="errors[`diet-${form.id}`]"
-                              class="mt-1 text-sm text-red-600">{{ errors[`diet-${form.id}`] }}</span>
+                        <span v-if="errors[`diet-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`diet-${form.id}`] }}</span>
                     </div>
                 </div>
             </fieldset>
@@ -310,7 +348,7 @@
 </template>
 
 <script setup>
-import {ref, computed, onMounted, nextTick, defineProps} from 'vue';
+import { ref, computed, onMounted, nextTick, defineProps } from 'vue';
 import Choices from 'choices.js';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -320,7 +358,7 @@ const formList = ref([
     {
         id: 1,
         name: '小美',
-        gender: 'male',
+        gender: '男性',
         birthday: '1990-01-01',
         email: 'test@example.com',
         phone: '0912345678',
@@ -330,13 +368,20 @@ const formList = ref([
         PassPort: 'E12345678',
         diet: '素食',
         experience: '5年戶外經驗',
-        disease: [], // 改為陣列
+        disease: [],
         LINE: '@test123',
         IG: 'test_ig',
         emContactPh: '0922334455',
         emContact: '王小明 (父親)',
     },
 ]);
+const showModal = ref(false);
+const formData = ref({
+    account_last_five: '',
+    paid_amount: '',
+    captcha: '',
+});
+const submitError = ref('');
 
 // 自訂錯誤訊息
 const errors = ref({});
@@ -360,38 +405,37 @@ const fieldLabels = computed(() => {
         dynamicLabels[`emContact-${form.id}`] = '緊急連絡人';
         dynamicLabels[`emContactPh-${form.id}`] = '緊急連絡人電話';
         dynamicLabels[`LINE-${form.id}`] = 'LINE-ID';
-        // dynamicLabels[`IG-${form.id}`] = 'IG-ID';
-        // dynamicLabels[`disease-${form.id}`] = '病史';
-        // dynamicLabels[`experience-${form.id}`] = '爬山/運動經驗';
         dynamicLabels[`diet-${form.id}`] = '飲食';
+        dynamicLabels[`experience-${form.id}`] = '爬山/運動經驗';
     });
-    return {...baseLabels, ...dynamicLabels};
+    return { ...baseLabels, ...dynamicLabels };
 });
 
 // Props 定義
 const props = defineProps({
-    data: {type: Object, required: false, default: () => ({})},
-    bank: {type: Object, required: false, default: () => ({})},
-    CountryData: {type: Object, required: false, default: () => ({})},
+    data: { type: Object, required: false, default: () => ({}) },
+    bank: { type: Object, required: false, default: () => ({}) },
+    CountryData: { type: Object, required: false, default: () => ({}) },
 });
 
-//疾病選項
-const countries = ref([]);//國家選項
-const disease = ref([]);//國家選項
+// 其他變數
+const countries = ref([]);
+const disease = ref([]);
 const diseases = ref([
-    {value: '', label: '可自行輸入字元增設', disabled: true }, // 不可選的提示選項
-    {value: '氣喘', label: '氣喘'},
-    {value: '高山症', label: '高山症'},
-    {value: '心臟病', label: '心臟病'},
-    {value: '糖尿病', label: '糖尿病'},
+    { value: '', label: '可自行輸入字元增設', disabled: true },
+    { value: '氣喘', label: '氣喘' },
+    { value: '高山症', label: '高山症' },
+    { value: '心臟病', label: '心臟病' },
+    { value: '糖尿病', label: '糖尿病' },
 ]);
 const captchaSrc = ref('');
 const captchaKey = ref('');
 const captchaInput = ref('');
-const account_last_five = ref('');//帳號後五碼
-const paid_amount = ref('');//付款金額
+const account_last_five = ref('');
+const paid_amount = ref('');
 let addFormId = 2;
-let refreshInterval = null; // 用於存儲定時器
+let refreshInterval = null;
+
 // 初始化
 onMounted(() => {
     refreshCaptcha();
@@ -401,10 +445,9 @@ onMounted(() => {
     }
     initChoices();
 
-    // 每 60 秒自動刷新一次驗證碼
     refreshInterval = setInterval(() => {
         refreshCaptcha();
-    }, 180 * 1000); // 60 秒
+    }, 180 * 1000);
 });
 
 // 新增表單項
@@ -413,7 +456,7 @@ const addForm = () => {
     formList.value.push({
         id: newId,
         name: '小美' + newId,
-        gender: 'male',
+        gender: '男性',
         birthday: '1990-01-01',
         email: 'test@example.com',
         phone: '0912345678',
@@ -423,7 +466,7 @@ const addForm = () => {
         PassPort: 'E12345678',
         diet: '素食',
         experience: '5年戶外經驗',
-        disease: ['無'], // 改為陣列
+        disease: ['無'],
         LINE: '@test123',
         IG: 'test_ig',
         emContactPh: '0922334455',
@@ -444,7 +487,7 @@ const removeForm = (id) => {
     formList.value = formList.value.filter((item) => item.id !== id);
 };
 
-// 提交表單處理
+// 提交表單處理：顯示模態框
 const onSubmit = async (event) => {
     console.log('提交事件觸發');
     const form = event.target;
@@ -453,46 +496,20 @@ const onSubmit = async (event) => {
     const isValid = form.checkValidity();
 
     if (isValid) {
-        console.log('驗證通過，提交數據:', {
-            formList: formList.value,
-            account_last_five: account_last_five.value,
-            paid_amount: paid_amount.value,
-            captcha: captchaInput.value
-        });
-        try {
-            const urlWithoutParams = window.location.origin + window.location.pathname;
-            const response = await axios.post(urlWithoutParams + '/apply', {
-                uuid: props.data.uuid,
-                data: formList.value,
-                amount: props.data.amount,
-                account_last_five: account_last_five.value,
-                paid_amount: paid_amount.value,
-                captcha: captchaInput.value,
-                key: captchaKey.value,
-            });
+        // 儲存表單資料以供模態框顯示
+        formData.value.account_last_five = account_last_five.value;
+        formData.value.paid_amount = paid_amount.value;
+        formData.value.captcha = captchaInput.value;
 
-            window.scrollTo(0, 0);
-            Swal.fire({
-                showCloseButton: true, // 顯示右上角的 X 按鈕
-                showConfirmButton: false, // 隱藏確認按鈕
-                showCancelButton: false, // 隱藏取消按鈕
-                allowOutsideClick: true, // 可選：允許點擊外部關閉
-                title: '報名成功',
-                html: response.data.message,
-            }).then(() => {
-                location.reload();
-            });
-        } catch (error) {
-            console.error('提交失敗:', error);
-            Swal.fire({
-                title: '錯誤',
-                text: JSON.stringify(error.response?.data?.message || '提交失敗'),
-                icon: 'error',
-                confirmButtonText: '確定',
-            }).then(() => {
-                refreshCaptcha();
-            });
-        }
+        console.log('驗證通過，準備確認:', {
+            // formList: formList.value,
+            // account_last_five: formData.value.account_last_five,
+            // paid_amount: formData.value.paid_amount,
+            // captcha: formData.value.captcha,
+        });
+
+        // 顯示模態框進行確認
+        showModal.value = true;
     } else {
         console.log('驗證失敗');
         const invalidFields = form.querySelectorAll(':invalid');
@@ -511,10 +528,53 @@ const onSubmit = async (event) => {
         const firstInvalidField = invalidFields[0];
         if (firstInvalidField) {
             console.log(`滾動到: ${firstInvalidField.name}`);
-            firstInvalidField.scrollIntoView({behavior: 'smooth', block: 'center'});
+            firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
             firstInvalidField.focus();
         }
     }
+};
+
+// 模態框確認後提交
+const confirmSubmit = async () => {
+    try {
+
+        const urlWithoutParams = window.location.origin + window.location.pathname;
+        const response = await axios.post(urlWithoutParams + '/apply', {
+            uuid: props.data.uuid,
+            data: formList.value,
+            amount: props.data.amount,
+            account_last_five: formData.value.account_last_five,
+            paid_amount: formData.value.paid_amount,
+            captcha: formData.value.captcha,
+            key: captchaKey.value,
+        });
+        showModal.value = false; // 關閉模態框
+        window.scrollTo(0, 0);
+        Swal.fire({
+            showCloseButton: true,
+            showConfirmButton: false,
+            showCancelButton: false,
+            allowOutsideClick: true,
+            title: '報名成功',
+            html: response.data.message,
+        }).then(() => {
+            location.reload();
+        });
+    } catch (error) {
+        console.error('提交失敗:', error);
+        showModal.value = false; // 關閉模態框
+        Swal.fire({
+            title: '錯誤',
+            text: JSON.stringify(error.response?.data?.message || '提交失敗'),
+            icon: 'error',
+            confirmButtonText: '確定',
+        }).then(() => {
+            refreshCaptcha();
+        });
+    }
+
+
+
 };
 
 // 刷新驗證碼
@@ -527,49 +587,44 @@ const refreshCaptcha = async () => {
     } catch (error) {
         console.error('驗證碼載入失敗', error);
     }
-
 };
+
 const customLocale = {
     noResultsText: '無符合疾病，按 Enter 新增',
     itemSelectText: '',
     searchPlaceholderValue: '輸入疾病名稱搜尋或新增...',
     addItemText: (value) => `按 Enter 新增 "${value}"`,
     maxItemText: (maxItemCount) => `最多只能選 ${maxItemCount} 項！`,
-    // 自訂過濾錯誤訊息
     customFilterError: '只能新增長度至少 2 個字符的值！',
 };
+
 // 初始化 Choices.js
 const initChoices = (newId = 1) => {
-
     const disease_id = `disease-${newId}`;
-
     disease.value[disease_id] = new Choices(`#${disease_id}`, {
         searchEnabled: true,
         allowHTML: false,
         itemSelectText: '',
         choices: diseases.value,
-        // locale: customLocale, // 應用自訂語系
-        addItems: true, // 必須啟用
-        addChoices: true, // 新增此屬性以啟用動態新增
+        addItems: true,
+        addChoices: true,
         removeItems: true,
         removeItemButton: true,
-        shouldSort: false, // 確保不排序，保持提示選項在第一位
+        shouldSort: false,
         duplicateItemsAllowed: false,
         editItems: false,
-        customAddItemText:'只能輸入2~25個中文字元',
+        customAddItemText: '只能輸入2~25個中文字元',
         noChoicesText: '無選項，請自行增設',
         addItemText: (value) => `按 Enter 新增 "${value}"`,
         maxItemCount: 10,
         addItemFilter: (value) => {
             const trimmedValue = value.trim();
-            return trimmedValue.length >= 2 && trimmedValue.length <= 25; // 長度檢查
+            return trimmedValue.length >= 2 && trimmedValue.length <= 25;
         },
         callbackOnInit: function () {
             console.log(`${disease_id} 初始化完成`);
         },
-
     });
-
 
     const country_id = `country-${newId}`;
     countries.value[country_id] = new Choices(`#${country_id}`, {
@@ -580,22 +635,6 @@ const initChoices = (newId = 1) => {
         choices: countries.value,
     });
     countries.value[country_id].setChoiceByValue('台灣(TWN)');
-};
-
-// 複製銀行帳號
-const copyAccount = () => {
-    const account = props.bank['Itinerary_bank.account'];
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(account)
-            .then(() => {
-                alert('帳號已複製到剪貼簿');
-            })
-            .catch((error) => {
-                console.error('複製失敗:', error);
-            });
-    } else {
-        console.warn('Clipboard API 不支援，請手動複製');
-    }
 };
 </script>
 
