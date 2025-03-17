@@ -40,8 +40,7 @@ class TripTimeResource extends Resource
             ->schema([
                 Forms\Components\Select::make('mould_id')
                     ->label('選擇行程')
-                    ->options(self::$tripMould::getData_form())// 從分類模型中獲取選項
-                    ->searchable() // 支持搜索
+                    ->options(Trip::getData_form())// 從分類模型中獲取選項
                     ->required()
                     ->live()
                     ->afterStateUpdated(function ($state, callable $set) {
@@ -56,7 +55,8 @@ class TripTimeResource extends Resource
                             $set('hintMonth', $template->hintMonth); // 假設模板有金額欄位
                             $set('passport_enabled', $template->passport_enabled); // 假設模板有護照開啟欄位
                         }
-                    }),
+                    })
+                ,
                 Forms\Components\TextInput::make('amount')
                     ->label('費用')
                     ->required()
@@ -69,10 +69,10 @@ class TripTimeResource extends Resource
                 Forms\Components\DatePicker::make('date_end')
                     ->hidden()
                 ,
-                Flatpickr::make('date_range')
-                    ->label('開團日期')
-                    ->range()
-                ,
+//                Flatpickr::make('date_range')
+//                    ->label('開團日期')
+//                    ->range()
+//                ,
                 Forms\Components\TextInput::make('quota')
                     ->label('名額')
                     ->required()
@@ -93,11 +93,11 @@ class TripTimeResource extends Resource
                     ->label('護照號碼是否開啟')
                     ->required(),
 
-                Forms\Components\Textarea::make('agreement_content')
-                    ->label('同意書內容')
-                    ->rows(5) // 設定高度為 5 行
-                    ->columnSpanFull()
-                ,
+//                Forms\Components\Textarea::make('agreement_content')
+//                    ->label('同意書內容')
+//                    ->rows(5) // 設定高度為 5 行
+//                    ->columnSpanFull()
+//                ,
 
 
             ]);

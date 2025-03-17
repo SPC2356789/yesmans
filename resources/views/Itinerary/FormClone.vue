@@ -2,49 +2,6 @@
     <form @submit.prevent="onSubmit" class="space-y-6">
         <h2 class="text-xl font-bold mb-4">報名表單</h2>
 
-        <!-- 銀行帳戶資訊區塊 -->
-        <div class="bg-gray-50 p-4 rounded border border-gray-200 my-4">
-            <p class="text-gray-700">請將款項轉入以下銀行帳戶：</p>
-            <ul class="mt-2 space-y-1 cursor-pointer" @click="copyAccount">
-                <li><span class="font-semibold">銀行名稱:</span> {{ props.bank['Itinerary_bank.name'] }}</li>
-                <li><span class="font-semibold">分行:</span> {{ props.bank['Itinerary_bank.branch'] }}</li>
-                <li><span class="font-semibold">帳號:</span> {{ props.bank['Itinerary_bank.account'] }}</li>
-                <li><span class="font-semibold">戶名:</span> {{ props.bank['Itinerary_bank.holder'] }}</li>
-                <li><span class="font-semibold">需轉帳金額:</span> {{ props.data['amount'] }}</li>
-            </ul>
-            <p class="text-sm text-gray-500 mt-2">轉帳完成後，請務必填寫帳號末五碼，以便確認付款。</p>
-            <p class="text-gray-700">填寫匯款資訊：</p>
-            <div class="mt-2 flex space-x-4">
-                <div class="flex-1">
-                    <input
-                        v-model="account_last_five"
-                        name="account_last_five"
-                        type="text"
-                        required
-                        minlength="5"
-                        maxlength="5"
-                        class="w-full p-2 border rounded-md focus:ring focus:ring-blue-200 focus:border-blue-500"
-                        placeholder="請輸入轉帳號末五碼"
-                    />
-                    <span v-if="errors.account_last_five" class="mt-1 text-sm text-red-600">{{
-                            errors.account_last_five
-                        }}</span>
-                </div>
-                <div class="flex-1">
-                    <input
-                        v-model="paid_amount"
-                        name="paid_amount"
-                        type="number"
-                        required
-                        min="0"
-                        class="w-full p-2 border rounded-md focus:ring focus:ring-blue-200 focus:border-blue-500"
-                        placeholder="請輸入匯款金額"
-                    />
-                    <span v-if="errors.paid_amount" class="mt-1 text-sm text-red-600">{{ errors.paid_amount }}</span>
-                </div>
-            </div>
-        </div>
-
         <!-- 動態表單項 -->
         <div v-for="(form, index) in formList" :key="form.id" class="mb-4 p-4 border rounded">
             <div class="flex flex-row justify-between">
@@ -116,7 +73,6 @@
                             v-model="form.country"
                             :id="'country-' + form.id"
                             :name="'country-' + form.id"
-                            required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         >
                             <!-- Choices.js 會動態填充選項 -->
@@ -306,8 +262,8 @@
                             class="border p-2 w-full"
                         >
                             <option value="">請選擇</option>
-                            <option value="vegetarian">素食</option>
-                            <option value="non-vegetarian">葷食</option>
+                            <option value="素食">素食</option>
+                            <option value="葷食">葷食</option>
                         </select>
                         <span v-if="errors[`diet-${form.id}`]"
                               class="mt-1 text-sm text-red-600">{{ errors[`diet-${form.id}`] }}</span>
@@ -339,7 +295,7 @@
                     type="text"
                     required
                     placeholder="輸入驗證碼"
-                    class="w-full m-0"
+                    class="w-full m-0 border"
                 />
                 <span v-if="errors.captcha" class="mt-1 text-sm text-red-600">{{ errors.captcha }}</span>
             </div>
@@ -363,16 +319,16 @@ import Swal from 'sweetalert2';
 const formList = ref([
     {
         id: 1,
-        name: '測試使用者',
+        name: '小美',
         gender: 'male',
         birthday: '1990-01-01',
         email: 'test@example.com',
         phone: '0912345678',
         country: 'TWN',
         id_card: 'A123456789',
-        address: '桃園市中壢區長江路85號',
+        address: '桃園市中壢區大安路XX號',
         PassPort: 'E12345678',
-        diet: 'vegetarian',
+        diet: '素食',
         experience: '5年戶外經驗',
         disease: [], // 改為陣列
         LINE: '@test123',
@@ -419,14 +375,16 @@ const props = defineProps({
     CountryData: {type: Object, required: false, default: () => ({})},
 });
 
-// 其他數據
+//疾病選項
 const countries = ref([]);//國家選項
 const disease = ref([]);//國家選項
 const diseases = ref([
-    {value: '流感', label: '流感'},
-    {value: 'COVID-19', label: 'COVID-19'},
-    {value: '哮喘', label: '哮喘'},
-]);//疾病選項
+    {value: '', label: '可自行輸入字元增設', disabled: true }, // 不可選的提示選項
+    {value: '氣喘', label: '氣喘'},
+    {value: '高山症', label: '高山症'},
+    {value: '心臟病', label: '心臟病'},
+    {value: '糖尿病', label: '糖尿病'},
+]);
 const captchaSrc = ref('');
 const captchaKey = ref('');
 const captchaInput = ref('');
@@ -454,16 +412,16 @@ const addForm = () => {
     const newId = addFormId++;
     formList.value.push({
         id: newId,
-        name: '測試使用者' + newId,
+        name: '小美' + newId,
         gender: 'male',
         birthday: '1990-01-01',
         email: 'test@example.com',
         phone: '0912345678',
         country: 'TWN',
         id_card: 'A123456789',
-        address: '桃園市中壢區長江路85號',
+        address: '桃園市中壢區大安路XX號',
         PassPort: 'E12345678',
-        diet: 'vegetarian',
+        diet: '素食',
         experience: '5年戶外經驗',
         disease: ['無'], // 改為陣列
         LINE: '@test123',
@@ -571,44 +529,57 @@ const refreshCaptcha = async () => {
     }
 
 };
-
+const customLocale = {
+    noResultsText: '無符合疾病，按 Enter 新增',
+    itemSelectText: '',
+    searchPlaceholderValue: '輸入疾病名稱搜尋或新增...',
+    addItemText: (value) => `按 Enter 新增 "${value}"`,
+    maxItemText: (maxItemCount) => `最多只能選 ${maxItemCount} 項！`,
+    // 自訂過濾錯誤訊息
+    customFilterError: '只能新增長度至少 2 個字符的值！',
+};
 // 初始化 Choices.js
 const initChoices = (newId = 1) => {
 
     const disease_id = `disease-${newId}`;
+
     disease.value[disease_id] = new Choices(`#${disease_id}`, {
         searchEnabled: true,
         allowHTML: false,
         itemSelectText: '',
         choices: diseases.value,
-        searchPlaceholderValue: '輸入疾病名稱搜尋或新增...',
-        noResultsText: '無符合疾病，按 Enter 新增',
+        // locale: customLocale, // 應用自訂語系
         addItems: true, // 必須啟用
         addChoices: true, // 新增此屬性以啟用動態新增
         removeItems: true,
         removeItemButton: true,
+        shouldSort: false, // 確保不排序，保持提示選項在第一位
         duplicateItemsAllowed: false,
         editItems: false,
-
+        customAddItemText:'只能輸入2~25個中文字元',
+        noChoicesText: '無選項，請自行增設',
+        addItemText: (value) => `按 Enter 新增 "${value}"`,
         maxItemCount: 10,
-        addItemFilter: (value) => value.trim().length >= 2,
+        addItemFilter: (value) => {
+            const trimmedValue = value.trim();
+            return trimmedValue.length >= 2 && trimmedValue.length <= 25; // 長度檢查
+        },
         callbackOnInit: function () {
             console.log(`${disease_id} 初始化完成`);
         },
-        // 強制顯示下拉選項
-        shouldSort: false,
-        position: 'bottom', // 確保下拉位置正確
+
     });
 
 
     const country_id = `country-${newId}`;
     countries.value[country_id] = new Choices(`#${country_id}`, {
+        noResultsText: '找不到相關國家',
         searchEnabled: true,
         allowHTML: true,
         itemSelectText: '',
         choices: countries.value,
     });
-    countries.value[country_id].setChoiceByValue('TWN');
+    countries.value[country_id].setChoiceByValue('台灣(TWN)');
 };
 
 // 複製銀行帳號

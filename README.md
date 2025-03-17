@@ -1,66 +1,34 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+登山報名網站
+專案概述
+這個 登山報名網站 是一個為登山愛好者設計的平台，允許用戶報名參加登山活動、管理個人信息並查看活動詳情。該專案使用 Laravel 10 作為後端框架，搭配 FilamentPHP 提供強大的管理面板，讓管理員可以輕鬆管理活動和用戶數據。前端則採用現代技術棧（如 Vue 3 和 Tailwind CSS），打造美觀且響應式的頁面，並注重資料安全設計。
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+技術棧
+後端
+Laravel 10：作為後端框架，提供強大的 ORM、路由、中間件和認證功能，確保穩定的 API 服務。
+FilamentPHP：用於構建管理面板，提供直觀的 UI 和高效的管理功能，管理員可通過此工具管理用戶、活動和報名記錄。
+MySQL：用於數據儲存，支持高效查詢與數據管理。
+前端
+Vue 3：前端框架，採用 Composition API 實現組件化和響應式設計，提升開發效率與可維護性。
+Vite：快速構建工具，提供即時開發伺服器和優化的打包流程，加速開發與部署。
+Tailwind CSS：用於創建美觀且響應式的頁面佈局，取代傳統的 Bootstrap，提供更高的自訂化與現代化設計風格。
+Pinia（可選）：用於前端狀態管理，提供輕量且靈活的解決方案。
+Axios：用於與後端 API 進行 HTTP 請求，確保數據流暢傳輸。
+資安設計
+為了保護用戶敏感數據（如個人信息和報名記錄），本專案採用了以下資安最佳實踐：
 
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+資料加密儲存：敏感數據（如電話號碼、地址）在儲存前使用 Laravel 的加密功能（encrypt 和 decrypt）或 AES-256 加密，確保數據庫即使被未授權訪問，數據仍無法輕易解讀。
+安全的 API 通信：使用 Laravel Passport 或 Sanctum 實現 Token-based 認證（JWT 或 API Token），搭配 HTTPS 協議，防止資料攔截或偽造。
+輸入驗證與清理：
+前端使用 Vue 的表單驗證（如 Vuelidate），後端使用 Laravel 的請求驗證（Request 類），防止 SQL 注入與 XSS 攻擊。
+利用 Laravel 的內建中間件（如 throttle）限制 API 請求頻率，防止暴力破解。
+權限控制：
+使用 Laravel 的 Gate 和 Policy 實現細粒度的權限管理，確保只有授權用戶（例如管理員）可以訪問 Filament 管理面板。
+普通用戶只能訪問自己的數據，管理員可查看所有數據。
+日誌與監控：利用 Laravel 的日誌系統記錄重要操作（如報名、數據修改），並可整合第三方監控工具（如 Sentry）以追蹤異常行為。
+特色功能
+活動報名：用戶可以瀏覽即將舉辦的登山活動，選擇參加並提交報名表單。
+個人資料管理：用戶可以查看與更新自己的個人信息，確保數據準確性。
+管理面板：通過 FilamentPHP 提供直觀的管理介面，管理員可以輕鬆管理活動、用戶和報名記錄。
+響應式設計：使用 Tailwind CSS 打造的頁面適配桌面與移動設備，提供一致的用戶體驗。
+實時更新：利用 Vue 的響應式特性，實現報名狀態的即時更新。
+專案結構

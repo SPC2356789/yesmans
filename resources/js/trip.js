@@ -155,7 +155,7 @@ function getCountry() {
             }
 
             return {
-                value: country.cca3,
+                value:`${labelText}(${country.cca3})`,
                 label: `    <div class="flex flex-row items-center w-full">
         <img class="w-6 mr-2" src="${country.flags.png}" alt="${labelText}" loading="lazy" />
           <span>${labelText} <br>${country.name.common} </span>

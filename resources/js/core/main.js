@@ -17,6 +17,16 @@ $(document).ready(function () {
     $(document).on('click', '[name="getOrder"]', function () {
         Tool.getOrder();
     });
+    $('#itinerary_compass').click(function (event) {
+        event.preventDefault(); // 防止表單提交
+        let term = $('#tripTerm').val().trim(); // 獲取輸入值
+        if (term) {
+            let url = new URL('/itinerary', window.location.origin);
+            url.searchParams.set('term', term); // 更新網址參數
+            window.location.href = url.toString(); // 重新導向
+        }
+    });
+
     $('#tripTerm').on('keypress', function (event) {
         // if (event.key === 'Enter') {
         event.preventDefault(); // 防止表單提交
