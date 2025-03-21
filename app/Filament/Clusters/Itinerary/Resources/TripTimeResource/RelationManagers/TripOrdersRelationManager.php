@@ -28,8 +28,6 @@ class TripOrdersRelationManager extends RelationManager
                 Forms\Components\TextInput::make('trip_uuid')
                     ->required()
                     ->maxLength(255),
-
-
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric()

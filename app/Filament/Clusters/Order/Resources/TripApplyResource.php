@@ -14,7 +14,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Helper\ShortCrypt;
-
+use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Actions\ActionGroup;
 class TripApplyResource extends Resource
 {
     protected static ?string $model = TripApply::class;
@@ -41,24 +42,24 @@ class TripApplyResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->tel()
                     ->required()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('country')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('id_card')
                     ->required()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('PassPort')
                     ->required()
                     ->maxLength(255)
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state),
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state),
                 Forms\Components\TextInput::make('address')
                     ->required()
                     ->maxLength(255),
@@ -75,7 +76,7 @@ class TripApplyResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emContactPh')
                     ->required()
-                    ->formatStateUsing(fn ($state) => $state ? ShortCrypt::decrypt($state) : $state)
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emContact')
                     ->required()
@@ -86,13 +87,16 @@ class TripApplyResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc') // 設置預設排序：created_at 降序
             ->columns([
+
                 Tables\Columns\TextColumn::make('name')
                     ->label('姓名')
-                   ,
+                    ->searchable(isIndividual: true)
+                ,
                 Tables\Columns\TextColumn::make('order_number')
                     ->label('訂單編號')
-                    ->searchable(),
+                    ->searchable(isIndividual: true),
                 Tables\Columns\TextColumn::make('gender')
                     ->label('性別')
                 ,
@@ -103,25 +107,40 @@ class TripApplyResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('email')
                     ->label('電子郵件')
-                  ->toggleable(isToggledHiddenByDefault: true)
-               ,   // 顯示時解密
+                    ->searchable(query: function ($query, $search) {
+                        if ($search) {
+                            $encryptedSearch = hash('sha256', $search);
+                            $query->where('email_hash', $encryptedSearch);
+                        }
+                        return $query;
+                    }, isIndividual: true)
+                    ->toggleable(isToggledHiddenByDefault: true)
+                ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('phone')
                     ->label('電話')
-             ,   // 顯示時解密
+                    ->searchable(query: function ($query, $search) {
+                        if ($search) {
+                            $encryptedSearch = hash('sha256', $search);
+                            $query->where('phone_hash', $encryptedSearch);
+                        }
+                        return $query;
+                    }, isIndividual: true)
+                ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('country')
                     ->label('國家')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('id_card')
                     ->label('身份證號')
-              ,   // 顯示時解密
+                    ->searchable(isIndividual: true)
+                ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('address')
                     ->label('地址')
                     ->toggleable(isToggledHiddenByDefault: true)
-              ,   // 顯示時解密
+                ,   // 顯示時解密
                 Tables\Columns\TextColumn::make('PassPort')
                     ->label('護照號碼')
                     ->toggleable(isToggledHiddenByDefault: true)
-             ,
+                ,
                 Tables\Columns\TextColumn::make('LINE')
                     ->label('LINE ID')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -158,20 +177,25 @@ class TripApplyResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-            ])
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\ForceDeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                ])->iconButton(),
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->selectCurrentPageOnly()
+
+            ;
     }
+
     protected static ?int $navigationSort = 2;
     protected static ?string $title = '訂單團員';
 
@@ -189,6 +213,7 @@ class TripApplyResource extends Resource
     {
         return self::$title;
     }
+
     public static function getPages(): array
     {
         return [

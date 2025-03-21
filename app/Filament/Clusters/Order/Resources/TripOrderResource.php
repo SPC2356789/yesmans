@@ -14,6 +14,8 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -109,6 +111,7 @@ class TripOrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc') // 設置預設排序：created_at 降序
             ->columns([
                 Tables\Columns\TextColumn::make('order_number')
                     ->label('訂單編號')
@@ -242,15 +245,20 @@ class TripOrderResource extends Resource
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                ])->iconButton(),
+            ], position: ActionsPosition::BeforeColumns)
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->selectCurrentPageOnly()
+            ;
     }
 
     public static function getRelations(): array

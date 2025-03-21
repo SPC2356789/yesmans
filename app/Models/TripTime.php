@@ -92,6 +92,7 @@ class TripTime extends BaseModel
             ->orderBy('mould_id', 'asc')
             ->where('is_published', 1)
             ->selectRaw(self::getDateLogic())
+            ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
             ->get(); // 🔥 這裡先執行查詢，獲取結果
 
         $trips->each(function ($trip) {

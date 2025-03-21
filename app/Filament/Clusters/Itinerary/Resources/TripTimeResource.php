@@ -12,6 +12,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -21,7 +23,9 @@ use Carbon\Carbon;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
-
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Actions;
+use Filament\Notifications\Notification;
 class TripTimeResource extends Resource
 {
     protected static ?string $model = TripTime::class;
@@ -71,7 +75,7 @@ class TripTimeResource extends Resource
                 Forms\Components\DatePicker::make('date_end')
                     ->hidden()
                 ,
-                Flatpickr::make('date_range')
+               Flatpickr::make('date_range')
                     ->label('開團日期')
                     ->range()
                 ,
@@ -83,10 +87,28 @@ class TripTimeResource extends Resource
                     ->label('提示月份')
                     ->options(array_combine(range(0, 12), range(0, 12))) // 自動產生 0~12 的選項
                 ,
-
+                Forms\Components\Textarea::make('agreement_content')
+                    ->label('同意書內容')
+                    ->rows(5) // 設定高度為 5 行
+                ,
                 Forms\Components\Placeholder::make('applied_count')
                     ->label('已報名人數')
-                ,
+                    ->content(function ($record) {
+                        // $record 是當前的 TripTimes 模型實例
+                        if (!$record) {
+                            return 0;
+                        }
+
+                        // 獲取所有相關的 TripOrder
+                        $orders = $record->Orders;
+
+                        // 計算所有 TripOrder 的 TripApply 總數
+                        $totalApplies = $orders->reduce(function ($carry, $order) {
+                            return $carry + $order->applies()->count();
+                        }, 0);
+
+                        return $totalApplies;
+                    }),
                 Forms\Components\Toggle::make('food')
                     ->label('有無搭伙')
                     ->required(),
@@ -94,12 +116,41 @@ class TripTimeResource extends Resource
                     ->label('護照號碼是否開啟')
                     ->required(),
 
-//                Forms\Components\Textarea::make('agreement_content')
-//                    ->label('同意書內容')
-//                    ->rows(5) // 設定高度為 5 行
-//                    ->columnSpanFull()
-//                ,
 
+                Actions::make([
+                    Action::make('copy_applies')
+                        ->label('複製團員資料')
+                        ->icon('heroicon-o-clipboard')
+                        ->action(function ($record) {
+                            if (!$record) {
+                                return;
+                            }
+
+                            $record->load('Orders.applies');
+                            $applies = $record->Orders->flatMap(function ($order) {
+                                return $order->applies;
+                            });
+
+                            $formattedData = $applies->map(function ($apply) {
+                                $email = $apply->email ;
+                                $phone = $apply->phone;
+                                return "姓名: {$apply->name}, 電子郵件: {$email}, 電話: {$phone}";
+                            })->implode("\n");
+
+                            if ($formattedData === '') {
+                                $formattedData = '無團員資料';
+                            }
+
+                            // 在後端觸發通知
+                            Notification::make()
+                                ->title('成功')
+                                ->body('團員資料已複製到剪貼簿！')
+                                ->success()
+                                ->send();
+
+                            return $formattedData;
+                        })
+                ]),
 
             ]);
 
@@ -233,18 +284,23 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-            ])
+
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\ForceDeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                ])->iconButton(),
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->selectCurrentPageOnly()
+            ;
     }
 
     public static function getRelations(): array

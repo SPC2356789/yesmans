@@ -341,7 +341,7 @@
                 type="submit"
                 class="xxx:w-1/2 xs:w-1/4 rounded-md bg-yes-major px-3 py-2 text-sm font-semibold hover:text-yes-major text-neutral-50 shadow-sm hover:bg-neutral-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yes-major"
             >
-                提交
+                確認報名
             </button>
         </div>
     </form>
@@ -362,7 +362,7 @@ const formList = ref([
         birthday: '1990-01-01',
         email: 'test@example.com',
         phone: '0912345678',
-        country: 'TWN',
+        country: '台灣(TWN)',
         id_card: 'A123456789',
         address: '桃園市中壢區大安路XX號',
         PassPort: 'E12345678',
@@ -460,7 +460,7 @@ const addForm = () => {
         birthday: '1990-01-01',
         email: 'test@example.com',
         phone: '0912345678',
-        country: 'TWN',
+        country: '台灣(TWN)',
         id_card: 'A123456789',
         address: '桃園市中壢區大安路XX號',
         PassPort: 'E12345678',
