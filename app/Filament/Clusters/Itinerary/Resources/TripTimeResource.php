@@ -23,9 +23,12 @@ use Carbon\Carbon;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Actions;
+
 use Filament\Notifications\Notification;
+use Filament\Forms\Components\Actions\Action;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
 class TripTimeResource extends Resource
 {
     protected static ?string $model = TripTime::class;
@@ -115,42 +118,6 @@ class TripTimeResource extends Resource
                 Forms\Components\Toggle::make('passport_enabled')
                     ->label('護照號碼是否開啟')
                     ->required(),
-
-
-                Actions::make([
-                    Action::make('copy_applies')
-                        ->label('複製團員資料')
-                        ->icon('heroicon-o-clipboard')
-                        ->action(function ($record) {
-                            if (!$record) {
-                                return;
-                            }
-
-                            $record->load('Orders.applies');
-                            $applies = $record->Orders->flatMap(function ($order) {
-                                return $order->applies;
-                            });
-
-                            $formattedData = $applies->map(function ($apply) {
-                                $email = $apply->email ;
-                                $phone = $apply->phone;
-                                return "姓名: {$apply->name}, 電子郵件: {$email}, 電話: {$phone}";
-                            })->implode("\n");
-
-                            if ($formattedData === '') {
-                                $formattedData = '無團員資料';
-                            }
-
-                            // 在後端觸發通知
-                            Notification::make()
-                                ->title('成功')
-                                ->body('團員資料已複製到剪貼簿！')
-                                ->success()
-                                ->send();
-
-                            return $formattedData;
-                        })
-                ]),
 
             ]);
 
@@ -283,9 +250,11 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                             );
                     })
             ])
+
             ->actions([
 
                 ActionGroup::make([
+
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                     Tables\Actions\ForceDeleteAction::make(),
@@ -302,6 +271,7 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
             ->selectCurrentPageOnly()
             ;
     }
+
 
     public static function getRelations(): array
     {

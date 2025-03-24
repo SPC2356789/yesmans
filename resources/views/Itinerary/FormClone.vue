@@ -118,10 +118,8 @@
                             required
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-yes-major sm:text-sm/6"
                         >
-                            <option value="">請選擇</option>
-                            <option value="男性" selected>男性</option>
-                            <option value="女性">女性</option>
-                            <option value="其他">其他</option>
+                            <option value="男" selected>男</option>
+                            <option value="女">女</option>
                         </select>
                         <span v-if="errors[`gender-${form.id}`]" class="mt-1 text-sm text-red-600">{{ errors[`gender-${form.id}`] }}</span>
                     </div>
@@ -358,7 +356,7 @@ const formList = ref([
     {
         id: 1,
         name: '小美',
-        gender: '男性',
+        gender: '男',
         birthday: '1990-01-01',
         email: 'test@example.com',
         phone: '0912345678',
@@ -456,7 +454,7 @@ const addForm = () => {
     formList.value.push({
         id: newId,
         name: '小美' + newId,
-        gender: '男性',
+        gender: '男',
         birthday: '1990-01-01',
         email: 'test@example.com',
         phone: '0912345678',
