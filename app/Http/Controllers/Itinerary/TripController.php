@@ -47,8 +47,7 @@ class TripController extends ItryController
         $selectedTripTime = $items->trip_times->pluck('dateAll', 'uuid');
         $uuid_default = $tripTime_uuid ?? $selectedTripTime->keys()->first(); //如果找不到uuid就預設第一個
 
-        $trip_times = $items->trip_times->keyBy('uuid')->get($uuid_default)->toArray();
-
+        $trip_times = $items->trip_times->keyBy('uuid')->get($uuid_default);
 
         $AllNames = array_keys(get_defined_vars());
         if (isset($_GET['t'])) {

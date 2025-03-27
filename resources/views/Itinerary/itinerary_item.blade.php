@@ -65,25 +65,26 @@
                     <div class="flex flex-row gap-2 items-center w-1/3">
                         <h1 class="xxx:text-lg md:text-xl">已報名</h1>
                         <div class="w-auto">
-                            {{ $trip_times['applied_count']??''}}
+                            {{ $trip_times->Orders->first()->applies->count()??''}}
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-between">
                     <div class="flex flex-row gap-2 items-center w-2/3">
                         <h1 class="xxx:text-lg md:text-xl">報名費用</h1>
-
-                        <div class="w-auto text-neutral-500">
-                            <del>{{ $trip_times['fake_amount']??''}}</del>
+                        NT
+                        <div class="flex flex-col">
+                            <div class="w-auto text-neutral-500 xxx:text-lg md:text-xl">
+                                <del>{{ $trip_times['fake_amount']??''}}</del>
+                            </div>
+                            <div class="w-auto text-yes-major xxx:text-lg md:text-xl">
+                                {{ $trip_times['amount']??''}}
+                            </div>
                         </div>
-                        <div class="w-auto text-yes-major">
-                            {{ $trip_times['amount']??''}}
-                        </div>
-                       元 新台幣
                     </div>
                     <button
                         name="signupBtn"
-                        class=" w-1/3 text-center xxx:text-xs  ss:text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white">
+                        class=" w-1/3 text-center text-base sm:text-lg lg:text-base xs:px-0.5 py-2 border border-gray-800 text-gray-800 rounded hover:bg-[#DA8A51] bg-neutral-50  hover:text-white">
                         <span class="w-auto ">我要報名</span>
                         <i class="fas fa-chevron-right w-1/12"> </i>
                     </button>
@@ -114,6 +115,6 @@
                 class="text-neutral-500 opacity-80">(請滑至同意書底部)</span></label>
     </button>
 
-    <div class="hidden" id="trip_from" data-trip_times='@json($trip_times)'data-bank_info='@json($bankInfo)'></div>
+    <div class="hidden" id="trip_from" data-trip_times='@json($trip_times)' data-bank_info='@json($bankInfo)'></div>
 
 @endsection

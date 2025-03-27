@@ -26,10 +26,10 @@ $(document).ready(function () {
         let links = '';
         $.each(timeContent, function (index, value) {
             // 創建每個日期範圍的連結
-            links += `<a href="${timeHref}?trip_time=${value.uuid}" class="flex flex-col gap-0.5 " data-mould="${value.mould_id}" ><span>${value.dateAll}</span><span>名額:${value.quota} 已報名:${value.applied_count} </span></a>`;
+            links += `<a href="${timeHref}?trip_time=${value.uuid}" class="flex flex-col gap-0.5 " data-mould="${value.mould_id}" ><span>${value.dateAll}</span><div class="flex gap-5"><span>名額:${value.quota} </span><span>已報名:${value.applied_count}</span> </div></a>`;
             // 你可以在這裡做一些處理，比如生成 HTML 或者其他操作
         });
-        let time = `<div class="flexflex-col w-full text-start gap-2.5 xxx:text-xs ss:text-base xs:text-sm md:text-lg max-h-[400px] overflow-y-auto">` + links + `</div>`;
+        let time = `<div class="flex flex-col w-full text-start gap-2.5 xxx:text-xs ss:text-base xs:text-sm md:text-lg max-h-[400px] overflow-y-auto">` + links + `</div>`;
         // console.log(timeContent)
         // 顯示 SweetAlert
         Swal.fire({

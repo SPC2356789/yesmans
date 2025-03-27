@@ -50,7 +50,7 @@ class Trip extends BaseModel
         $trips = Trip::selectRaw('id, title,subtitle, category,carousel,tags,slug,icon')
             ->with(['trip_times' => function ($query) use ($cate) {
                 $query
-                    ->select('uuid', 'mould_id', 'date_start', 'date_end', 'quota', 'applied_count')
+                    ->select('uuid', 'mould_id', 'date_start', 'date_end', 'quota', )
                     ->when($cate !== 2, function ($query) {
                         $query->orderBy('date_start', 'asc'); // 按照時間由早到晚排序
                     })
@@ -58,11 +58,28 @@ class Trip extends BaseModel
                         $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
                     })
                     ->when($cate == 2, function ($query) {
-                        $query->orderByRaw('(COALESCE(quota, 0) - COALESCE(applied_count, 0)) ASC');
+//                        $query->orderByRaw('(COALESCE(quota, 0) - COALESCE(applied_count, 0)) ASC');
                     })
                     ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
                     ->selectRaw(TripTime::getDateLogic())
                     ->where('is_published', 1)
+                    ->selectRaw("(
+            SELECT COUNT(*)
+            FROM trip_applies
+            WHERE trip_applies.id IN (
+                SELECT trip_apply_id
+                FROM order_has_apply
+                WHERE order_has_apply.trip_order_on IN (
+                    SELECT order_number
+                    FROM trip_orders
+                    WHERE trip_orders.id IN (
+                        SELECT trip_order_id
+                        FROM time_has_order
+                        WHERE time_has_order.trip_times_uuid = trip_times.uuid
+                    )
+                )
+            )
+        ) AS applied_count")
                 ;
             }])
             ->with(['categories' => function ($query) {
@@ -80,6 +97,7 @@ class Trip extends BaseModel
 //                        $query->where('is_published', 0);;
                     })
                     ->where('is_published', 1)
+
                 ;
             })
             ->when($term !== '', function ($query) use ($term, $tags) {
@@ -110,8 +128,6 @@ class Trip extends BaseModel
 
     public static function getTrip($trip = null, $tripTime_uuid = null)
     {
-
-
         // 建立查詢
         $query = self::selectRaw('*')
             ->when($tripTime_uuid, function ($query, $tripTime_uuid) {
@@ -120,7 +136,7 @@ class Trip extends BaseModel
                     $query
                         ->where('uuid', $tripTime_uuid)
                         ->where('is_published', 1)
-                        ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
+                        ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日
                     ;
 
                 });
@@ -132,6 +148,7 @@ class Trip extends BaseModel
                     ->selectRaw(TripTime::getDateLogic())
                     ->where('is_published', 1)
                     ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
+                    ->with(['Orders.applies']); // 預載 Orders 和 applies 關係
                 ;
             }])
             ->where('slug', $trip);

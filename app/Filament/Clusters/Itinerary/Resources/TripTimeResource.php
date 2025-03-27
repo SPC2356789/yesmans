@@ -29,6 +29,7 @@ use Filament\Forms\Components\Actions\Action;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+
 class TripTimeResource extends Resource
 {
     protected static ?string $model = TripTime::class;
@@ -78,7 +79,7 @@ class TripTimeResource extends Resource
                 Forms\Components\DatePicker::make('date_end')
                     ->hidden()
                 ,
-               Flatpickr::make('date_range')
+                Flatpickr::make('date_range')
                     ->label('開團日期')
                     ->range()
                 ,
@@ -191,16 +192,51 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('applied_count')
-                    ->label('已報名')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                ,
+                    ->label('已報名人數')
+                    ->getStateUsing(function ($record) {
+                        if (!$record) {
+                            return 0;
+                        }
+                        $orders = $record->Orders;
+                        $totalApplies = $orders->reduce(function ($carry, $order) {
+                            return $carry + $order->applies->count();
+                        }, 0);
+                        return $totalApplies;
+                    }),
+
                 Tables\Columns\TextColumn::make('available_spots')
                     ->label('剩餘')
-                    ->getStateUsing(fn($record) => (int)$record->quota - (int)$record->applied_count) // 允許負數
+                    ->getStateUsing(function ($record) {
+                        if (!$record) {
+                            return 0;
+                        }
+                        $quota = (int)$record->quota;
+                        $orders = $record->Orders;
+                        $totalApplies = $orders->reduce(function ($carry, $order) {
+                            return $carry + $order->applies->count();
+                        }, 0);
+                        return $quota - $totalApplies;
+                    })
                     ->sortable(query: function ($query, $direction) {
-                        return $query->orderByRaw("CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED) $direction");
+                        return $query->orderByRaw("
+            CAST(quota AS SIGNED) - (
+                SELECT COUNT(*)
+                FROM trip_applies
+                WHERE trip_applies.id IN (
+                    SELECT trip_apply_id
+                    FROM order_has_apply
+                    WHERE order_has_apply.trip_order_on IN (
+                        SELECT order_number
+                        FROM trip_orders
+                        WHERE trip_orders.id IN (
+                            SELECT trip_order_id
+                            FROM time_has_order
+                            WHERE time_has_order.trip_times_uuid = trip_times.uuid
+                        )
+                    )
+                )
+            ) $direction
+        ");
                     }),
 
                 Tables\Columns\IconColumn::make('food')
@@ -250,7 +286,6 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                             );
                     })
             ])
-
             ->actions([
 
                 ActionGroup::make([
@@ -268,8 +303,7 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
-            ->selectCurrentPageOnly()
-            ;
+            ->selectCurrentPageOnly();
     }
 
 

@@ -70,6 +70,8 @@ class ItryController extends Controller
         if (request()->get('t') === 'a') {
             dd($cat, $term, $tagArray, $items);
         }
+
+
         $AllNames = array_merge(array_keys(get_defined_vars()), array_keys($commonData)); //結合所有
 //       dd($Slug);
         return response()
