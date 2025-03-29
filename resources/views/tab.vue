@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
                                 <div class="w-1/5 flex flex-col items-end h-full">
-                                    <a v-if="item.quota - item.applied_count < 10 && d_key === 'upcoming'"
+                                    <a v-if="item.quota - item.applied_count < 3 && d_key === 'upcoming'"
                                        :href="`/itinerary/${d_key}/trip/${item.trip.slug}?trip_time=${index}`"
                                             class="btn btn-outline-warning btn-cus ms-auto">
                                         再{{ item.quota - item.applied_count }}人成團
