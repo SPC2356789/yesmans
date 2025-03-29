@@ -35,11 +35,8 @@
             <div class="lg:h-full " id="tab">
 
             </div>
-        {{--                                                    <button type="button"--}}
-        {{--                                                            class="btn btn-outline-warning btn-cus ms-auto">--}}
-        {{--                                                        再3人成團--}}
-        {{--                                                    </button>--}}
-        {{--        </div>--}}
+
+
         @include('Blog.blog_hot', ['BlogItems' => $BlogItems])
     </div>
 

@@ -102,7 +102,7 @@ class BlogController extends Controller
     /**
      * 查詢分類
      */
-    public function Category($cat = null): array
+    public function Category($cat = null)
     {
         return $this->Categories->getData(1, 1, '*', 'slug', $cat);
     }

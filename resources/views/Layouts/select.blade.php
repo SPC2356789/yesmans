@@ -6,9 +6,9 @@
             id="menu-button" aria-expanded="true" aria-haspopup="true">
         @if(isset($select,$default))
             @if(is_array($select[$default]))
-                <span >{{$select[$default]['dateAll']}}</span>
+                <span >{{$select[$default]['dateAll']}}</span>1
             @else
-                <span >{{$select[$default]}}</span>
+                <span >{{$select[$default]}} {{$default=="recent"?'(未來一個月)':''}}</span>
             @endif
         @endif
         @if(isset($placeholder))

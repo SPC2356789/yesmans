@@ -67,7 +67,7 @@ class TripTime extends BaseModel
      */
     public static function getData($cate = '*')
     {
-        $trips = TripTime::selectRaw('uuid, mould_id,quota,applied_count')
+        $trips = TripTime::selectRaw('uuid, mould_id,quota')
             ->with(['Trip' => function ($query) {
                 $query->select('id', 'slug', 'title', 'subtitle', 'icon', 'slug', 'carousel', 'tags', 'is_published');
             }])
@@ -85,9 +85,12 @@ class TripTime extends BaseModel
                 $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
             })
             ->when($cate == 'upcoming', function ($query) {
-                $query->orderByRaw('(CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED)) ASC');
-
+                $query
+                    ->orderByRaw('(CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED)) ASC');
+                ;
             })
+            ->selectRaw(self::getAppliedCount())
+            ->havingRaw('quota > applied_count') // HAVING 計算虛擬欄位
             ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
             ->orderBy('mould_id', 'asc')
             ->where('is_published', 1)
@@ -120,7 +123,28 @@ class TripTime extends BaseModel
         });
         return $trips;
     }
-
+    /**
+     * 取得報名人數
+     */
+    public static function getAppliedCount(): string{
+        return "(
+            SELECT COUNT(*)
+            FROM trip_applies
+            WHERE trip_applies.id IN (
+                SELECT trip_apply_id
+                FROM order_has_apply
+                WHERE order_has_apply.trip_order_on IN (
+                    SELECT order_number
+                    FROM trip_orders
+                    WHERE trip_orders.id IN (
+                        SELECT trip_order_id
+                        FROM time_has_order
+                        WHERE time_has_order.trip_times_uuid = trip_times.uuid
+                    )
+                )
+            )
+        ) AS applied_count";
+    }
     public static function getDateLogic(): string
     {
         return 'CONCAT(

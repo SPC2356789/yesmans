@@ -2,7 +2,7 @@
 @section($Slug, 'active')
 
 @section('tLink')
-{{--    @vite(['resources/js/itinerary.js'])--}}
+    {{--    @vite(['resources/js/itinerary.js'])--}}
 @endsection
 
 @section('blink')
@@ -23,7 +23,7 @@
                 <nav aria-label="Breadcrumb" class="hidden md:block">
                     <ol class="flex space-x-2 text-sm items-center">
                         <li aria-current="page" class="text-2xl">
-                            <div>{{$Categories[$urlSlug]}}</div>
+                            <div>{{$Categories[$urlSlug]}} {{$urlSlug=="recent"?'(未來一個月)':''}}</div>
                         </li>
                     </ol>
                 </nav>
@@ -31,7 +31,7 @@
                     <div
                             class="flex items-center rounded-md bg-white  outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-neutral-800 max-w-sm mx-auto max-h-12 px-3">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" name="search" id="Search"  data-key="{{$urlSlug}}"
+                        <input type="text" name="search" id="Search" data-key="{{$urlSlug}}"
                                class="block max-w-[100px] grow py-1.5 pl-1 pr-0.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
                                autocomplete="off" value="{{$term}}" placeholder="行程探索">
                     </div>

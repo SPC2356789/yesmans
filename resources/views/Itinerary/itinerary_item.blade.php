@@ -65,20 +65,20 @@
                     <div class="flex flex-row gap-2 items-center w-1/3">
                         <h1 class="xxx:text-lg md:text-xl">已報名</h1>
                         <div class="w-auto">
-                            {{ $trip_times->Orders->first()->applies->count()??''}}
+                            {{ $trip_times->applied_count ?? '0' }}
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-between">
-                    <div class="flex flex-row gap-2 items-center w-2/3">
-                        <h1 class="xxx:text-lg md:text-xl">報名費用</h1>
-                        NT
-                        <div class="flex flex-col">
+                    <div class="flex flex-row gap-2 items-end w-2/3">
+                        <h1 class="xxx:text-lg md:text-xl">報名費用     </h1>
+
+                        <div class="flex flex-col justify-start">
                             <div class="w-auto text-neutral-500 xxx:text-lg md:text-xl">
-                                <del>{{ $trip_times['fake_amount']??''}}</del>
+                                <del>{{ $trip_times['fake_amount']?'NT '.$trip_times['fake_amount']:''}}</del>
                             </div>
                             <div class="w-auto text-yes-major xxx:text-lg md:text-xl">
-                                {{ $trip_times['amount']??''}}
+                                NT {{ $trip_times['amount']??''}}
                             </div>
                         </div>
                     </div>

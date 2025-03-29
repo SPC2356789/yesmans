@@ -58,7 +58,12 @@
                                     </div>
                                 </div>
                                 <div class="w-1/5 flex flex-col items-end h-full">
-                                    <a :href="`/itinerary/${d_key}/trip/${item.trip.slug}?trip_time=${index}`"
+                                    <a v-if="item.quota - item.applied_count < 10 && d_key === 'upcoming'"
+                                       :href="`/itinerary/${d_key}/trip/${item.trip.slug}?trip_time=${index}`"
+                                            class="btn btn-outline-warning btn-cus ms-auto">
+                                        再{{ item.quota - item.applied_count }}人成團
+                                    </a>
+                                    <a v-else :href="`/itinerary/${d_key}/trip/${item.trip.slug}?trip_time=${index}`"
                                        class="w-11/12 xxx:px-1 xxx:py-2 sm:p-2 md965:p-1 text-center rounded-full bg-[#55958d] text-[#f7dbab] hover:text-[#467771] hover:bg-[#f8b551] xxx:text-xs xxs:text-sm xs:text-base sm:text-lg md965:text-base lg:text-base">
                                         報名中
                                     </a>
@@ -134,5 +139,8 @@ const fetchTripData = async () => {
     }
 };
 
-onMounted(fetchTripData);
+onMounted(() => {
+    fetchTripData();
+console.log(tripData)
+});
 </script>

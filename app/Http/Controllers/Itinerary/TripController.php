@@ -42,12 +42,12 @@ class TripController extends ItryController
         $tripTime_uuid = request()->query('trip_time') ?? (empty(session('trip_time')) ? null : session('trip_time')); // 取得 'trip_time' 參數
 
         $items = $this->Trip->getTrip($trip, $tripTime_uuid);
-
         session(['trip_time' => $tripTime_uuid ?? '']);
         $selectedTripTime = $items->trip_times->pluck('dateAll', 'uuid');
         $uuid_default = $tripTime_uuid ?? $selectedTripTime->keys()->first(); //如果找不到uuid就預設第一個
 
         $trip_times = $items->trip_times->keyBy('uuid')->get($uuid_default);
+
 
         $AllNames = array_keys(get_defined_vars());
         if (isset($_GET['t'])) {

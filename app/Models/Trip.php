@@ -58,28 +58,14 @@ class Trip extends BaseModel
                         $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
                     })
                     ->when($cate == 2, function ($query) {
-//                        $query->orderByRaw('(COALESCE(quota, 0) - COALESCE(applied_count, 0)) ASC');
+                        $query->orderByRaw('(CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED)) ASC');
                     })
                     ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
                     ->selectRaw(TripTime::getDateLogic())
                     ->where('is_published', 1)
-                    ->selectRaw("(
-            SELECT COUNT(*)
-            FROM trip_applies
-            WHERE trip_applies.id IN (
-                SELECT trip_apply_id
-                FROM order_has_apply
-                WHERE order_has_apply.trip_order_on IN (
-                    SELECT order_number
-                    FROM trip_orders
-                    WHERE trip_orders.id IN (
-                        SELECT trip_order_id
-                        FROM time_has_order
-                        WHERE time_has_order.trip_times_uuid = trip_times.uuid
-                    )
-                )
-            )
-        ) AS applied_count")
+                    ->selectRaw(TripTime::getAppliedCount())
+
+                ; // 預載 Orders 和 applies 關係
                 ;
             }])
             ->with(['categories' => function ($query) {
@@ -93,8 +79,7 @@ class Trip extends BaseModel
                         $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
                     })
                     ->when($cate == 2, function ($query) {
-//                        $query->orderByRaw('(COALESCE(quota, 0) - COALESCE(applied_count, 0)) ASC');
-//                        $query->where('is_published', 0);;
+
                     })
                     ->where('is_published', 1)
 
@@ -148,7 +133,7 @@ class Trip extends BaseModel
                     ->selectRaw(TripTime::getDateLogic())
                     ->where('is_published', 1)
                     ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
-                    ->with(['Orders.applies']); // 預載 Orders 和 applies 關係
+                    ->selectRaw(TripTime::getAppliedCount())
                 ;
             }])
             ->where('slug', $trip);
