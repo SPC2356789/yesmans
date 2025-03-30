@@ -151,10 +151,10 @@ body {
     color: #e19050 !important;
 }
 
-.btn-cus {
-    padding: 0.5rem 0.8rem !important; /* 調整內邊距 */
-    font-size: 0.9rem !important; /* 調整字體大小 */
-}
+/*.btn-cus {*/
+/*    padding: 0.5rem 0.8rem !important; !* 調整內邊距 *!*/
+/*    font-size: 0.9rem !important; !* 調整字體大小 *!*/
+/*}*/
 
 #mainNav .nav-link:hover{
     color: #446c6a !important;

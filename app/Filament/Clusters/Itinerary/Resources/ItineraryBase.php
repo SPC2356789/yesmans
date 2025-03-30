@@ -26,7 +26,7 @@ class ItineraryBase extends BaseSettings
     protected static ?string $cluster = Itinerary::class;
 
     protected static ?string $title = '基礎設定';
-    protected static ?string $area = 'Itinerary';
+    protected static ?string $area = 'itinerary';
     protected static ?int $navigationSort = 3;
 
     public static function getModelLabel(): string

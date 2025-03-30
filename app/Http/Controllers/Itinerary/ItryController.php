@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Itinerary;
 use App\Http\Controllers\Controller;
 
 use App\Models\Categories;
+use App\Models\Media;
 use App\Models\TripTime;
 use App\Models\Trip;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use JetBrains\PhpStorm\NoReturn;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class ItryController extends Controller
 {
@@ -71,7 +74,6 @@ class ItryController extends Controller
             dd($cat, $term, $tagArray, $items);
         }
 
-
         $AllNames = array_merge(array_keys(get_defined_vars()), array_keys($commonData)); //結合所有
 //       dd($Slug);
         return response()
@@ -92,10 +94,11 @@ class ItryController extends Controller
         $commonData = $this->getCommonData($urlSlug, $term, $tag);
         extract($commonData);
         $AllNames = array_merge(array_keys(get_defined_vars()), array_keys($commonData)); //結合所有
+
         return view('Layouts.item_card', compact($AllNames))->render();
     }
 
-    private function getCommonData($key=null, $term=null, $tag=null): array
+    private function getCommonData($key = null, $term = null, $tag = null): array
     {
         $tags = $this->Tags()->keyBy('id')->toArray();
         $tag_slug = $this->Tags()->keyBy('slug')->toArray();
@@ -119,15 +122,24 @@ class ItryController extends Controller
             'tags' => $tags,
             'tagArray' => $tagArray,
             'cat' => $cat,
-            'items' => $this->getItems($cat, $term, $tagArray)->paginate($this->Page)->onEachSide(1),
+            'SEOData' => $this->SEOdata($this->getItems($cat, $term, $tagArray)),
+            'items' => $this->getItems($cat, $term, $tagArray),
         ];
     }
 
 
-    public function getItems($cat, $term, $tagArray)
+    public function getItems($cat, $term = null, $tagArray = [])
     {
 
-        return $this->Trip->getData($cat, $term, $tagArray);
+        $trips = $this->Trip->getData($cat, $term, $tagArray)->paginate($this->Page)->onEachSide(1);
+
+        $trips->each(function ($trip) {
+
+            $trip->forceFill([
+                'carouselOne' => Storage::url($this->Media[$trip->carousel[0]]),
+            ]);
+        });
+        return $trips;
     }
 
     public function Category($chkUrl = null)
@@ -144,5 +156,25 @@ class ItryController extends Controller
         return $this->Categories->getData(2, 2, '*',);
     }
 
+    public function SEOdata($items = null)
+    {
+        $Base = $this->Settings->getBase($this->Slug);
+        $General = $this->Settings->getElseOrGeneral();
+        $schema = $this->schema($items, "product", $this->Slug, $General);
+
+        return $SEOData = new SEOData(
+            title: $Base['seo.title'] ?? null, // 如果不存在，設置為 null
+            description: $Base['seo.description'] ?? null,
+            image: !empty($Base['OG.image']) ? $this->Settings->CheckProtocol(Storage::url($Base['OG.image'])) : null,
+            url: request()->fullUrl(),
+            tags: !empty($Base['seo.tag']) ? $Base['seo.tag'] : null,
+            schema: $schema,
+            site_name: $General['brand_name'] ?? null,
+            favicon: !empty($General['favicon']) ? $this->Settings->CheckProtocol(Storage::url($General['favicon'])) : null,
+            robots: $Base['seo.robots'] ?? null,
+            openGraphTitle: $Base['OG.title'] ?? null
+        );
+
+    }
 
 }

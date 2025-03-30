@@ -52,15 +52,15 @@
                             </div>
                             <div class="flex flex-row w-full items-end justify-between">
                                 <div class="flex flex-col gap-1 w-4/5">
-                                    <span class="text-[#da8a51] text-xs ss:text-sm">{{ item.dateAll }}</span>
+                                    <span class="text-[#da8a51] text-xs ss:text-sm ">{{ item.dateAll }}</span>
                                     <div class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center">
                                         <span class="span_tag" v-for="(tag) in item.trip.tagSpell" :key="tag">{{ tag }}</span>
                                     </div>
                                 </div>
                                 <div class="w-1/5 flex flex-col items-end h-full">
-                                    <a v-if="item.quota - item.applied_count < 3 && d_key === 'upcoming'"
+                                    <a v-if="item.quota - item.applied_count < 4 && d_key === 'upcoming'"
                                        :href="`/itinerary/${d_key}/trip/${item.trip.slug}?trip_time=${index}`"
-                                            class="btn btn-outline-warning btn-cus ms-auto">
+                                            class="btn btn-outline-warning w-10/12 xxx:px-1  xxx:py-2 sm:p-2 md965:p-1 xxx:text-xs xxs:text-sm xs:text-base sm:text-lg md965:text-base lg:text-base">
                                         再{{ item.quota - item.applied_count }}人成團
                                     </a>
                                     <a v-else :href="`/itinerary/${d_key}/trip/${item.trip.slug}?trip_time=${index}`"

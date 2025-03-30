@@ -94,9 +94,19 @@ class BlogController extends Controller
 
     private function getItems($urlSlug, $term)
     {
-        return $this->Items->getData($urlSlug, $term ?? session('blog_term'))
+        $blogs= $this->Items->getData($urlSlug, $term ?? session('blog_term'))
             ->paginate($this->Page)
             ->onEachSide(1);
+        $blogs->each(function ($blog) {
+
+            $blog->forceFill([
+                'carouselOne' => Storage::url($this->Media[$blog->featured_image]),
+            ]);
+        });
+
+        return $blogs;
+
+
     }
 
     /**
@@ -152,7 +162,7 @@ class BlogController extends Controller
     {
         $Base = $this->Settings->getBase($this->Slug);
         $General = $this->Settings->getElseOrGeneral();
-        $schema = $this->schema($items, "Article", $this->Slug);
+        $schema = $this->schema($items, "blog", $this->Slug,$General);
 
         return $SEOData = new SEOData(
             title: $Base['seo.title'] ?? null, // 如果不存在，設置為 null

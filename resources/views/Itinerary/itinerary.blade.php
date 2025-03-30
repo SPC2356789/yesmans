@@ -27,7 +27,7 @@
                         </li>
                     </ol>
                 </nav>
-                <div class="flex items-ceenter  order-1  xsm:ms-auto">
+                <div class="flex items-center  order-1  xsm:ms-auto">
                     <div
                             class="flex items-center rounded-md bg-white  outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-neutral-800 max-w-sm mx-auto max-h-12 px-3">
                         <i class="fa-solid fa-magnifying-glass"></i>

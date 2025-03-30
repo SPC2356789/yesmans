@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Trip extends BaseModel
 {
@@ -47,10 +48,11 @@ class Trip extends BaseModel
 
     public static function getData($cate = '', $term = '', $tags = '')
     {
-        $trips = Trip::selectRaw('id, title,subtitle, category,carousel,tags,slug,icon')
+        $trips = Trip::selectRaw('id, title,subtitle, category,carousel,tags,slug,icon,amount,quota,seo_description,seo_title')
+
             ->with(['trip_times' => function ($query) use ($cate) {
                 $query
-                    ->select('uuid', 'mould_id', 'date_start', 'date_end', 'quota', )
+                    ->select('uuid', 'mould_id', 'date_start', 'date_end', 'quota', 'amount')
                     ->when($cate !== 2, function ($query) {
                         $query->orderBy('date_start', 'asc'); // 按照時間由早到晚排序
                     })
@@ -107,6 +109,7 @@ class Trip extends BaseModel
             )
             ->where('is_published', 1)
         ;
+
 
         return $trips;
     }

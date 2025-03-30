@@ -40,6 +40,7 @@ class BlogItem extends BaseModel
     {
         return $this->belongsTo(Categories::class, 'category_id', 'id');
     }
+
     public function media(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'featured_image', 'id');
@@ -65,6 +66,7 @@ class BlogItem extends BaseModel
                         ->orWhere('content', 'LIKE', '%' . $term . '%');
                 });
             })
+            ->with('categories')
             ->where('is_published', 1)//抓有發布的文章
             ->orderBy('orderby', 'asc')
             ->leftJoin('categories', 'blog_items.category_id', '=', 'categories.id') // JOIN categories 表
@@ -108,7 +110,8 @@ class BlogItem extends BaseModel
         $data = self::selectRaw('*')
 //            ->where('category_id', $cate)
             ->where('slug', $itemSlug)
-//            ->where('id', $id)
+            ->with('media')
+            ->with('categories')
             ->where('is_published', 1)
             ->firstOrFail(); // 如果找不到符合條件的資料，會拋出異常
         return $data;
