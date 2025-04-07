@@ -22,6 +22,7 @@ class Categories extends BaseModel
             ->where('type', $type)
             ->where('area', $area)
             ->where('status', 1)
+
             ->orderBy('orderby', 'asc');
 
         // 檢查是否存在，但不影響原始查詢

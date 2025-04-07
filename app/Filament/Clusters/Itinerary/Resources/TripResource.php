@@ -21,6 +21,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class TripResource extends Resource
 {
@@ -42,13 +44,25 @@ class TripResource extends Resource
                     ->searchable() // 支持搜索
                     ->required(),
                 Forms\Components\TextInput::make('slug')
+                    ->label('模板代號')
                     ->required()
-                    ->maxLength(255),
+                    ->rule(
+                        Rule::unique('trips', 'slug')
+                            ->whereNull('deleted_at')   // 排除已刪除的
+                            ->ignore($form->getRecord() ? $form->getRecord()->id : null) // 排除當前記錄的 id
+                    )
+                    ->helperText('分類代號在資料庫中必須唯一')
+                    ->validationMessages([
+                        'unique' => '此 :attribute 的值，已經被使用了',
+                    ])
+                ,
                 Forms\Components\TextInput::make('title')
+                    ->label('標題')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(10),
                 Forms\Components\TextInput::make('subtitle')
-                    ->maxLength(255),
+                    ->label('副標題')
+                    ->maxLength(10),
                 MediaPicker::make('carousel')
                     ->label('選擇照片')
                     ->multiple()
@@ -85,6 +99,7 @@ class TripResource extends Resource
                         ->default(1)
                 ]),
                 Forms\Components\Textarea::make('description')
+                    ->label('行程介紹')
                     ->columnSpanFull(),
                 Section::make([
                     TinyEditor::make('content')
@@ -107,12 +122,14 @@ class TripResource extends Resource
                         ->required(),
                 ]),
                 Forms\Components\Textarea::make('agreement_content')
+                    ->label('同意書')
                     ->rows(5)
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('passport_enabled')
                     ->label('護照號碼是否開啟')
                 ,
                 Forms\Components\Toggle::make('is_published')
+                    ->label('發布')
                     ->required(),
 
                 Forms\Components\TextInput::make('seo_title')
@@ -127,21 +144,23 @@ class TripResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('categories.name')
+                    ->label('分類')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
+                    ->label('代號')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
-                    ->label('模板')
+                    ->label('名稱')
                     ->searchable()
                     ->getStateUsing(function ($record) {
                         return $record->title . '-' . $record->subtitle; // 合併 name 和 title
                     }),
-                Tables\Columns\TextColumn::make('subtitle')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('quota')
+                    ->label('名額')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
+                    ->label('金額')
                     ->money('TWD') // 顯示台幣格式
                     ->sortable(),
                 Tables\Columns\ToggleColumn::make('passport_enabled')
@@ -170,6 +189,11 @@ class TripResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ReplicateAction::make()
+                    ->action(function ($record) {
+                        $record->slug = $record->slug . '-' . substr(Str::uuid()->toString(), 0, 8); // 取8碼確保唯一性
+                        $record->replicate()->save();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

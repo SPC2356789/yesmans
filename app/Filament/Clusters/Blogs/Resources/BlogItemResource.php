@@ -30,6 +30,7 @@ use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Arr;
 
 class BlogItemResource extends Resource
 {
@@ -69,7 +70,7 @@ class BlogItemResource extends Resource
                             ->maxLength(8), // 最大長度
                         Select::make('category_id')
                             ->label('文章分類')
-                            ->options(self::$category::getData(1, 1)->pluck('name', 'id')->toArray())// 從分類模型中獲取選項
+                            ->options(Arr::except(self::$category::getData(1, 1)->toArray(), [3]))// 從分類模型中獲取選項並把ID3所有文章刪除
                             ->searchable() // 支持搜索
                             ->required(),
 //                        TextInput::make('slug')

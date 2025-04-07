@@ -86,6 +86,7 @@ class ItryController extends Controller
         $term = $request->input('term') ?? null;
         $tag = $request->input('tag') ?? null;
         $urlSlug = $key ?? $this->urlSlug;
+
         $params = ['term' => $term];
         if (!empty($tag)) {
             $params['tag'] = implode(',', (array)$tag);
@@ -109,6 +110,10 @@ class ItryController extends Controller
 
         $Categories_slug = $this->Category()->keyBy('slug')->toArray();
         $cat = $Categories_slug[$key]['id'] ?? null; // 把 slug 轉換成 id
+        $CategoryTitle = $this->Category($key)->pluck('name', 'slug');
+
+        $urlSlug = $key ?? $this->urlSlug;
+        $title = $CategoryTitle[$urlSlug];
 
         return [
             'months' => true,
@@ -118,11 +123,11 @@ class ItryController extends Controller
             'apply' => $this->apply,
             'Media' => $this->Media,
             'MediaMlt' => $this->MediaMlt,
-            'Categories' => $this->Category($key)->pluck('name', 'slug'),
+            'Categories' => $CategoryTitle,
             'tags' => $tags,
             'tagArray' => $tagArray,
             'cat' => $cat,
-            'SEOData' => $this->SEOdata($this->getItems($cat, $term, $tagArray)),
+            'SEOData' => $this->SEOdata($this->getItems($cat, $term, $tagArray), $title),
             'items' => $this->getItems($cat, $term, $tagArray),
         ];
     }
@@ -156,14 +161,15 @@ class ItryController extends Controller
         return $this->Categories->getData(2, 2, '*',);
     }
 
-    public function SEOdata($items = null)
+    public function SEOdata($items = null, $title = null)
     {
         $Base = $this->Settings->getBase($this->Slug);
         $General = $this->Settings->getElseOrGeneral();
-        $schema = $this->schema($items, "product", $this->Slug, $General);
 
+        $schema = $this->schema($items, "product", $this->Slug, $General);
+//        dd($title['recent']);
         return $SEOData = new SEOData(
-            title: $Base['seo.title'] ?? null, // 如果不存在，設置為 null
+            title: $Base['seo.title'].$title ?? null, // 如果不存在，設置為 null
             description: $Base['seo.description'] ?? null,
             image: !empty($Base['OG.image']) ? $this->Settings->CheckProtocol(Storage::url($Base['OG.image'])) : null,
             url: request()->fullUrl(),
@@ -172,7 +178,7 @@ class ItryController extends Controller
             site_name: $General['brand_name'] ?? null,
             favicon: !empty($General['favicon']) ? $this->Settings->CheckProtocol(Storage::url($General['favicon'])) : null,
             robots: $Base['seo.robots'] ?? null,
-            openGraphTitle: $Base['OG.title'] ?? null
+            openGraphTitle: $Base['OG.title'] .$title ?? null
         );
 
     }

@@ -102,6 +102,7 @@ class Controller extends BaseController
             } elseif ($itemType === 'Product') {
 
                 $listItem["item"]["description"] = $item->seo_description ?? '';
+                $listItem["item"]["additionalType"] = 'https://schema.org/TouristTrip';
                 if (!empty($item->amount)) {
                     $offers = [];
 
@@ -109,17 +110,25 @@ class Controller extends BaseController
                     if (!empty($item->trip_times)) {
                         foreach ($item->trip_times as $trip) {
 
-                            $offers[] = [
+                            $offer = [
                                 '@type' => 'Offer',
                                 'price' => (string)($trip->amount ?? $item->amount), // 使用 trip 價格或預設
                                 'priceCurrency' => $item->currency ?? 'TWD',
                                 'availability' => ($trip['quota'] ?? 0) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
                                 'name' => "{$item->title} from {$trip->date_range} ",
-                                'validFrom' => $trip->date_start, // "2025-04-01"
+                                'validFrom' => $trip->date_start,
+                                'priceValidUntil' => date('Y-m-d', strtotime($trip->date_start . ' -1 week')), // "2025-04-01"
                                 'validThrough' => $trip->date_end ?? $trip->date_start, // "2025-04-02"
                                 'sku' => $trip->uuid,
                             ];
 
+                            // 可以加入其他需要的細節，比如對於旅行的資訊
+                            $offer['tourDetails'] = [
+                                '@type' => 'TouristTrip',
+                                'startDate' => $trip->date_start,
+                                'endDate' => $trip->date_end ?? $trip->date_start, // 結束日期
+                            ];
+                            $offers[] = $offer;
                         }
                     }
 

@@ -240,6 +240,7 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
                     }),
 
                 Tables\Columns\IconColumn::make('food')
+                    ->label('搭伙')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean(),
                 Tables\Columns\ToggleColumn::make('is_published')

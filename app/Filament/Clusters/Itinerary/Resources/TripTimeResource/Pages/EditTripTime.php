@@ -148,6 +148,7 @@ class EditTripTime extends EditRecord
             return
                 "    姓名: \"{$apply->name}\",\n" .
                 "    電話: \"{$apply->phone}\",\n" .
+                "    生日: \"{$apply->birthday}\",\n" .
                 "    身分證: \"{$apply->id_card}\",\n";
         })->implode(",\n");
     }
