@@ -14,14 +14,14 @@
 
 <body id="page-top" class="@yield('bg') flex flex-col justify-between h-screen overflow-hidden"
       data-page="{{($jsPage??($Slug??''))}}">
-@if (config('services.GTM.enabled'))
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id={{ config('services.GTM.id') }}"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-@endif
+{{--@if (config('services.GTM.enabled'))--}}
+{{--    <!-- Google Tag Manager (noscript) -->--}}
+{{--    <noscript>--}}
+{{--        <iframe src="https://www.googletagmanager.com/ns.html?id={{ config('services.GTM.id') }}"--}}
+{{--                height="0" width="0" style="display:none;visibility:hidden"></iframe>--}}
+{{--    </noscript>--}}
+{{--    <!-- End Google Tag Manager (noscript) -->--}}
+{{--@endif--}}
 <div class="overlay"></div>
 <div class="yesman-container" id="yesmanContainer">
     <span class="letter">Y</span>

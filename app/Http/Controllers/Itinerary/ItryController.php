@@ -169,7 +169,7 @@ class ItryController extends Controller
         $schema = $this->schema($items, "product", $this->Slug, $General);
 //        dd($title['recent']);
         return $SEOData = new SEOData(
-            title: $Base['seo.title'].$title ?? null, // 如果不存在，設置為 null
+            title: ($Base['seo.title'] ?? null) . $title, // 如果不存在，設置為 null
             description: $Base['seo.description'] ?? null,
             image: !empty($Base['OG.image']) ? $this->Settings->CheckProtocol(Storage::url($Base['OG.image'])) : null,
             url: request()->fullUrl(),
@@ -178,7 +178,7 @@ class ItryController extends Controller
             site_name: $General['brand_name'] ?? null,
             favicon: !empty($General['favicon']) ? $this->Settings->CheckProtocol(Storage::url($General['favicon'])) : null,
             robots: $Base['seo.robots'] ?? null,
-            openGraphTitle: $Base['OG.title'] .$title ?? null
+            openGraphTitle: ($Base['seo.title'] ?? null) . $title,
         );
 
     }
