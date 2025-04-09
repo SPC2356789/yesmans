@@ -22,6 +22,6 @@ return [
     'settings_title' => 'Cookie settings',
     'settings_text' => 'Our website stores four types of cookies. At any time you can choose which cookies you accept and which you refuse. You can read more about what cookies are and what types of cookies we store in our  <a href=":policyUrl" target="_blank" class="underline hover:no-underline">Cookie Policy</a>.',
     'message' => 'Cookie之使用
-為了提供您最佳的服務，本網站會在您的電腦中放置並取用我們的Cookie，若您不願接受Cookie的寫入，您可在您使用的瀏覽器功能項中設定隱私權等級為高，即可拒絕Cookie的寫入，但可能會導至網站某些功能無法正常執行 。',
+為了提供您最佳的服務，本網站會在您的電腦中放置並取用我們的Cookie，若您不願接受Cookie的寫入，請立即離開本網站 。',
     'agree' => '接受',
 ];

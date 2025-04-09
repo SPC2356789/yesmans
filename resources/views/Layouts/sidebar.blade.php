@@ -16,7 +16,7 @@
     <!-- 篩選器 -->
     {{--                <div class="flex flex-col  px-3" name="span">--}}
     @if(isset($tags))
-        <div class="flex flex-col gap-2" name="tags">
+        <div class="flex flex-col gap-2 " name="tags">
             <h1 class="text-xl font-bold text-gray-800">篩選器</h1>
             <div class="flex flex-wrap xxx:gap-1 ss:gap-1.5 items-center justify-start ">
                 @foreach($tags as $tk => $tv)

@@ -12,7 +12,7 @@
 @section('head_content')
     <section class="">
         <div class="swiper carousel">
-            <div class="swiper-wrapper relative">
+            <div class="swiper-wrapper relative ">
                 <div class="bg-white z-10 absolute w-full h-full opacity-0"></div>
                 @foreach($Carousels as $Carousel)
                     <img class="swiper-slide"

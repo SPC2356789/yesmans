@@ -3,15 +3,23 @@
  * 訂單狀態
  */
 return [
+
     10 => [
         'text' => '報名完成',
         'note' => '初始狀態 - 待小編檢查入帳',
         'icon' => 'heroicon-o-magnifying-glass-minus',  // 放大鏡-，表示等待
         'color' => 'warning',                           // 黃色
     ],
+
     41 => [
         'text' => '報名完成',
-        'note' => '已匯款 - 小編已確認入帳',
+        'note' => '已匯訂 - 小編已確認入帳',
+        'icon' => 'heroicon-o-magnifying-glass-plus',   // 放大鏡+，表示完成
+        'color' => 'success',                           // 綠色
+    ],
+    42 => [
+        'text' => '報名完成',
+        'note' => '已完款 - 小編已確認入帳',
         'icon' => 'heroicon-o-magnifying-glass-plus',   // 放大鏡+，表示完成
         'color' => 'success',                           // 綠色
     ],
@@ -63,9 +71,15 @@ return [
         'icon' => 'heroicon-o-currency-dollar',        // 美元符號，表示待退款 (修正 typo)
         'color' => 'danger',                           // 紅色
     ],
+    98 => [
+        'text' => '報名取消',
+        'note' => '已退訂金',
+        'icon' => 'heroicon-o-currency-dollar',        // 美元符號，表示退款完成
+        'color' => 'gray',                             // 灰色 (原為綠色，但你設為 gray)
+    ],
     99 => [
         'text' => '報名取消',
-        'note' => '已退款',
+        'note' => '已退全款',
         'icon' => 'heroicon-o-currency-dollar',        // 美元符號，表示退款完成
         'color' => 'gray',                             // 灰色 (原為綠色，但你設為 gray)
     ],

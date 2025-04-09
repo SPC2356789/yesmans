@@ -100,11 +100,6 @@ class TripAppliesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('order_number')
-                    ->copyable()
-                    ->copyMessage('copied')
-                    ->label('訂單編號')
-                   ,
                 Tables\Columns\TextColumn::make('name')
                     ->copyable()
                     ->copyMessage('copied')

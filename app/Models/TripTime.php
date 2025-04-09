@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\belongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -15,15 +15,13 @@ class TripTime extends BaseModel
     use SoftDeletes;
     use HasFactory;
 
-//    protected $casts = [
-//        'date' => 'array',
-//    ];
     protected static function boot()
     {
         parent::boot();
 // 當記錄從資料庫載入時觸發
         static::retrieved(function ($model) {
-            $model->date_range = $model->date_start . ' to ' . $model->date_end; // 將 quota 設為 1
+            $model->date_range = $model->date_start . ' to ' . $model->date_end;
+            $model->applied_count=$model->orders->sum(fn ($order) => $order->applies->count());
         });
         static::creating(function ($model) {
             if (empty($model->uuid)) {
@@ -45,16 +43,20 @@ class TripTime extends BaseModel
 
     }
 
-    public function Orders(): belongsToMany
+//    public function Orders(): belongsToMany
+//    {
+//        return $this->belongsToMany(
+//            TripOrder::class,
+//            'time_has_order',
+//            'trip_times_uuid',
+//            'trip_order_id',
+//            'uuid',
+//            'id' // 用 trip_uuid 作為目標鍵
+//        );
+//    }
+    public function orders(): HasMany
     {
-        return $this->belongsToMany(
-            TripOrder::class,
-            'time_has_order',
-            'trip_times_uuid',
-            'trip_order_id',
-            'uuid',
-            'id' // 用 trip_uuid 作為目標鍵
-        );
+        return $this->hasMany(TripOrder::class, 'trip_time_uuid', 'uuid');
     }
 
     public function Trip(): BelongsTo
@@ -68,6 +70,7 @@ class TripTime extends BaseModel
     public static function getData($cate = '*')
     {
         $trips = TripTime::selectRaw('uuid, mould_id,quota')
+            ->with('Orders.applies')
             ->with(['Trip' => function ($query) {
                 $query->select('id', 'slug', 'title', 'subtitle', 'icon', 'slug', 'carousel', 'tags', 'is_published');
             }])

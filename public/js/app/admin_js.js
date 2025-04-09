@@ -26,3 +26,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.copyToClipboard = function (button) {
+        let text = button.getAttribute('data-copy'); // 從 data-copy 獲取數據
+        // 將 HTML 實體解碼（例如 &quot; 轉回 "）
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = text;
+        text = textarea.value;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    // alert('已複製到剪貼板！');
+                    // console.log('已成功複製到剪貼簿');
+                })
+                .catch(err => {
+                    console.error('複製失敗', err);
+                });
+        } else {
+            // alert('瀏覽器不支持剪貼板操作，請手動複製：' + text);
+        }
+    };
+});

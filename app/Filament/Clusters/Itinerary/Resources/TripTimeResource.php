@@ -98,20 +98,7 @@ class TripTimeResource extends Resource
                 Forms\Components\Placeholder::make('applied_count')
                     ->label('已報名人數')
                     ->content(function ($record) {
-                        // $record 是當前的 TripTimes 模型實例
-                        if (!$record) {
-                            return 0;
-                        }
-
-                        // 獲取所有相關的 TripOrder
-                        $orders = $record->Orders;
-
-                        // 計算所有 TripOrder 的 TripApply 總數
-                        $totalApplies = $orders->reduce(function ($carry, $order) {
-                            return $carry + $order->applies()->count();
-                        }, 0);
-
-                        return $totalApplies;
+                        return $record->applied_count;
                     }),
                 Forms\Components\Toggle::make('food')
                     ->label('有無搭伙')
@@ -193,16 +180,9 @@ AND NOW() BETWEEN DATE_SUB(date_start, INTERVAL hintMonth MONTH) AND date_start)
 
                 Tables\Columns\TextColumn::make('applied_count')
                     ->label('已報名人數')
-                    ->getStateUsing(function ($record) {
-                        if (!$record) {
-                            return 0;
-                        }
-                        $orders = $record->Orders;
-                        $totalApplies = $orders->reduce(function ($carry, $order) {
-                            return $carry + $order->applies->count();
-                        }, 0);
-                        return $totalApplies;
-                    }),
+//                    ->getStateUsing(fn($record) => dd($record->Orders)
+//                    )
+                ,
 
                 Tables\Columns\TextColumn::make('available_spots')
                     ->label('剩餘')

@@ -21,7 +21,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
 use SolutionForest\FilamentAccessManagement\FilamentAccessManagementPanel;
-
+use Filament\Enums\ThemeMode;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
@@ -63,6 +63,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('yes-admin')
             ->authGuard('web')
+            ->darkMode(true) // 啟用暗色模式支持
+            ->defaultThemeMode(ThemeMode::Dark) // 強制默認為暗色模式
             ->favicon(Storage::url($this->Settings->getElseOrGeneral()['favicon']))
             ->profile(isSimple: false)
             ->login()

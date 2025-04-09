@@ -1,15 +1,15 @@
 <!-- Cookie 同意橫幅 -->
 <div class="js-cookie-consent cookie-consent fixed bottom-0 inset-x-0 pb-4 z-50 animate-fade-in-up">
     <div class="max-w-[600px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="p-4 rounded-xl bg-neutral-800 opacity-85 shadow-lg border !border-neutral-950">
+        <div class="p-4 rounded-xl bg-black opacity-85 shadow-lg border !border-neutral-950">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div class="flex-1">
-                    <p class="text-white text-sm md:text-base cookie-consent__message">
+                    <p class="text-white  text-sm md:text-base cookie-consent__message">
                         {!! trans('cookie-consent::texts.message') !!}
                     </p>
                 </div>
                 <div class="flex-col w-full sm:w-auto flex gap-2">
-                    <button class="js-cookie-consent-agree cookie-consent__agree cursor-pointer flex items-center justify-center px-5 py-2 rounded-full text-sm font-medium text-white bg-yes-major bg-opacity-75 hover:bg-opacity-100 transition-colors duration-200">
+                    <button class="js-cookie-consent-agree cookie-consent__agree cursor-pointer flex items-center justify-center px-5 py-2 rounded-full text-sm font-medium text-black bg-yes-major bg-opacity-90 hover:bg-opacity-100 transition-colors duration-200">
                         {{ trans('cookie-consent::texts.agree') }}
                     </button>
                     <button class="js-cookie-consent-reject cursor-pointer flex items-center justify-center px-5 py-2 rounded-full text-sm font-medium text-white bg-neutral-600 bg-opacity-75 hover:bg-opacity-100 transition-colors duration-200">

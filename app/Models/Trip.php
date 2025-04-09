@@ -52,6 +52,7 @@ class Trip extends BaseModel
 
             ->with(['trip_times' => function ($query) use ($cate) {
                 $query
+                    ->with('Orders.applies')
                     ->select('uuid', 'mould_id', 'date_start', 'date_end', 'quota', 'amount')
                     ->when($cate !== 2, function ($query) {
                         $query->orderBy('date_start', 'asc'); // 按照時間由早到晚排序
@@ -60,12 +61,13 @@ class Trip extends BaseModel
                         $query->whereBetween('date_start', [now()->toDateString(), now()->addMonth()->toDateString()]); // 未來一個月
                     })
                     ->when($cate == 2, function ($query) {
-                        $query->orderByRaw('(CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED)) ASC');
+                        $query   ->selectRaw(TripTime::getAppliedCount())//因排序，直接開啟 不使用虛擬元素
+                            ->orderByRaw('(CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED)) ASC');
                     })
                     ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
                     ->selectRaw(TripTime::getDateLogic())
                     ->where('is_published', 1)
-                    ->selectRaw(TripTime::getAppliedCount())
+
 
                 ; // 預載 Orders 和 applies 關係
                 ;
@@ -131,12 +133,13 @@ class Trip extends BaseModel
             })
             ->with(['trip_times' => function ($query) {
                 $query
+                    ->with('Orders.applies')
                     ->select('*')
                     ->orderBy('date_start', 'asc') // 按照時間由早到晚排序
                     ->selectRaw(TripTime::getDateLogic())
                     ->where('is_published', 1)
                     ->where('date_start', '>=', now()->startOfDay())// 只選擇今天或以後的日期
-                    ->selectRaw(TripTime::getAppliedCount())
+//                    ->selectRaw(TripTime::getAppliedCount())
                 ;
             }])
             ->where('slug', $trip);
