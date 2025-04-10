@@ -132,6 +132,7 @@ class TripController extends ItryController
             // 儲存報名資料，包含報名的 ID 列表
             $tripOrder = TripOrder::create([
                 'order_number' => $order_number,
+                'trip_time_uuid' => $request['uuid'],
                 'account_last_five' => $request['account_last_five'],
                 'paid_amount' => $request['paid_amount'],
                 'amount' => $request['amount'],
@@ -140,7 +141,7 @@ class TripController extends ItryController
             ]);
 // 將 TripApply 關聯到 TripOrder
             $tripOrder->applies()->attach($tripApplyId);
-            $tripOrder->times()->attach($request['uuid']);
+//            $tripOrder->times()->attach($request['uuid']);
 //uuid尋找時間與團名
             $TripTimes = TripTime::with('Trip')->where('uuid', $request['uuid'])->first();;
             $TripTime = TripTime::selectRaw(TripTime::getDateLogic())->where('uuid', $request['uuid'])->first();

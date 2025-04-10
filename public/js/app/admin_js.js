@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     const sidebarItems = document.querySelectorAll(".fi-sidebar-nav .fi-sidebar-item a");
 
@@ -47,4 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // alert('瀏覽器不支持剪貼板操作，請手動複製：' + text);
         }
     };
+});
+document.addEventListener('livewire:init', () => {
+    Livewire.on('copy-to-clipboard', (event) => {
+        const content = event.content;
+        const successMessage = event.successMessage;
+        const failedMessage = event.failedMessage;
+
+        navigator.clipboard.writeText(content).then(() => {
+            console.log('已複製到剪貼簿');
+            alert(successMessage);
+        }).catch(err => {
+            console.error('複製失敗', err);
+            alert(failedMessage + '\n請手動複製內容：' + content);
+        });
+    });
 });

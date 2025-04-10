@@ -90,31 +90,42 @@ class TripOrderResource extends Resource
                     Forms\Components\Select::make('status')
                         ->label('訂單狀態')
                         ->options(function (?string $state, $get, $set) use ($original_amount) {
+                            // 從 config('order_statuses') 獲取所有狀態
                             $statuses = config('order_statuses');
 
-                            // 定義映射函數
-                            $mapOption = fn($item, $key) => [$key => "{$item['text']} : {$item['note']}"];
-
-                            // 定義分組與狀態鍵
-                            $groups = [
-                                '報名階段' => ['10'],
-                                '付款處理' => ['11', '12', '41', $original_amount ? '42' : null],
-                                '問題處理' => ['14', '15'],
-                                '取消處理' => ['91', '92', '93', '94'],
-                                '終止狀態' => ['98', '1', $original_amount ? '99' : null],
+                            // 定義分組結構
+                            $options = [
+                                '報名階段' => collect($statuses)
+                                    ->only(['10'])
+                                    ->mapWithKeys(function ($item, $key) {
+                                        return [$key => "{$item['text']} : {$item['note']}"];
+                                    })
+                                    ->all(),
+                                '付款處理' => collect($statuses)
+                                    ->only(['11', '12', '41', $original_amount ? '42' : ''])
+                                    ->mapWithKeys(function ($item, $key) {
+                                        return [$key => "{$item['text']} : {$item['note']}"];
+                                    })
+                                    ->all(),
+                                '問題處理' => collect($statuses)
+                                    ->only(['14', '15'])
+                                    ->mapWithKeys(function ($item, $key) {
+                                        return [$key => "{$item['text']} : {$item['note']}"];
+                                    })
+                                    ->all(),
+                                '取消處理' => collect($statuses)
+                                    ->only(['91', '92', '93', '94'])
+                                    ->mapWithKeys(function ($item, $key) {
+                                        return [$key => "{$item['text']} : {$item['note']}"];
+                                    })
+                                    ->all(),
+                                '終止狀態' => collect($statuses)
+                                    ->only(['98',  '1', $original_amount ? '99' : ''])
+                                    ->mapWithKeys(function ($item, $key) {
+                                        return [$key => "{$item['text']} : {$item['note']}"];
+                                    })
+                                    ->all(),
                             ];
-
-                            // 生成選項
-                            $options = collect($groups)
-                                ->mapWithKeys(function ($keys, $group) use ($statuses, $mapOption) {
-                                    return [
-                                        $group => collect($statuses)
-                                            ->only(array_filter($keys)) // 移除 null 值
-                                            ->mapWithKeys($mapOption)
-                                            ->all()
-                                    ];
-                                })
-                                ->all();
 
                             return $options;
                         })
