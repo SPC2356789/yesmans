@@ -21,7 +21,7 @@ class TripTime extends BaseModel
 // 當記錄從資料庫載入時觸發
         static::retrieved(function ($model) {
             $model->date_range = $model->date_start . ' to ' . $model->date_end;
-            $model->applied_count=$model->orders->sum(fn ($order) => $order->applies->count());
+            $model->applied_count=$model->orders->sum(fn ($order) => $order->applies->count())??0;
         });
         static::creating(function ($model) {
             if (empty($model->uuid)) {
