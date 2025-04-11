@@ -98,7 +98,7 @@ class TripTimeResource extends Resource
                 Forms\Components\Placeholder::make('applied_count')
                     ->label('已報名人數')
                     ->content(function ($record) {
-                        return $record->applied_count;
+                        return $record->applied_count ?? 0;
                     }),
                 Forms\Components\Toggle::make('food')
                     ->label('有無搭伙')
