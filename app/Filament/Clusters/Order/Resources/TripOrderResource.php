@@ -41,8 +41,8 @@ class TripOrderResource extends Resource
         return $form
             ->schema(function ($record) {
 
-                    $original_amount = TripTime::where('uuid', $record->trip_time_uuid??0)->first()->fake_amount??0; // (原價)
-                    $original_total = $original_amount ? $original_amount * $record->appliesCount : null;//總額(原價) (若原價沒有則不計算總額)
+                $original_amount = TripTime::where('uuid', $record->trip_time_uuid ?? 0)->first()->fake_amount ?? 0; // (原價)
+                $original_total = $original_amount ? $original_amount * $record->appliesCount : null;//總額(原價) (若原價沒有則不計算總額)
 
 
                 return [
@@ -51,6 +51,9 @@ class TripOrderResource extends Resource
                         ->required()
 //                    ->disabled() // 禁止修改
                         ->maxLength(255),
+                    Forms\Components\TextInput::make('entry_number')
+                        ->label('入山編號')
+                    ,
                     Forms\Components\Select::make('selected_times')
 //                    ->required()
                         ->label('行程時間')
@@ -216,6 +219,14 @@ class TripOrderResource extends Resource
                     ->copyable()
                     ->copyMessage('copied')
                     ->copyMessageDuration(1500)
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->formatStateUsing(function ($state) {
+                        // 以 _ 分割訂單編號
+                        $parts = explode('_', $state);
+                        // 將分段內容用 <br> 或其他方式組合
+                        return implode('<br>', $parts);
+                    })
+                    ->html() // 允許 HTML 渲染
                 ,
 
                 Tables\Columns\TextColumn::make('times.title')
@@ -269,6 +280,10 @@ class TripOrderResource extends Resource
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
                 ,
+                Tables\Columns\TextInputColumn::make('entry_number')
+                    ->label('入山編號')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('account_last_five')
                     ->label('帳戶後五碼')
                     ->searchable()
@@ -288,16 +303,7 @@ class TripOrderResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-//                Tables\Columns\TextColumn::make('updated_at')
-//                    ->label('更新時間')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
-//                Tables\Columns\TextColumn::make('deleted_at')
-//                    ->label('刪除時間')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->recordUrl(null) // 禁用整行點擊導航
 
@@ -361,14 +367,15 @@ class TripOrderResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
-
             ->selectCurrentPageOnly();
     }
+
 // 明確禁用創建功能
     public static function canCreate(): bool
     {
         return false;
     }
+
     public static function getRelations(): array
     {
         return [

@@ -122,8 +122,8 @@ class TripOrder extends BaseModel
     public function national_park($data, $mod): string
     {
         $mods = match ($mod) {
-            1 => 'con_lisMem_member', // 玉山、雪山
-            2 => 'con_step2_lisMem_member', // 太魯閣
+            1 => 'con_lisMem', // 玉山、雪山
+            2 => 'con_step2_lisMem', // 太魯閣
         };
 
         $jsCode = <<<JS
@@ -145,34 +145,59 @@ class TripOrder extends BaseModel
             const element = document.getElementById(id);
             if (element) {
                 element.value = value;
+                const changeEvent = new Event('change', { bubbles: true });
+                element.dispatchEvent(changeEvent);
             } else {
                 console.warn(`表單欄位 \${id} 不存在`);
             }
         };
 
-        setValue(`{$mods}_name_\${index}`, member.name || '');
-        setValue(`{$mods}_tel_\${index}`, member.tel || '');
-        setValue(`{$mods}_addr_\${index}`, member.addr || '');
-        setValue(`{$mods}_mobile_\${index}`, member.mobile || '');
-        setValue(`{$mods}_email_\${index}`, member.email || '');
-        setValue(`{$mods}_sid_\${index}`, member.sid || '');
-        setValue(`{$mods}_contactname_\${index}`, member.contactName || '');
-        setValue(`{$mods}_contacttel_\${index}`, member.contactTel || '');
+        const triggerBlur = (id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                const blurEvent = new Event('blur', { bubbles: true });
+                element.dispatchEvent(blurEvent);
+            }
+        };
 
-        setValue(`{$mods}_nation_\${index}`, member.nation || '');
-        setValue(`{$mods}_sex_\${index}`, member.sex || '');
+        // 設置基本欄位
+        setValue(`{$mods}_member_name_\${index}`, member.name || '');
+        setValue(`{$mods}_member_tel_\${index}`, member.tel || '');
+        setValue(`{$mods}_member_addr_\${index}`, member.addr || '');
+        setValue(`{$mods}_member_mobile_\${index}`, member.mobile || '');
+        setValue(`{$mods}_member_email_\${index}`, member.email || '');
+        setValue(`{$mods}_member_sid_\${index}`, member.sid || '');
+        setValue(`{$mods}_member_contactname_\${index}`, member.contactName || '');
+        setValue(`{$mods}_member_contacttel_\${index}`, member.contactTel || '');
 
-        const birthdayInput = document.getElementById(`{$mods}_birthday_\${index}`);
+        setValue(`{$mods}_member_nation_\${index}`, member.nation || '');
+        setValue(`{$mods}_member_sex_\${index}`, member.sex || '');
+
+        const birthdayInput = document.getElementById(`{$mods}_member_birthday_\${index}`);
         if (birthdayInput) {
             birthdayInput.value = member.birthday || '';
-            birthdayInput.dispatchEvent(new Event('change'));
+            birthdayInput.dispatchEvent(new Event('change', { bubbles: true }));
         } else {
-            console.warn(`生日欄位 {$mods}_birthday_\${index} 不存在`);
+            console.warn(`生日欄位 {$mods}_member_birthday_\${index} 不存在`);
         }
 
+        // 設置國家並延遲一秒設置城市
+
+            // 先設置國家
+            setValue(`{$mods}_ddlmember_country_\${index}`, '9999');
+
+            // 延遲一秒設置城市
+            setTimeout(() => {
+
+                    setValue(`{$mods}_ddlmember_city_\${index}`, '9999');
+
+            }, 1000); // 延遲 1000 毫秒（1 秒）
+
+
+        // 觸發所有欄位的 blur 事件
         const inputs = memberDiv.querySelectorAll('input, select');
         inputs.forEach(input => {
-            input.dispatchEvent(new Event('blur'));
+            input.dispatchEvent(new Event('blur', { bubbles: true }));
         });
     });
 })();
@@ -204,8 +229,7 @@ JS;
         }
 
         const memberIndex = index + 1;
-
-        const setValue = (name, value) => {
+  const setValue = (name, value) => {
             const element = document.querySelector(`[name="\${name}"]`);
             if (element) {
                 if (element.tagName === 'SELECT') {
@@ -219,8 +243,18 @@ JS;
                 } else {
                     element.value = value;
                 }
+                const changeEvent = new Event('change', { bubbles: true });
+                element.dispatchEvent(changeEvent);
             } else {
                 console.warn(`表單欄位 \${name} 不存在`);
+            }
+        };
+
+        const triggerBlur = (name) => {
+            const element = document.querySelector(`[name="\${name}"]`);
+            if (element) {
+                const blurEvent = new Event('blur', { bubbles: true });
+                element.dispatchEvent(blurEvent);
             }
         };
 
@@ -232,6 +266,20 @@ JS;
         setValue(`{$mods}_\${memberIndex}_IdCard`, member.sid || '');
         setValue(`{$mods}_\${memberIndex}_SOSName`, member.contactName || '');
         setValue(`{$mods}_\${memberIndex}_SOSTel`, member.contactTel || '');
+
+
+         // 設置國家並延遲一秒設置城市
+
+            // 先設置國家
+            setValue(`{$mods}_\${memberIndex}_City`, '9999');
+
+
+            // 延遲一秒設置城市
+            setTimeout(() => {
+                setValue(`{$mods}_\${memberIndex}_Town`, '9999');
+
+            }, 1000); // 延遲 1000 毫秒（1 秒）
+
 
         const countryKind = member.nation === '中華民國' ? '1' : '0';
         setValue(`{$mods}_\${memberIndex}_CountryKind`, countryKind);
@@ -252,7 +300,7 @@ JS;
 
         const inputs = memberDiv.querySelectorAll('input, select');
         inputs.forEach(input => {
-            input.dispatchEvent(new Event('blur'));
+                       input.dispatchEvent(new Event('blur', { bubbles: true }));
         });
     });
 })();

@@ -14,11 +14,15 @@ use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Collection;
+use Filament\Tables\Columns\Layout\Panel;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 
 class TripOrdersRelationManager extends RelationManager
 {
     protected static string $relationship = 'Orders';
     protected static ?string $model = TripOrder::class;
+
     public function table(Table $table): Table
     {
         return $table
@@ -28,12 +32,11 @@ class TripOrdersRelationManager extends RelationManager
                     ->searchable()
                     ->copyable()
                     ->copyMessage('訂單編號 copied')
-
+                    ->toggleable(isToggledHiddenByDefault: false)
                 ,
                 Tables\Columns\TextColumn::make('applies.name')
                     ->label('團員')
                     ->searchable()
-                    ->html() // 啟用 HTML 渲染
                     ->listWithLineBreaks()
                     ->limitList(2)
                     ->expandableLimitedList()
@@ -45,17 +48,18 @@ class TripOrdersRelationManager extends RelationManager
                     ->copyMessage('copied')
                     ->numeric()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: false)
                 ,
+
                 Tables\Columns\TextColumn::make('total_amount') // 新增總金額欄位
                 ->label('總金額')
-                ,
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('original_amount')
                     ->label('每位原價')
                     ->getStateUsing(function ($record) {
                         return (TripTime::where('uuid', $record->trip_time_uuid)->first()->fake_amount) ?? 0;
                     })
-                ,
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 Tables\Columns\TextColumn::make('paid_amount')
                     ->label('已付金額')
@@ -63,13 +67,18 @@ class TripOrdersRelationManager extends RelationManager
                     ->extraAttributes([
                         'style' => 'white-space: pre-wrap;width: 120px;', // 保留換行和空白
                     ])
-//                    ->formatStateUsing(fn ($state) => nl2br(e($state))) // 顯示時轉換換行
+
                 ,
 
                 Tables\Columns\TextInputColumn::make('account_last_five')
                     ->label('帳戶後五碼')
                     ->searchable()
-                ,
+                    ->extraAttributes(['class' => 'w-12']) // Tailwind 類別 w-40 表示寬度 10rem（約 160px）
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextInputColumn::make('entry_number')
+                    ->label('入山編號')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 Tables\Columns\SelectColumn::make('status')
                     ->options(function () {
@@ -375,6 +384,7 @@ class TripOrdersRelationManager extends RelationManager
             ->body('目前沒有可複製的申請資料，請先新增申請。')
             ->send();
     }
+
     protected function sendSuccessNotification($count): void
     {
         Notification::make()
