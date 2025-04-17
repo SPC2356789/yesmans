@@ -101,6 +101,7 @@ class TripTimeResource extends Resource
                         return $record->applied_count;
                     })
                     ->visible(fn($record) => $record !== null),
+
                 Forms\Components\Toggle::make('food')
                     ->label('有無搭伙')
                     ->required(),
