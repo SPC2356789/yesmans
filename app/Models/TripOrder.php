@@ -35,9 +35,9 @@ class TripOrder extends BaseModel
         });
 
     }
-    protected $appends = ['applies_count', 'total_amount', 'lave_amount'];
+    protected $appends = ['applied_count', 'total_amount', 'lave_amount'];
 
-    public function getAppliesCountAttribute()
+    public function getAppliedCountAttribute(): int
     {
         $applies = json_decode($this->applies, true);
         return count($applies);
@@ -46,7 +46,7 @@ class TripOrder extends BaseModel
     public function getTotalAmountAttribute()
     {
         $applies = json_decode($this->applies, true);
-        return is_array($applies) ? $this->applies_count * $this->amount : $this->amount;
+        return is_array($applies) ? $this->applied_count * $this->amount : $this->amount;
     }
 
     public function getLaveAmountAttribute()

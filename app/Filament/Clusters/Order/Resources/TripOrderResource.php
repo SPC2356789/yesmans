@@ -40,8 +40,10 @@ class TripOrderResource extends Resource
     {
         return $form
             ->schema(function ($record) {
-                $original_amount = TripTime::where('uuid', $record->trip_time_uuid)->first()->fake_amount; // (原價)
-                $original_total = $original_amount ? $original_amount * $record->appliesCount : null;//總額(原價) (若原價沒有則不計算總額)
+
+                    $original_amount = TripTime::where('uuid', $record->trip_time_uuid??0)->first()->fake_amount??0; // (原價)
+                    $original_total = $original_amount ? $original_amount * $record->appliesCount : null;//總額(原價) (若原價沒有則不計算總額)
+
 
                 return [
                     Forms\Components\TextInput::make('order_number')
@@ -120,7 +122,7 @@ class TripOrderResource extends Resource
                                     })
                                     ->all(),
                                 '終止狀態' => collect($statuses)
-                                    ->only(['98',  '1', $original_amount ? '99' : ''])
+                                    ->only(['98', '1', $original_amount ? '99' : ''])
                                     ->mapWithKeys(function ($item, $key) {
                                         return [$key => "{$item['text']} : {$item['note']}"];
                                     })
@@ -166,14 +168,14 @@ class TripOrderResource extends Resource
                                     break;
                             }
                         })
-                    ,
+                        ->visible(fn($record) => $record !== null),
                     Forms\Components\TextInput::make('account_last_five')
                         ->label('匯款後五碼')
                         ->maxLength(10),
 
                     Forms\Components\Textarea::make('paid_amount')
                         ->label('已付款金額')
-                    ,
+                        ->autosize(), // 啟用自動調整高度
                     Forms\Components\Placeholder::make('total_amount')
                         ->label('')
                         ->hint(fn($get) => '訂單總金額 ' . $get('total_amount'))
@@ -359,9 +361,14 @@ class TripOrderResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
+
             ->selectCurrentPageOnly();
     }
-
+// 明確禁用創建功能
+    public static function canCreate(): bool
+    {
+        return false;
+    }
     public static function getRelations(): array
     {
         return [

@@ -10,31 +10,41 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+
 class TripTime extends BaseModel
 {
     use SoftDeletes;
     use HasFactory;
+    protected $appends = ['applied_count'];
 
-    protected static function boot()
+
+    protected static function boot(): void
     {
         parent::boot();
 // 當記錄從資料庫載入時觸發
         static::retrieved(function ($model) {
             $model->date_range = $model->date_start . ' to ' . $model->date_end;
-            $model->applied_count=$model->orders->sum(fn ($order) => $order->applies->count());
+//            $model->applied_count = $model->orders->sum(fn($order) => $order->applies->count());
+//            $model->applied_count = ($model->orders->sum(fn($order) => $order->applies->count())) ?? '0';
         });
         static::creating(function ($model) {
             if (empty($model->uuid)) {
                 $model->uuid = Str::uuid();
             }
+
         });
         static::saving(function ($model) {
 
-            $dates =$model->date_range;
+            $dates = $model->date_range;
             $model->date_start = $dates[0] ?? null;
             $model->date_end = $dates[1] ?? $dates[0];
             unset($model->date_range);
         });
+    }
+    public function getAppliedCountAttribute()
+    {
+
+        return $this->orders->sum(fn($order) => $order->applies->count());
     }
 
     protected static function booted()
@@ -89,8 +99,7 @@ class TripTime extends BaseModel
             })
             ->when($cate == 'upcoming', function ($query) {
                 $query->selectRaw(self::getAppliedCount())
-                    ->orderByRaw('(CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED)) ASC');
-                ;
+                    ->orderByRaw('(CAST(quota AS SIGNED) - CAST(applied_count AS SIGNED)) ASC');;
             })
             ->selectRaw(self::getAppliedCount())
             ->whereRaw('CAST(quota AS SIGNED) > ' . self::getAppliedCountRaw()) // 用純子查詢
@@ -126,6 +135,7 @@ class TripTime extends BaseModel
         });
         return $trips;
     }
+
     /**
      * 取得報名人數（不含別名）
      */
@@ -149,10 +159,12 @@ class TripTime extends BaseModel
         )
     )";
     }
+
     /**
      * 取得報名人數
      */
-    public static function getAppliedCount(): string{
+    public static function getAppliedCount(): string
+    {
         return "(
             SELECT COUNT(*)
             FROM trip_applies
@@ -171,6 +183,7 @@ class TripTime extends BaseModel
             )
         ) AS applied_count";
     }
+
     public static function getDateLogic(): string
     {
         return 'CONCAT(
