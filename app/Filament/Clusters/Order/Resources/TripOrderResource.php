@@ -221,9 +221,7 @@ class TripOrderResource extends Resource
                     ->copyMessageDuration(1500)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(function ($state) {
-                        // 以 _ 分割訂單編號
                         $parts = explode('_', $state);
-                        // 將分段內容用 <br> 或其他方式組合
                         return implode('<br>', $parts);
                     })
                     ->html() // 允許 HTML 渲染

@@ -141,7 +141,7 @@ class TripController extends ItryController
             ]);
 // 將 TripApply 關聯到 TripOrder
             $tripOrder->applies()->attach($tripApplyId);
-//            $tripOrder->times()->attach($request['uuid']);
+//            $tripOrder->times()->attach($request['uuid']);           改成這樣了'trip_time_uuid' => $request['uuid'],
 //uuid尋找時間與團名
             $TripTimes = TripTime::with('Trip')->where('uuid', $request['uuid'])->first();;
             $TripTime = TripTime::selectRaw(TripTime::getDateLogic())->where('uuid', $request['uuid'])->first();

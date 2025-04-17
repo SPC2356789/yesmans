@@ -31,8 +31,14 @@ class TripOrdersRelationManager extends RelationManager
                     ->label('訂單編號')
                     ->searchable()
                     ->copyable()
-                    ->copyMessage('訂單編號 copied')
-                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->copyMessage('copied')
+                    ->copyMessageDuration(1500)
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->formatStateUsing(function ($state) {
+                        $parts = explode('_', $state);
+                        return implode('<br>', $parts);
+                    })
+                    ->html() // 允許 HTML 渲染
                 ,
                 Tables\Columns\TextColumn::make('applies.name')
                     ->label('團員')
