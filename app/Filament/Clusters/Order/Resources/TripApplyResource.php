@@ -10,12 +10,16 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Helper\ShortCrypt;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Actions\ActionGroup;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
+
 class TripApplyResource extends Resource
 {
     protected static ?string $model = TripApply::class;
@@ -28,59 +32,140 @@ class TripApplyResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Placeholder::make('id')
+                    ->label('序號')
+                    ->content(function ($record) {
+                        return $record ? $record->id : 'N/A';
+                    })
+                ,
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->label('名字')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('order_number')
                     ->required()
+                    ->label('訂單編號')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('gender')
+                Forms\Components\Select::make('gender')
+                    ->label('性別')
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        '男' => '男',
+                        '女' => '女',
+                    ]),
                 Forms\Components\DatePicker::make('birthday')
+                    ->label('生日')
                     ->required(),
                 Forms\Components\TextInput::make('email')
+                    ->label('電子郵件')
                     ->email()
-                    ->required()
                     ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
+                    ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
+                    ->label('電話')
                     ->tel()
-                    ->required()
                     ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('country')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('country')
+                    ->label('國家')
+                    ->required()
+                    ->options(function () {
+                        // 讀取 JSON 檔案
+                        $jsonPath = public_path('lib/trip_country.json');
+                        if (!File::exists($jsonPath)) {
+                            return [];
+                        }
+
+                        $countries = json_decode(File::get($jsonPath), true);
+                        $options = [];
+
+                        foreach ($countries as $country) {
+                            // 提取中文名稱
+                            $labelText = '';
+                            if (!empty($country['translations']['zho']['common'])) {
+                                $labelText = $country['translations']['zho']['common'];
+                            } elseif (!empty($country['name']['nativeName']['zho']['common'])) {
+                                $labelText = $country['name']['nativeName']['zho']['common'];
+                            } else {
+                                $labelText = $country['name']['common']; // 回退到英文名稱
+                            }
+
+                            // 生成 value: 中文名稱(cca3)
+                            $value = "{$labelText}({$country['cca3']})";
+
+                            // 生成 label: HTML 結構
+                            $label = <<<HTML
+<div class="flex flex-row items-center w-full ">
+    <img class="w-6 mx-3" src="{$country['flags']['png']}" alt="{$labelText}" loading="lazy" />
+    <span>{$value}<br>{$country['name']['common']}</span>
+</div>
+HTML;
+
+                            $options[$value] = $label;
+                        }
+
+                        return $options;
+                    })
+                    ->allowHtml()
+                    ->searchable() // 啟用搜尋功能
+
+                ,
                 Forms\Components\TextInput::make('id_card')
+                    ->label('身分證/居留證')
                     ->required()
                     ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('address')
+                    ->label('地址')
+                    ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('PassPort')
-                    ->required()
-                    ->maxLength(255)
-                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state),
-                Forms\Components\TextInput::make('address')
-                    ->required()
+                    ->label('護照')
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
-                Forms\Components\TextInput::make('diet')
+                Forms\Components\Select::make('diet')
+                    ->label('飲食偏好') // 可選：設置更明確的標籤
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        '葷食' => '葷食',
+                        '素食' => '素食',
+                    ]),
                 Forms\Components\TextInput::make('experience')
+                    ->label('經驗')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('disease')
+                    ->label('疾病')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('LINE')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('IG')
                     ->maxLength(255),
+                Forms\Components\TextInput::make('emContact')
+                    ->required()
+                    ->label('緊急連絡人')
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('emContactPh')
+                    ->label('緊急連絡人電話')
                     ->required()
                     ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
-                Forms\Components\TextInput::make('emContact')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\FileUpload::make('passport_pic')
+                    ->label('護照照片上傳')
+                    ->image()
+                    ->directory(fn($get) => 'passport') // 📂 設定儲存目錄
+                    ->disk('private')
+                    ->visibility('private')
+                    ->imageEditor()
+                    ->getUploadedFileNameForStorageUsing(function (UploadedFile $file, $get): string {
+                        return $get('PassPort') ?? $get('id_card'); // 只使用護照號碼作為檔名
+                    })
+                    ->dehydrated(true), // 確保狀態被保存
+                Forms\Components\ViewField::make('passport_')
+                    ->label('護照照片預覽')
+                    ->view('components.passport-pic-preview')
+                    ->dehydrated(false), // 確保狀態被保存
             ]);
     }
 
@@ -92,10 +177,21 @@ class TripApplyResource extends Resource
 
                 Tables\Columns\TextColumn::make('name')
                     ->label('姓名')
-                    ->searchable(isIndividual: true)
+                    ->searchable()
                 ,
                 Tables\Columns\TextColumn::make('order_number')
                     ->label('訂單編號')
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('copied')
+                    ->copyMessageDuration(1500)
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->formatStateUsing(function ($state) {
+                        $parts = explode('_', $state);
+                        return implode('<br>', $parts);
+                    })
+                    ->html() // 允許 HTML 渲染
+
                     ->searchable(isIndividual: true),
                 Tables\Columns\TextColumn::make('gender')
                     ->label('性別')
@@ -161,7 +257,7 @@ class TripApplyResource extends Resource
                     ->label('建立時間')
                     ->dateTime()
                     ->sortable()
-                ,
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('更新時間')
                     ->dateTime()
@@ -175,6 +271,30 @@ class TripApplyResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                SelectFilter::make('country')
+                    ->label('國家')
+                    ->options(function () {
+                        $jsonPath = public_path('lib/trip_country.json');
+                        if (!File::exists($jsonPath)) {
+                            return [];
+                        }
+
+                        $countries = json_decode(File::get($jsonPath), true);
+                        return collect($countries)->mapWithKeys(function ($country) {
+                            $labelText = $country['translations']['zho']['common'] ??
+                                $country['name']['nativeName']['zho']['common'] ??
+                                $country['name']['common'];
+                            $value = "{$labelText}({$country['cca3']})";
+                            $englishName = $country['name']['common'];
+
+
+                            return [$value => $value];
+                        })->all();
+                    })
+                    ->searchable()
+                    ->placeholder('請選擇國家')
+                  ,
+
             ])
             ->actions([
                 ActionGroup::make([
@@ -191,9 +311,7 @@ class TripApplyResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
-            ->selectCurrentPageOnly()
-
-            ;
+            ->selectCurrentPageOnly();
     }
 
     protected static ?int $navigationSort = 2;

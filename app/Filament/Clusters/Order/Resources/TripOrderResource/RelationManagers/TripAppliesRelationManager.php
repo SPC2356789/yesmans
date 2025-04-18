@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-
+use Illuminate\Support\Facades\File;
 class TripAppliesRelationManager extends RelationManager
 {
     protected static string $relationship = 'applies';
@@ -23,57 +23,125 @@ class TripAppliesRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                Forms\Components\Placeholder::make('id')
+                    ->label('序號')
+                    ->content(function ($record) {
+                        return $record ? $record->id : 'N/A';
+                    })
+                ,
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->label('名字')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('order_number')
                     ->required()
+                    ->label('訂單編號')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('gender')
+                Forms\Components\Select::make('gender')
+                    ->label('性別')
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        '男' => '男',
+                        '女' => '女',
+                    ]),
                 Forms\Components\DatePicker::make('birthday')
+                    ->label('生日')
                     ->required(),
                 Forms\Components\TextInput::make('email')
+                    ->label('電子郵件')
                     ->email()
                     ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
+                    ->label('電話')
                     ->tel()
                     ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('country')
+                Forms\Components\Select::make('country')
+                    ->label('國家')
                     ->required()
-                    ->maxLength(255),
+                    ->options(function () {
+                        // 讀取 JSON 檔案
+                        $jsonPath = public_path('lib/trip_country.json');
+                        if (!File::exists($jsonPath)) {
+                            return [];
+                        }
+
+                        $countries = json_decode(File::get($jsonPath), true);
+                        $options = [];
+
+                        foreach ($countries as $country) {
+                            // 提取中文名稱
+                            $labelText = '';
+                            if (!empty($country['translations']['zho']['common'])) {
+                                $labelText = $country['translations']['zho']['common'];
+                            } elseif (!empty($country['name']['nativeName']['zho']['common'])) {
+                                $labelText = $country['name']['nativeName']['zho']['common'];
+                            } else {
+                                $labelText = $country['name']['common']; // 回退到英文名稱
+                            }
+
+                            // 生成 value: 中文名稱(cca3)
+                            $value = "{$labelText}({$country['cca3']})";
+
+                            // 生成 label: HTML 結構
+                            $label = <<<HTML
+<div class="flex flex-row items-center w-full ">
+    <img class="w-6 mx-3" src="{$country['flags']['png']}" alt="{$labelText}" loading="lazy" />
+    <span>{$value}<br>{$country['name']['common']}</span>
+</div>
+HTML;
+
+                            $options[$value] = $label;
+                        }
+
+                        return $options;
+                    })
+                    ->allowHtml()
+                    ->searchable() // 啟用搜尋功能
+
+        ,
                 Forms\Components\TextInput::make('id_card')
+                    ->label('身分證/居留證')
                     ->required()
                     ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
+                    ->label('地址')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('PassPort')
+                    ->label('護照')
                     ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
-                Forms\Components\TextInput::make('diet')
+                Forms\Components\Select::make('diet')
+                    ->label('飲食偏好') // 可選：設置更明確的標籤
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        '葷食' => '葷食',
+                        '素食' => '素食',
+                    ]),
                 Forms\Components\TextInput::make('experience')
+                    ->label('經驗')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('disease')
+                    ->label('疾病')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('LINE')
+
                     ->maxLength(255),
                 Forms\Components\TextInput::make('IG')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('emContactPh')
-                    ->required()
-                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('emContact')
                     ->required()
+                    ->label('緊急連絡人')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('emContactPh')
+                    ->label('緊急連絡人電話')
+                    ->required()
+                    ->formatStateUsing(fn($state) => $state ? ShortCrypt::decrypt($state) : $state)
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('passport_pic')
                     ->label('護照照片上傳')
@@ -100,16 +168,22 @@ class TripAppliesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->copyable()
+                    ->copyMessage('copied')
+                    ->label('序號')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                ,
                 Tables\Columns\TextColumn::make('name')
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('姓名')
-                   ,
+                ,
                 Tables\Columns\TextColumn::make('gender')
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('性別')
-                    ->formatStateUsing(fn ($state) => $state === 'male' ? '男' : ($state === 'female' ? '女' : $state)),
+                    ->formatStateUsing(fn($state) => $state === 'male' ? '男' : ($state === 'female' ? '女' : $state)),
 
                 Tables\Columns\TextColumn::make('birthday')
                     ->copyable()
@@ -128,7 +202,7 @@ class TripAppliesRelationManager extends RelationManager
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('電話')
-                   ,
+                ,
                 Tables\Columns\TextColumn::make('country')
                     ->copyable()
                     ->copyMessage('copied')
@@ -170,13 +244,13 @@ class TripAppliesRelationManager extends RelationManager
                     ->copyMessage('copied')
                     ->label('緊急聯絡人')
                     ->searchable()
-                  ,
+                ,
                 Tables\Columns\TextColumn::make('emContactPh')
                     ->copyable()
                     ->copyMessage('copied')
                     ->label('緊急聯絡電話')
                     ->searchable()
-                   ,
+                ,
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->copyable()

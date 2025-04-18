@@ -437,7 +437,7 @@ let refreshInterval = null;
 // 初始化
 onMounted(() => {
     refreshCaptcha();
-    console.log(props.data);
+    // console.log(props.data);
     if (props && props.CountryData) {
         countries.value = props.CountryData;
     }
